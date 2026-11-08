@@ -38,7 +38,12 @@ export default function SectionHeader({
               </span>
             )}
             {badge && (
-              <span className="font-mono text-[10px] uppercase tracking-widest text-ivory-dim border-l border-obsidian-border pl-3">
+              <span
+                className={cn(
+                  "font-mono text-xs uppercase tracking-wider text-acid font-medium",
+                  index && "text-ivory-dim border-l border-obsidian-border pl-3 text-[10px]"
+                )}
+              >
                 {badge}
               </span>
             )}
@@ -84,7 +89,12 @@ export default function SectionHeader({
           </span>
         )}
         {badge && (
-          <span className="font-mono text-[10px] uppercase tracking-widest text-ivory-dim border-l border-obsidian-border pl-3">
+          <span
+            className={cn(
+              "font-mono text-xs uppercase tracking-wider text-acid font-medium",
+              index && "text-ivory-dim border-l border-obsidian-border pl-3 text-[10px]"
+            )}
+          >
             {badge}
           </span>
         )}

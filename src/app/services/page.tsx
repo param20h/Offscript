@@ -49,10 +49,9 @@ export default function ServicesPage() {
               {/* Header Ribbon */}
               <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-obsidian-border font-mono text-xs">
                 <div className="flex items-center gap-3">
-                  <span className="text-acid font-bold tracking-wider">
-                    DISCIPLINE
+                  <span className="text-acid font-medium uppercase tracking-wider">
+                    {service.id}
                   </span>
-                  <span className="text-ivory font-medium">{service.id.toUpperCase()}</span>
                 </div>
                 <div className="flex items-center gap-2 text-ivory-dim">
                   <Clock className="w-3.5 h-3.5 text-acid" />

@@ -63,13 +63,13 @@ export default function Footer() {
 
           {/* Studio Specifications Column */}
           <div className="md:col-span-4">
-            <h3 className="font-mono text-[11px] uppercase tracking-widest text-ivory-dim mb-6 pb-2 border-b border-obsidian-border">
-              Studio Coordinates
+            <h3 className="font-mono text-xs uppercase tracking-wider text-ivory-dim mb-6 pb-2 border-b border-obsidian-border">
+              Studio Practice
             </h3>
             <div className="space-y-4 font-mono text-xs text-ivory-muted">
               <div>
                 <span className="text-[10px] text-ivory-dim uppercase tracking-wider block mb-1">
-                  Studio Mandate
+                  Mandate
                 </span>
                 <p className="text-acid flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-acid rounded-none" />
@@ -81,8 +81,8 @@ export default function Footer() {
                 <span className="text-[10px] text-ivory-dim uppercase tracking-wider block mb-1">
                   Operating Standard
                 </span>
-                <p className="text-ivory-muted/80">
-                  Strict TypeScript // Edge Architecture // Measurable Impact
+                <p className="text-ivory-muted/90">
+                  Strict TypeScript, edge infrastructure, and verifiable architecture.
                 </p>
               </div>
 
@@ -90,7 +90,7 @@ export default function Footer() {
                 <span className="text-[10px] text-ivory-dim uppercase tracking-wider block mb-1">
                   Response Window
                 </span>
-                <p className="text-ivory-muted/80">
+                <p className="text-ivory-muted/90">
                   Within 24 business hours
                 </p>
               </div>

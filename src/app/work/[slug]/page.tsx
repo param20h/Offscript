@@ -93,11 +93,9 @@ export default async function ProjectDetailPage({ params }: Props) {
         <div className="relative z-10">
           <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-obsidian-border font-mono text-xs">
             <div className="flex items-center gap-3">
-              <span className="text-acid font-bold">
-                ARCHITECTURAL DOSSIER //
+              <span className="text-acid font-semibold uppercase tracking-wider">
+                {project.category}
               </span>
-              <span className="text-ivory font-medium">{project.slug.toUpperCase()}</span>
-              <span className="text-ivory-dim">// {project.category.toUpperCase()}</span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -181,14 +179,10 @@ export default async function ProjectDetailPage({ params }: Props) {
                 {project.problem}
               </p>
             </div>
-            <div className="mt-6 pt-4 border-t border-obsidian-border font-mono text-[10px] text-ivory-dim uppercase">
-              STATUS: IDENTIFIED ARCHITECTURAL BOTTLENECK
-            </div>
           </div>
 
           {/* Approach Card */}
           <div className="p-8 border border-acid/40 bg-obsidian-surface flex flex-col justify-between relative">
-            <div className="absolute top-2 right-2 w-2 h-2 bg-acid" />
             <div>
               <div className="flex items-center gap-2 font-mono text-xs text-acid uppercase tracking-widest mb-4">
                 <CheckCircle2 className="w-4 h-4 text-acid" />
@@ -200,9 +194,6 @@ export default async function ProjectDetailPage({ params }: Props) {
               <p className="font-sans text-sm sm:text-base text-ivory-muted leading-relaxed font-light">
                 {project.approach}
               </p>
-            </div>
-            <div className="mt-6 pt-4 border-t border-obsidian-border font-mono text-[10px] text-acid uppercase">
-              STATUS: DETERMINISTIC IMPLEMENTATION
             </div>
           </div>
         </section>

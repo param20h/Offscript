@@ -98,9 +98,9 @@ export default function AboutPage() {
 
         {/* Right Studio Identity Dossier */}
         <div className="lg:col-span-5 p-8 border border-obsidian-border bg-obsidian-surface space-y-6">
-          <h3 className="font-mono text-xs text-acid uppercase tracking-widest pb-3 border-b border-obsidian-border flex items-center justify-between">
-            <span>Studio Identity Codex</span>
-            <span>// 2026</span>
+          <h3 className="font-mono text-xs text-acid uppercase tracking-wider pb-3 border-b border-obsidian-border flex items-center justify-between">
+            <span>Studio Profile</span>
+            <span className="text-ivory-dim">OFFSCRIPT</span>
           </h3>
 
           <div className="space-y-4 font-mono text-xs text-ivory-muted">
@@ -113,8 +113,8 @@ export default function AboutPage() {
               <span className="text-ivory">Precise, Honest, Understated</span>
             </div>
             <div className="flex justify-between border-b border-obsidian-border/60 pb-2">
-              <span className="text-ivory-dim">CONTRACT RIGOR</span>
-              <span className="text-acid">TypeScript Strict // Verified RAG</span>
+              <span className="text-ivory-dim">TECHNICAL RIGOR</span>
+              <span className="text-acid">Strict TypeScript &amp; Verifiable AI</span>
             </div>
             <div className="flex justify-between border-b border-obsidian-border/60 pb-2">
               <span className="text-ivory-dim">PUBLIC CONTACT</span>

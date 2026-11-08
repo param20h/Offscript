@@ -14,22 +14,12 @@ export default function ContactCTA() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="p-8 sm:p-12 lg:p-16 border border-obsidian-border bg-obsidian relative">
-          {/* Subtle Corner Accents */}
-          <div className="absolute -top-1.5 -left-1.5 w-3 h-3 border-t-2 border-l-2 border-acid" />
-          <div className="absolute -top-1.5 -right-1.5 w-3 h-3 border-t-2 border-r-2 border-acid" />
-          <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 border-b-2 border-l-2 border-acid" />
-          <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 border-b-2 border-r-2 border-acid" />
-
-          {/* Section Indicator */}
-          <MotionWrapper className="mb-6">
-            <span className="font-mono text-xs uppercase tracking-widest text-acid">
-              // INITIATION
-            </span>
-          </MotionWrapper>
-
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end">
             {/* Left Headline */}
             <MotionWrapper delay={0.1} className="lg:col-span-8">
+              <span className="font-mono text-xs uppercase tracking-wider text-acid block mb-4">
+                Start An Engagement
+              </span>
               <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-ivory uppercase leading-[0.95]">
                 <span className="block">HAVE AN IDEA?</span>
                 <span className="block text-acid">LET&apos;S MAKE IT REAL.</span>
@@ -64,11 +54,11 @@ export default function ContactCTA() {
             </MotionWrapper>
           </div>
 
-          {/* Bottom Coordinates & Direct Inquiries */}
+          {/* Bottom Direct Inquiries */}
           <div className="mt-12 pt-8 border-t border-obsidian-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 font-mono text-xs text-ivory-dim">
             <div className="flex items-center gap-2">
               <Mail className="w-3.5 h-3.5 text-acid" />
-              <span>DIRECT CONTACT:</span>
+              <span>Email:</span>
               <a
                 href={`mailto:${SITE_CONFIG.email}`}
                 className="text-ivory hover:text-acid underline underline-offset-4 decoration-acid/40 transition-colors"
@@ -77,9 +67,8 @@ export default function ContactCTA() {
               </a>
             </div>
 
-            <div className="flex items-center gap-2 text-acid font-medium">
-              <span className="w-1.5 h-1.5 bg-acid inline-block" />
-              <span>BUILT DIFFERENT. ENGINEERED PROPERLY.</span>
+            <div className="text-ivory-dim text-xs">
+              Response within 24 business hours
             </div>
           </div>
         </div>

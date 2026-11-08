@@ -132,8 +132,8 @@ export default function Navbar() {
           aria-modal="true"
         >
           <div className="flex flex-col gap-6 pt-4">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-acid">
-              // STUDIO NAVIGATION
+            <span className="font-mono text-xs uppercase tracking-wider text-ivory-dim">
+              Menu
             </span>
             <nav className="flex flex-col gap-4" aria-label="Mobile Navigation">
               {NAV_LINKS.map((link, idx) => {

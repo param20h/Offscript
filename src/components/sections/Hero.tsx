@@ -47,22 +47,15 @@ export default function Hero() {
       {/* Background Subtle Architectural Grid */}
       <div className="absolute inset-0 bg-grid-pattern opacity-25 pointer-events-none" />
 
-      {/* Top Editorial Ribbon: Meaningful Studio Specifications */}
+      {/* Top Editorial Ribbon: Studio Positioning */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-6 lg:mb-10">
-        <div className="flex flex-wrap items-center justify-between gap-3 py-2.5 border-b border-obsidian-border font-mono text-[10px] sm:text-xs text-ivory-dim uppercase tracking-widest">
+        <div className="flex flex-wrap items-center justify-between gap-3 py-3 border-b border-obsidian-border font-mono text-xs text-ivory-dim tracking-wider">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 bg-acid inline-block" />
-            <span className="text-ivory font-medium">{SITE_CONFIG.positioning}</span>
+            <span className="text-ivory font-medium uppercase">{SITE_CONFIG.positioning}</span>
           </div>
-          <div className="hidden lg:flex items-center gap-6 text-ivory-dim/80">
-            <span>WEB PLATFORMS</span>
-            <span className="text-acid/40">//</span>
-            <span>INTELLIGENT SYSTEMS</span>
-            <span className="text-acid/40">//</span>
-            <span>CREATIVE ENGINEERING</span>
-          </div>
-          <div className="text-acid font-medium">
-            <span>BUILT DIFFERENT. ENGINEERED PROPERLY.</span>
+          <div className="text-acid font-medium tracking-widest text-[11px] uppercase">
+            {SITE_CONFIG.tagline}
           </div>
         </div>
       </div>
@@ -77,13 +70,6 @@ export default function Hero() {
             animate="visible"
             className="lg:col-span-7 flex flex-col justify-center z-10"
           >
-            {/* Studio Marker */}
-            <motion.div variants={itemVariants} className="mb-3">
-              <span className="font-mono text-xs sm:text-sm uppercase tracking-widest text-acid font-medium">
-                // CREATIVE ENGINEERING CODEX
-              </span>
-            </motion.div>
-
             {/* Oversized Headline with Calibrated Breakpoint Scaling */}
             <motion.h1
               variants={itemVariants}
@@ -128,31 +114,6 @@ export default function Hero() {
                 START A PROJECT
               </Button>
             </motion.div>
-
-            {/* Studio Execution Standards */}
-            <motion.div
-              variants={itemVariants}
-              className="mt-10 pt-5 border-t border-obsidian-border grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-[11px]"
-            >
-              <div>
-                <span className="text-ivory-dim block uppercase tracking-wider mb-1">
-                  DISCIPLINE
-                </span>
-                <span className="text-ivory font-medium">Digital Engineering</span>
-              </div>
-              <div>
-                <span className="text-ivory-dim block uppercase tracking-wider mb-1">
-                  PRACTICE
-                </span>
-                <span className="text-ivory font-medium">Full-Stack &amp; AI Agents</span>
-              </div>
-              <div>
-                <span className="text-ivory-dim block uppercase tracking-wider mb-1">
-                  STANDARD
-                </span>
-                <span className="text-acid font-medium">Production From Day One</span>
-              </div>
-            </motion.div>
           </motion.div>
 
           {/* Right Column: Free-Floating Signature 3D Digital Sculpture */}
@@ -162,10 +123,6 @@ export default function Hero() {
             transition={{ duration: 0.85, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-5 relative w-full h-[380px] sm:h-[460px] lg:h-[540px] flex items-center justify-center"
           >
-            {/* Subtle Architectural Alignment Ticks */}
-            <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-obsidian-border pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-obsidian-border pointer-events-none" />
-
             {/* Interactive 3D Canvas */}
             <div className="w-full h-full relative">
               <SignatureCanvas />
@@ -174,26 +131,22 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Bottom Architectural Bar */}
+      {/* Bottom Editorial Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mt-10 pt-4 border-t border-obsidian-border">
         <div className="flex flex-wrap items-center justify-between text-xs font-mono text-ivory-dim gap-4">
-          <div className="flex items-center gap-3">
-            <span className="text-acid font-bold">00</span>
-            <span className="uppercase tracking-widest text-ivory">
+          <div className="flex items-center gap-2">
+            <span className="uppercase tracking-wider text-ivory">
               OFFSCRIPT DIGITAL STUDIO
             </span>
           </div>
-          <div className="hidden md:flex items-center gap-6 text-[11px] uppercase tracking-wider text-ivory-dim">
-            <span>NO TEMPLATES</span>
-            <span className="text-acid/40">//</span>
-            <span>NO DISPOSABLE CODE</span>
-            <span className="text-acid/40">//</span>
-            <span>VERIFIED ARCHITECTURE</span>
-          </div>
           <div>
-            <span className="tracking-widest text-acid hover:underline cursor-pointer">
-              SCROLL FOR WORK ↓
-            </span>
+            <a
+              href="#statement"
+              className="tracking-wider text-acid hover:text-ivory transition-colors flex items-center gap-1.5"
+            >
+              <span>EXPLORE STUDIO</span>
+              <span>↓</span>
+            </a>
           </div>
         </div>
       </div>

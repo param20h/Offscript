@@ -278,8 +278,8 @@ export default function ContactPage() {
             {submissionResult.status === "idle" && (
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="pb-4 border-b border-obsidian-border font-mono text-xs text-ivory-dim flex justify-between items-center">
-                  <span>INQUIRY FORM // INITIAL ARCHITECTURAL BRIEF</span>
-                  <span className="text-acid">* REQUIRED FIELDS</span>
+                  <span className="uppercase tracking-wider">Project Brief &amp; Requirements</span>
+                  <span className="text-acid">* Required Fields</span>
                 </div>
 
                 {errorMessage && (

@@ -58,10 +58,7 @@ export default function WorkIndex() {
             {/* Top Metadata Ribbon */}
             <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-obsidian-border font-mono text-xs">
               <div className="flex items-center gap-3">
-                <span className="text-acid font-bold">
-                  SYSTEM //
-                </span>
-                <span className="text-ivory-dim uppercase tracking-wider">
+                <span className="text-acid uppercase tracking-wider font-semibold">
                   {project.category}
                 </span>
               </div>

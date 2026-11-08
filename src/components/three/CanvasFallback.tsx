@@ -3,117 +3,100 @@ import React from "react";
 export default function CanvasFallback() {
   return (
     <div
-      className="w-full h-full min-h-[420px] sm:min-h-[480px] lg:min-h-[560px] flex items-center justify-center relative overflow-hidden bg-transparent"
-      aria-label="OFFSCRIPT Architectural Sculpture Blueprint Fallback"
+      className="w-full h-full min-h-[380px] sm:min-h-[460px] lg:min-h-[540px] flex items-center justify-center relative overflow-hidden bg-transparent"
+      aria-label="OFFSCRIPT Architectural Sculpture Elevation"
     >
       {/* Precision coordinate background grid */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-25" />
+      <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none" />
 
-      {/* Crosshairs & Technical Corner Markers */}
-      <div className="absolute top-2 left-2 font-mono text-[9px] text-ivory-dim/70 tracking-widest flex items-center gap-1.5">
-        <span className="w-1.5 h-1.5 bg-acid inline-block" />
-        SCHEMATIC // ISO_ARCH
-      </div>
-      <div className="absolute top-2 right-2 font-mono text-[9px] text-ivory-dim/70 tracking-widest">
-        AXIS: 32.4° // -18.7°
-      </div>
-      <div className="absolute bottom-2 left-2 font-mono text-[9px] text-ivory-dim/70 tracking-widest">
-        FALLBACK: STATIC_VECTOR
-      </div>
-      <div className="absolute bottom-2 right-2 font-mono text-[9px] text-acid/80 tracking-widest flex items-center gap-1">
-        <span className="w-1 h-1 bg-acid inline-block" />
-        STRUCTURE: MONOLITHIC
-      </div>
-
-      {/* Geometric Architectural Wireframe Blueprint */}
+      {/* Geometric Architectural Isometric Drawing */}
       <div className="relative z-10 w-72 h-72 sm:w-80 sm:h-80 flex items-center justify-center">
         <svg
-          viewBox="0 0 240 240"
-          className="w-full h-full text-ivory/80 stroke-current fill-none"
+          viewBox="0 0 320 320"
+          className="w-full h-full"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          {/* Subtle Grid Axes */}
-          <line
-            x1="120"
-            y1="20"
-            x2="120"
-            y2="220"
-            className="stroke-obsidian-border"
-            strokeDasharray="2 4"
-          />
-          <line
-            x1="20"
-            y1="120"
-            x2="220"
-            y2="120"
-            className="stroke-obsidian-border"
-            strokeDasharray="2 4"
+          {/* Subtle Ground Datum Grid */}
+          <line x1="40" y1="240" x2="280" y2="240" stroke="#2B2B2B" strokeWidth="1" />
+          <line x1="80" y1="255" x2="240" y2="255" stroke="#2B2B2B" strokeWidth="1" strokeDasharray="3 3" />
+
+          {/* Stepped Base Plinth */}
+          <polygon
+            points="100,240 220,240 240,250 120,250"
+            fill="#1C1C1C"
+            stroke="#383838"
+            strokeWidth="1"
           />
 
-          {/* Orbital Ellipse A */}
-          <ellipse
-            cx="120"
-            cy="120"
-            rx="95"
-            ry="40"
-            transform="rotate(-25 120 120)"
-            className="stroke-ivory/30 stroke-[0.8]"
+          {/* Vertical Brushed Silver Monolith (Isometric projection) */}
+          {/* Top Face */}
+          <polygon
+            points="115,75 165,55 195,70 145,90"
+            fill="#FAF9F6"
+            stroke="#D8DDE4"
+            strokeWidth="1.2"
+          />
+          {/* Left Face (Silver Highlight) */}
+          <polygon
+            points="115,75 145,90 145,225 115,210"
+            fill="#D8DDE4"
+            stroke="#C0C8D0"
+            strokeWidth="1.2"
+          />
+          {/* Right Face (Silver Shadow) */}
+          <polygon
+            points="145,90 195,70 195,205 145,225"
+            fill="#A0AAB5"
+            stroke="#808B96"
+            strokeWidth="1.2"
           />
 
-          {/* Orbital Ellipse B (Acid Accent) */}
-          <ellipse
-            cx="120"
-            cy="120"
-            rx="75"
-            ry="30"
-            transform="rotate(45 120 120)"
-            className="stroke-acid/40 stroke-[0.8]"
-            strokeDasharray="4 3"
+          {/* Horizontal Warm Ivory Ceramic Cantilever Block (Intersects through pillar) */}
+          {/* Top Face (Warm Ivory) */}
+          <polygon
+            points="60,140 210,105 260,120 110,155"
+            fill="#FAF9F6"
+            stroke="#F0EDE5"
+            strokeWidth="1.2"
+          />
+          {/* Left Face (Warm Ivory Accent) */}
+          <polygon
+            points="60,140 110,155 110,185 60,170"
+            fill="#F0EDE5"
+            stroke="#B8B5AD"
+            strokeWidth="1.2"
+          />
+          {/* Front Face (Warm Ivory Shade) */}
+          <polygon
+            points="110,155 260,120 260,150 110,185"
+            fill="#DCD8CF"
+            stroke="#B8B5AD"
+            strokeWidth="1.2"
           />
 
-          {/* Monolithic Slab (Isometric Cuboid) */}
+          {/* Acid Lime Architectural Precision Datum Blade */}
           <polygon
-            points="95,45 135,30 135,160 95,175"
-            className="fill-obsidian-subtle/80 stroke-acid stroke-[1.2]"
-          />
-          <polygon
-            points="135,30 155,42 155,172 135,160"
-            className="fill-obsidian-border/50 stroke-acid/60 stroke-[1]"
-          />
-          <polygon
-            points="95,45 115,57 155,42 135,30"
-            className="fill-obsidian-surface stroke-acid/80 stroke-[1]"
+            points="55,138 215,101 265,116 105,153"
+            fill="#D6FF35"
+            stroke="#A9D115"
+            strokeWidth="1"
+            opacity="0.9"
           />
 
-          {/* Intersecting Cantilever Plate */}
+          {/* Floating Spatial Rectangular Frame (Offset tilt) */}
           <polygon
-            points="55,120 175,85 185,100 65,135"
-            className="fill-obsidian-subtle/70 stroke-ivory stroke-[1.2]"
-          />
-          <polygon
-            points="65,135 185,100 185,115 65,150"
-            className="fill-obsidian-border/40 stroke-ivory/60 stroke-[1]"
+            points="80,110 240,65 240,210 80,255"
+            stroke="#D8DDE4"
+            strokeWidth="1.5"
+            strokeDasharray="6 3"
+            fill="none"
+            opacity="0.6"
           />
 
-          {/* Crystalline Octahedral Cage Overlaid */}
-          <polygon
-            points="120,40 180,120 120,200 60,120"
-            className="stroke-acid/70 stroke-[0.8]"
-          />
-          <line x1="60" y1="120" x2="180" y2="120" className="stroke-acid/50 stroke-[0.8]" />
-          <line x1="120" y1="40" x2="120" y2="200" className="stroke-acid/50 stroke-[0.8]" />
-
-          {/* Precision Node Markers */}
-          <circle cx="120" cy="40" r="2.5" className="fill-acid" />
-          <circle cx="180" cy="120" r="2.5" className="fill-acid" />
-          <circle cx="120" cy="200" r="2.5" className="fill-acid" />
-          <circle cx="60" cy="120" r="2.5" className="fill-acid" />
-          <circle cx="120" cy="120" r="3" className="fill-ivory" />
+          {/* Minimalist Axis Tick Indicator */}
+          <circle cx="160" cy="160" r="2.5" fill="#D6FF35" />
         </svg>
-
-        {/* Center telemetry label */}
-        <div className="absolute -bottom-4 font-mono text-[9px] tracking-widest text-ivory-dim uppercase text-center">
-          OFFSCRIPT SCULPTURAL BLUEPRINT
-        </div>
       </div>
     </div>
   );
