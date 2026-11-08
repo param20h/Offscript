@@ -1,0 +1,33 @@
+{
+  "name": "offscript-studio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "gsap": "^3.12.7",
+    "lucide-react": "^1.16.0",
+    "motion": "^12.4.7",
+    "next": "^16.4.5",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "tailwind-merge": "^3.0.2",
+    "three": "^0.174.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.1",
+    "@types/node": "^22.13.9",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@types/three": "^0.174.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.1.1",
+    "typescript": "^5.8.2"
+  }
+}
