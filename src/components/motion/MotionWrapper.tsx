@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 
 interface MotionWrapperProps {
   children: React.ReactNode;
+  id?: string;
   delay?: number;
   duration?: number;
   yOffset?: number;
@@ -15,6 +16,7 @@ interface MotionWrapperProps {
 
 export default function MotionWrapper({
   children,
+  id,
   delay = 0,
   duration = 0.6,
   yOffset = 24,
@@ -24,11 +26,16 @@ export default function MotionWrapper({
   const shouldReduceMotion = useReducedMotion();
 
   if (shouldReduceMotion) {
-    return <div className={className}>{children}</div>;
+    return (
+      <div id={id} className={className}>
+        {children}
+      </div>
+    );
   }
 
   return (
     <motion.div
+      id={id}
       initial={{ opacity: 0, y: yOffset }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: viewportOnce, margin: "-40px" }}
