@@ -78,14 +78,12 @@ export default function ServicesPreview() {
                 {/* Dossier Header */}
                 <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-obsidian-border font-mono text-xs">
                   <div className="flex items-center gap-2">
-                    <span className="text-acid font-bold">
-                      DISCIPLINE //
-                    </span>
-                    <span className="text-ivory">{selectedService.id.toUpperCase()}</span>
+                    <span className="w-1.5 h-1.5 bg-acid" />
+                    <span className="text-ivory font-medium uppercase tracking-wider">{selectedService.title}</span>
                   </div>
-                  <Tag variant="acid" size="sm">
-                    CAPABILITY ACTIVE
-                  </Tag>
+                  <span className="text-ivory-dim uppercase tracking-wider text-[11px]">
+                    Engineering Discipline
+                  </span>
                 </div>
 
                 {/* Service Title & Tagline */}

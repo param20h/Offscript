@@ -118,11 +118,11 @@ export default function ContactPage() {
         badge="DIRECT ACCESS"
         title="START AN ENGAGEMENT."
         subtitle="Tell us what you're imagining. We'll help turn it into tangible digital architecture."
-        description="Whether you require an unignorable digital flagship, an autonomous AI pipeline, or full-stack platform engineering, we respond within 24 business hours."
+        description="Whether you require an unignorable digital flagship, an autonomous AI pipeline, or full-stack platform engineering, our team reviews each inquiry directly."
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-12 items-start">
-        {/* Left Column: Direct Inquiries & Calendly Hook */}
+        {/* Left Column: Direct Inquiries & Consultation */}
         <div className="lg:col-span-5 space-y-8">
           {/* Direct Studio Email Card */}
           <div className="p-8 border border-obsidian-border bg-obsidian-surface space-y-6">
@@ -148,10 +148,6 @@ export default function ContactPage() {
                 <span className="text-ivory">IST (UTC +5:30)</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-ivory-dim">RESPONSE WINDOW</span>
-                <span className="text-acid">&lt; 24 Business Hours</span>
-              </div>
-              <div className="flex justify-between">
                 <span className="text-ivory-dim">STUDIO SCOPE</span>
                 <span className="text-ivory font-medium">Bespoke Engineering</span>
               </div>
@@ -168,7 +164,7 @@ export default function ContactPage() {
               Need to brainstorm or align on architectural scope?
             </h3>
             <p className="font-sans text-sm text-ivory-muted leading-relaxed font-light">
-              We host 30-minute discovery calls to evaluate technical architecture, timeline feasibility, and scope boundaries before any contract is drafted.
+              We host 30-minute discovery consultations to evaluate technical architecture, timeline feasibility, and scope boundaries before any engagement commences.
             </p>
             <div className="pt-2">
               <Button
@@ -178,11 +174,11 @@ export default function ContactPage() {
                 withArrow
                 className="w-full"
               >
-                REQUEST DISCOVERY CALL
+                REQUEST CONSULTATION
               </Button>
             </div>
             <p className="font-mono text-[10px] text-ivory-dim text-center">
-              * Automated Calendly scheduling will activate upon URL configuration.
+              Direct scheduling via email while automated calendar integration is provisioned.
             </p>
           </div>
         </div>
@@ -200,8 +196,8 @@ export default function ContactPage() {
                   Inquiry Dispatched &amp; Delivered.
                 </h3>
                 <p className="font-sans text-sm text-ivory-muted max-w-md mx-auto leading-relaxed font-light">
-                  Thank you, <span className="text-ivory font-medium">{formData.name}</span>. Your project brief has been received. We will follow up from{" "}
-                  <span className="text-acid font-mono">{SITE_CONFIG.email}</span> within 24 business hours.
+                  Thank you, <span className="text-ivory font-medium">{formData.name}</span>. Your project brief has been received. We will follow up directly from{" "}
+                  <span className="text-acid font-mono">{SITE_CONFIG.email}</span>.
                 </p>
                 <div className="pt-4">
                   <button

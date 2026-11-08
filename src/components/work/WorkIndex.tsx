@@ -120,7 +120,7 @@ export default function WorkIndex() {
                   <div className="flex justify-between items-center font-mono text-[10px] text-ivory-dim border-b border-obsidian-border pb-2 z-10">
                     <span className="flex items-center gap-1.5">
                       <span className="w-1.5 h-1.5 bg-acid rounded-none inline-block" />
-                      SPEC // {project.slug.toUpperCase()}
+                      {project.title}
                     </span>
                     <span className="text-acid">{project.verificationBadge}</span>
                   </div>

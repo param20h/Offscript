@@ -36,7 +36,6 @@ html {
   background-color: #171717;
   color: #F0EDE5;
   color-scheme: dark;
-  scroll-behavior: smooth;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

@@ -8,11 +8,11 @@ export default function Footer() {
     <footer className="w-full bg-obsidian border-t border-obsidian-border mt-auto">
       {/* Upper Footer: Studio Identity & Navigation */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-16 items-start">
           {/* Brand Column */}
-          <div className="md:col-span-5 flex flex-col justify-between">
+          <div className="md:col-span-7 flex flex-col justify-between space-y-6">
             <div>
-              <div className="flex items-baseline gap-1.5 mb-4">
+              <div className="flex items-baseline gap-1.5 mb-3">
                 <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ivory">
                   OFFSCRIPT
                 </span>
@@ -23,18 +23,18 @@ export default function Footer() {
               <p className="font-mono text-xs uppercase tracking-widest text-acid mb-3">
                 {SITE_CONFIG.positioning}
               </p>
-              <p className="font-sans text-sm text-ivory-muted/90 max-w-sm leading-relaxed mb-6">
-                {SITE_CONFIG.tagline}
+              <p className="font-sans text-sm text-ivory-muted/90 max-w-md leading-relaxed">
+                {SITE_CONFIG.tagline} We design and engineer production software, intelligent agent workflows, and distinct digital flagships.
               </p>
             </div>
 
-            <div className="space-y-1">
-              <span className="font-mono text-[10px] text-ivory-dim uppercase tracking-wider block">
+            <div className="pt-2">
+              <span className="font-mono text-[10px] text-ivory-dim uppercase tracking-wider block mb-1">
                 Direct Inquiries
               </span>
               <a
                 href={`mailto:${SITE_CONFIG.email}`}
-                className="font-mono text-sm text-ivory hover:text-acid transition-colors inline-flex items-center gap-1 group"
+                className="font-mono text-sm sm:text-base text-ivory hover:text-acid transition-colors inline-flex items-center gap-1 group"
               >
                 <span>{SITE_CONFIG.email}</span>
                 <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -43,12 +43,12 @@ export default function Footer() {
           </div>
 
           {/* Navigation Links Column */}
-          <div className="md:col-span-3">
+          <div className="md:col-span-5">
             <h3 className="font-mono text-[11px] uppercase tracking-widest text-ivory-dim mb-6 pb-2 border-b border-obsidian-border">
               Directory
             </h3>
-            <ul className="space-y-3 font-mono text-xs tracking-wider uppercase">
-              {FOOTER_LINKS.map((link, idx) => (
+            <ul className="grid grid-cols-2 gap-y-3 gap-x-6 font-mono text-xs tracking-wider uppercase">
+              {FOOTER_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
@@ -60,58 +60,18 @@ export default function Footer() {
               ))}
             </ul>
           </div>
+        </div>
+      </div>
 
-          {/* Studio Specifications Column */}
-          <div className="md:col-span-4">
-            <h3 className="font-mono text-xs uppercase tracking-wider text-ivory-dim mb-6 pb-2 border-b border-obsidian-border">
-              Studio Practice
-            </h3>
-            <div className="space-y-4 font-mono text-xs text-ivory-muted">
-              <div>
-                <span className="text-[10px] text-ivory-dim uppercase tracking-wider block mb-1">
-                  Mandate
-                </span>
-                <p className="text-acid flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-acid rounded-none" />
-                  Independent Engineering &amp; Architecture
-                </p>
-              </div>
-
-              <div>
-                <span className="text-[10px] text-ivory-dim uppercase tracking-wider block mb-1">
-                  Operating Standard
-                </span>
-                <p className="text-ivory-muted/90">
-                  Strict TypeScript, edge infrastructure, and verifiable architecture.
-                </p>
-              </div>
-
-              <div>
-                <span className="text-[10px] text-ivory-dim uppercase tracking-wider block mb-1">
-                  Response Window
-                </span>
-                <p className="text-ivory-muted/90">
-                  Within 24 business hours
-                </p>
-              </div>
-            </div>
+      {/* Lower Footer: Colophon & Legal */}
+      <div className="border-t border-obsidian-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-ivory-dim">
+          <div className="flex items-center gap-2">
+            <span>&copy; {new Date().getFullYear()} OFFSCRIPT Studio. All rights reserved.</span>
           </div>
-        </div>
 
-        {/* Oversized Subtle Studio Wordmark */}
-        <div className="pt-16 pb-8 border-b border-obsidian-border/60 overflow-hidden select-none">
-          <span className="block font-display text-[14vw] font-black tracking-tighter leading-none text-obsidian-border/50 hover:text-obsidian-border/80 transition-colors whitespace-nowrap text-center">
-            OFFSCRIPT
-          </span>
-        </div>
-
-        {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-ivory-dim">
-          <p>© {SITE_CONFIG.year} {SITE_CONFIG.legalName}. All rights reserved.</p>
           <div className="flex items-center gap-6">
-            <span className="text-ivory-dim/60">
-              BUILT DIFFERENT. ENGINEERED PROPERLY.
-            </span>
+            <span>Built different. Engineered properly.</span>
           </div>
         </div>
       </div>
