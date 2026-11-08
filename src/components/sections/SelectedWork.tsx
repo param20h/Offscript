@@ -113,30 +113,118 @@ export default function SelectedWork() {
                         <span>DIAG_v0.1</span>
                       </div>
 
-                      {/* Schematic Diagram Area */}
+                      {/* Project-Specific Schematic Topology Diagram */}
                       <div className="relative z-10 flex-1 flex items-center justify-center py-4">
-                        <div className="w-full max-w-xs space-y-3 font-mono text-[11px]">
-                          <div className="flex items-center justify-between p-2 border border-obsidian-border bg-obsidian-surface/90">
-                            <span className="text-ivory-muted flex items-center gap-1.5">
-                              <Layers className="w-3.5 h-3.5 text-acid" />
-                              Interface Tier
-                            </span>
-                            <span className="text-acid text-[10px]">Next.js / Reactive</span>
-                          </div>
+                        <div className="w-full max-w-xs space-y-2 font-mono text-[11px]">
+                          {project.slug === "myco-pr-intelligence" && (
+                            <>
+                              <div className="flex items-center justify-between p-2 border border-obsidian-border bg-obsidian-surface/90">
+                                <span className="text-ivory-muted flex items-center gap-1.5">
+                                  <Layers className="w-3.5 h-3.5 text-acid" />
+                                  PR Diff Ingestion
+                                </span>
+                                <span className="text-acid text-[10px]">GitHub REST</span>
+                              </div>
+                              <div className="flex justify-center text-ivory-dim text-[10px]">
+                                ↓ [Tree-sitter AST Parse]
+                              </div>
+                              <div className="flex items-center justify-between p-2 border border-acid/40 bg-obsidian-surface/90">
+                                <span className="text-ivory flex items-center gap-1.5 font-medium">
+                                  <Cpu className="w-3.5 h-3.5 text-acid" />
+                                  Breaking Contract Matrix
+                                </span>
+                                <span className="text-acid text-[10px]">0–100 Score</span>
+                              </div>
+                            </>
+                          )}
 
-                          <div className="flex justify-center text-ivory-dim text-xs">
-                            ↓ [JSON-RPC / WebSockets]
-                          </div>
+                          {project.slug === "zenithflow" && (
+                            <>
+                              <div className="flex items-center justify-between p-2 border border-obsidian-border bg-obsidian-surface/90">
+                                <span className="text-ivory-muted flex items-center gap-1.5">
+                                  <Terminal className="w-3.5 h-3.5 text-acid" />
+                                  Command Engine
+                                </span>
+                                <span className="text-acid text-[10px]">Low Latency</span>
+                              </div>
+                              <div className="flex justify-center text-ivory-dim text-[10px]">
+                                ↓ [Reactive State Bus]
+                              </div>
+                              <div className="flex items-center justify-between p-2 border border-acid/40 bg-obsidian-surface/90">
+                                <span className="text-ivory flex items-center gap-1.5 font-medium">
+                                  <Layers className="w-3.5 h-3.5 text-acid" />
+                                  Async Orchestration Store
+                                </span>
+                                <span className="text-acid text-[10px]">Local-First</span>
+                              </div>
+                            </>
+                          )}
 
-                          <div className="flex items-center justify-between p-2 border border-acid/30 bg-obsidian-surface/90">
-                            <span className="text-ivory-muted flex items-center gap-1.5">
-                              <Cpu className="w-3.5 h-3.5 text-acid" />
-                              Processing Core
-                            </span>
-                            <span className="text-ivory text-[10px]">
-                              {project.technologies[0]}
-                            </span>
-                          </div>
+                          {project.slug === "vesta-ai" && (
+                            <>
+                              <div className="flex items-center justify-between p-2 border border-obsidian-border bg-obsidian-surface/90">
+                                <span className="text-ivory-muted flex items-center gap-1.5">
+                                  <Layers className="w-3.5 h-3.5 text-acid" />
+                                  SEC Disclosures &amp; Calls
+                                </span>
+                                <span className="text-acid text-[10px]">10-K / 10-Q</span>
+                              </div>
+                              <div className="flex justify-center text-ivory-dim text-[10px]">
+                                ↓ [Multi-Agent Graph RAG]
+                              </div>
+                              <div className="flex items-center justify-between p-2 border border-acid/40 bg-obsidian-surface/90">
+                                <span className="text-ivory flex items-center gap-1.5 font-medium">
+                                  <Cpu className="w-3.5 h-3.5 text-acid" />
+                                  Citation Synthesis Brief
+                                </span>
+                                <span className="text-acid text-[10px]">Verified RAG</span>
+                              </div>
+                            </>
+                          )}
+
+                          {project.slug === "campusiq" && (
+                            <>
+                              <div className="flex items-center justify-between p-2 border border-obsidian-border bg-obsidian-surface/90">
+                                <span className="text-ivory-muted flex items-center gap-1.5">
+                                  <Layers className="w-3.5 h-3.5 text-acid" />
+                                  Department Event Streams
+                                </span>
+                                <span className="text-acid text-[10px]">WebSockets</span>
+                              </div>
+                              <div className="flex justify-center text-ivory-dim text-[10px]">
+                                ↓ [Pub/Sub Message Bus]
+                              </div>
+                              <div className="flex items-center justify-between p-2 border border-acid/40 bg-obsidian-surface/90">
+                                <span className="text-ivory flex items-center gap-1.5 font-medium">
+                                  <Cpu className="w-3.5 h-3.5 text-acid" />
+                                  Realtime Operations Hub
+                                </span>
+                                <span className="text-acid text-[10px]">Cluster Node</span>
+                              </div>
+                            </>
+                          )}
+
+                          {project.slug === "triage-ai" && (
+                            <>
+                              <div className="flex items-center justify-between p-2 border border-obsidian-border bg-obsidian-surface/90">
+                                <span className="text-ivory-muted flex items-center gap-1.5">
+                                  <Terminal className="w-3.5 h-3.5 text-acid" />
+                                  Incident Queue Stream
+                                </span>
+                                <span className="text-acid text-[10px]">Zero-Shot</span>
+                              </div>
+                              <div className="flex justify-center text-ivory-dim text-[10px]">
+                                ↓ [Embedding Classification]
+                              </div>
+                              <div className="flex items-center justify-between p-2 border border-acid/40 bg-obsidian-surface/90">
+                                <span className="text-ivory flex items-center gap-1.5 font-medium">
+                                  <Cpu className="w-3.5 h-3.5 text-acid" />
+                                  Deterministic Routing
+                                </span>
+                                <span className="text-acid text-[10px]">Audit Log</span>
+                              </div>
+                            </>
+                          )}
                         </div>
                       </div>
 

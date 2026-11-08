@@ -72,11 +72,11 @@ export default function Footer() {
             <div className="space-y-4 font-mono text-xs text-ivory-muted">
               <div>
                 <span className="text-[10px] text-ivory-dim uppercase tracking-wider block mb-1">
-                  Availability
+                  Studio Mandate
                 </span>
                 <p className="text-acid flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-acid rounded-none animate-pulse" />
-                  Accepting select projects for Q2 / Q3 2026
+                  <span className="w-1.5 h-1.5 bg-acid rounded-none" />
+                  Independent Engineering &amp; Architecture
                 </p>
               </div>
 

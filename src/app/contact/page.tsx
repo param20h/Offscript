@@ -63,8 +63,8 @@ export default function ContactPage() {
                 <span className="text-acid">&lt; 24 Business Hours</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-ivory-dim">CURRENT STATUS</span>
-                <span className="text-acid">OPEN FOR Q2/Q3 2026</span>
+                <span className="text-ivory-dim">STUDIO SCOPE</span>
+                <span className="text-acid">BESPOKE CLIENT SYSTEMS</span>
               </div>
             </div>
           </div>

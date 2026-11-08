@@ -77,9 +77,9 @@ export default function ContactCTA() {
               </a>
             </div>
 
-            <div className="flex items-center gap-2 text-acid">
+            <div className="flex items-center gap-2 text-acid font-medium">
               <span className="w-1.5 h-1.5 bg-acid inline-block" />
-              <span>ACCEPTING SELECT NEW ENGAGEMENTS</span>
+              <span>BUILT DIFFERENT. ENGINEERED PROPERLY.</span>
             </div>
           </div>
         </div>

@@ -172,7 +172,7 @@ export default function Navbar() {
             </Button>
             <div className="flex justify-between items-center text-xs font-mono text-ivory-dim pt-4 border-t border-obsidian-border">
               <span>{SITE_CONFIG.email}</span>
-              <span className="text-acid">STATUS: AVAILABLE</span>
+              <span className="text-acid">{SITE_CONFIG.tagline}</span>
             </div>
           </div>
         </div>
