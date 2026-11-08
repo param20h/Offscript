@@ -4,10 +4,46 @@ import React, { useState } from "react";
 import { SITE_CONFIG } from "@/lib/constants";
 import SectionHeader from "@/components/ui/SectionHeader";
 import Button from "@/components/ui/Button";
-import Tag from "@/components/ui/Tag";
-import { Mail, Calendar, CheckCircle2, ArrowUpRight, AlertCircle, Loader2 } from "lucide-react";
+import {
+  Mail,
+  Calendar,
+  CheckCircle2,
+  ArrowUpRight,
+  AlertCircle,
+  Loader2,
+  SendHorizontal,
+  ExternalLink,
+} from "lucide-react";
+
+type SubmissionState =
+  | { status: "idle" }
+  | { status: "delivered"; message: string }
+  | {
+      status: "fallback_recorded";
+      message: string;
+      mailtoUrl: string;
+      fallbackEmail: string;
+    };
+
+const BUDGET_OPTIONS = {
+  USD: [
+    { value: "Under $10k", label: "Under $10,000 (Launch / Scoped Prototype)" },
+    { value: "$10k–$25k", label: "$10,000 – $25,000 (Production Application / MVP)" },
+    { value: "$25k–$50k", label: "$25,000 – $50,000 (Full-Scale Platform / Custom AI)" },
+    { value: "$50k+", label: "$50,000+ (Enterprise Architecture)" },
+    { value: "To Be Scoped", label: "To Be Scoped in Discovery" },
+  ],
+  INR: [
+    { value: "Under ₹8L", label: "Under ₹8,00,000 (Launch / Scoped Prototype)" },
+    { value: "₹8L–₹20L", label: "₹8,00,000 – ₹20,00,000 (Production Application / MVP)" },
+    { value: "₹20L–₹40L", label: "₹20,00,000 – ₹40,00,000 (Full-Scale Platform / Custom AI)" },
+    { value: "₹40L+", label: "₹40,00,000+ (Enterprise Architecture)" },
+    { value: "To Be Scoped", label: "To Be Scoped in Discovery" },
+  ],
+};
 
 export default function ContactPage() {
+  const [currency, setCurrency] = useState<"USD" | "INR">("USD");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -20,7 +56,16 @@ export default function ContactPage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [submissionSuccess, setSubmissionSuccess] = useState<boolean | null>(null);
+  const [submissionResult, setSubmissionResult] = useState<SubmissionState>({ status: "idle" });
+
+  const handleCurrencyChange = (newCurrency: "USD" | "INR") => {
+    setCurrency(newCurrency);
+    // Reset to the first budget option for the new currency
+    setFormData((prev) => ({
+      ...prev,
+      budgetRange: BUDGET_OPTIONS[newCurrency][0].value,
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,18 +76,37 @@ export default function ContactPage() {
       const res = await fetch("/api/inquire", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          currency,
+        }),
       });
 
       const data = await res.json();
+
+      if (res.status === 503) {
+        // Truth in engineering: server logged inquiry, but automated SMTP/Resend is not yet verified
+        setSubmissionResult({
+          status: "fallback_recorded",
+          message: data.error,
+          mailtoUrl: data.mailtoUrl,
+          fallbackEmail: data.fallbackEmail || SITE_CONFIG.email,
+        });
+        return;
+      }
 
       if (!res.ok) {
         throw new Error(data.error || "Failed to submit project inquiry.");
       }
 
-      setSubmissionSuccess(true);
+      setSubmissionResult({
+        status: "delivered",
+        message: data.message || "Your inquiry has been successfully delivered to the studio.",
+      });
     } catch (err: any) {
-      setErrorMessage(err.message || "An unexpected error occurred. Please contact us via email.");
+      setErrorMessage(
+        err.message || "An unexpected network error occurred. Please contact us directly via email."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -51,7 +115,6 @@ export default function ContactPage() {
   return (
     <div className="w-full py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <SectionHeader
-        index="// PROJECT INQUIRY"
         badge="DIRECT ACCESS"
         title="START AN ENGAGEMENT."
         subtitle="Tell us what you're imagining. We'll help turn it into tangible digital architecture."
@@ -64,7 +127,7 @@ export default function ContactPage() {
           {/* Direct Studio Email Card */}
           <div className="p-8 border border-obsidian-border bg-obsidian-surface space-y-6">
             <span className="font-mono text-xs uppercase tracking-widest text-acid block">
-              // Direct Inquiries
+              Direct Inquiries
             </span>
             <div>
               <span className="font-mono text-[10px] text-ivory-dim uppercase tracking-wider block mb-1">
@@ -127,34 +190,30 @@ export default function ContactPage() {
         {/* Right Column: Full-Stack Project Inquiry Form */}
         <div className="lg:col-span-7">
           <div className="p-8 sm:p-12 border border-obsidian-border bg-obsidian-surface">
-            {submissionSuccess ? (
+            {/* Condition 1: Direct Transactional Delivery Success */}
+            {submissionResult.status === "delivered" && (
               <div className="py-12 text-center space-y-4">
                 <div className="w-12 h-12 bg-acid/10 border border-acid text-acid flex items-center justify-center mx-auto">
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
                 <h3 className="font-display text-2xl font-bold text-ivory">
-                  Inquiry Validated &amp; Recorded.
+                  Inquiry Dispatched &amp; Delivered.
                 </h3>
                 <p className="font-sans text-sm text-ivory-muted max-w-md mx-auto leading-relaxed font-light">
-                  Thank you, <span className="text-ivory font-medium">{formData.name}</span>. Your project brief has been validated by our inquiry route. We will follow up from{" "}
+                  Thank you, <span className="text-ivory font-medium">{formData.name}</span>. Your project brief has been received. We will follow up from{" "}
                   <span className="text-acid font-mono">{SITE_CONFIG.email}</span> within 24 business hours.
                 </p>
-                <div className="p-4 bg-obsidian border border-obsidian-border text-left font-mono text-xs text-ivory-dim max-w-md mx-auto space-y-1">
-                  <div><span className="text-ivory-dim">Project:</span> <span className="text-ivory">{formData.projectType}</span></div>
-                  <div><span className="text-ivory-dim">Budget:</span> <span className="text-ivory">{formData.budgetRange}</span></div>
-                  <div><span className="text-ivory-dim">Timeline:</span> <span className="text-ivory">{formData.timeline}</span></div>
-                </div>
                 <div className="pt-4">
                   <button
                     type="button"
                     onClick={() => {
-                      setSubmissionSuccess(null);
+                      setSubmissionResult({ status: "idle" });
                       setFormData({
                         name: "",
                         email: "",
                         company: "",
                         projectType: "Web Development",
-                        budgetRange: "Under $10k",
+                        budgetRange: BUDGET_OPTIONS[currency][0].value,
                         timeline: "2 to 4 Weeks",
                         description: "",
                       });
@@ -165,7 +224,58 @@ export default function ContactPage() {
                   </button>
                 </div>
               </div>
-            ) : (
+            )}
+
+            {/* Condition 2: Server Fallback Logged (Honest Technical State) */}
+            {submissionResult.status === "fallback_recorded" && (
+              <div className="py-6 space-y-6">
+                <div className="p-5 bg-acid/5 border border-acid/40 space-y-3">
+                  <div className="flex items-center gap-2 text-acid font-mono text-xs font-semibold uppercase tracking-wider">
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    <span>Inquiry Preserved on Studio Server</span>
+                  </div>
+                  <p className="font-sans text-xs text-ivory-muted leading-relaxed">
+                    Your brief has been validated and stored in our server intake queue. However, because automated external email dispatch awaits sending-domain verification, please also send your pre-formatted brief via email to ensure zero-friction direct delivery:
+                  </p>
+                  <div className="pt-2">
+                    <a
+                      href={submissionResult.mailtoUrl}
+                      className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-acid text-obsidian font-mono text-xs font-bold uppercase tracking-wider hover:bg-ivory transition-colors"
+                    >
+                      <Mail className="w-4 h-4" />
+                      <span>Send Pre-Filled Email ({submissionResult.fallbackEmail})</span>
+                      <ArrowUpRight className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+
+                <div className="p-5 border border-obsidian-border bg-obsidian font-mono text-xs space-y-2 text-ivory-dim">
+                  <div className="text-[10px] uppercase tracking-wider text-ivory-muted border-b border-obsidian-border pb-1">
+                    Logged Brief Summary
+                  </div>
+                  <div><span className="text-ivory-dim">Name:</span> <span className="text-ivory">{formData.name}</span></div>
+                  <div><span className="text-ivory-dim">Email:</span> <span className="text-ivory">{formData.email}</span></div>
+                  <div><span className="text-ivory-dim">Discipline:</span> <span className="text-ivory">{formData.projectType}</span></div>
+                  <div><span className="text-ivory-dim">Budget:</span> <span className="text-acid">{currency} {formData.budgetRange}</span></div>
+                  <div><span className="text-ivory-dim">Timeline:</span> <span className="text-ivory">{formData.timeline}</span></div>
+                </div>
+
+                <div className="text-center">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSubmissionResult({ status: "idle" });
+                    }}
+                    className="font-mono text-xs text-ivory-dim hover:text-acid hover:underline cursor-pointer"
+                  >
+                    ← Edit or Submit Another Brief
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Condition 3: Default Active Form */}
+            {submissionResult.status === "idle" && (
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="pb-4 border-b border-obsidian-border font-mono text-xs text-ivory-dim flex justify-between items-center">
                   <span>INQUIRY FORM // INITIAL ARCHITECTURAL BRIEF</span>
@@ -260,47 +370,72 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                {/* Budget Range & Timeline */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div>
+                {/* Currency & Budget Selection */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
                     <label
                       htmlFor="budgetRange"
-                      className="block font-mono text-xs text-ivory uppercase tracking-wider mb-2"
+                      className="block font-mono text-xs text-ivory uppercase tracking-wider"
                     >
                       Budget Framework
                     </label>
-                    <select
-                      id="budgetRange"
-                      value={formData.budgetRange}
-                      onChange={(e) => setFormData({ ...formData, budgetRange: e.target.value })}
-                      className="w-full px-4 py-3 bg-obsidian border border-obsidian-border text-ivory text-sm font-sans focus:outline-none focus:border-acid transition-colors"
-                    >
-                      <option value="Under $10k">Under $10k (Launch / Focused Sprint)</option>
-                      <option value="$10k–$25k">$10k–$25k (Standard App / System)</option>
-                      <option value="$25k–$50k">$25k–$50k (Comprehensive Platform / AI)</option>
-                      <option value="$50k+">$50k+ (Enterprise Architecture)</option>
-                      <option value="To Be Scoped">To Be Scoped in Discovery</option>
-                    </select>
+                    {/* Explicit Currency Toggle */}
+                    <div className="flex items-center gap-1 bg-obsidian border border-obsidian-border p-0.5">
+                      <button
+                        type="button"
+                        onClick={() => handleCurrencyChange("USD")}
+                        className={`px-2.5 py-1 font-mono text-xs transition-colors cursor-pointer ${
+                          currency === "USD"
+                            ? "bg-acid text-obsidian font-bold"
+                            : "text-ivory-dim hover:text-ivory"
+                        }`}
+                      >
+                        USD ($)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleCurrencyChange("INR")}
+                        className={`px-2.5 py-1 font-mono text-xs transition-colors cursor-pointer ${
+                          currency === "INR"
+                            ? "bg-acid text-obsidian font-bold"
+                            : "text-ivory-dim hover:text-ivory"
+                        }`}
+                      >
+                        INR (₹)
+                      </button>
+                    </div>
                   </div>
 
-                  <div>
-                    <label
-                      htmlFor="timeline"
-                      className="block font-mono text-xs text-ivory uppercase tracking-wider mb-2"
-                    >
-                      Target Timeline
-                    </label>
-                    <select
-                      id="timeline"
-                      value={formData.timeline}
-                      onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                      className="w-full px-4 py-3 bg-obsidian border border-obsidian-border text-ivory text-sm font-sans focus:outline-none focus:border-acid transition-colors"
-                    >
-                      <option value="2 to 4 Weeks">2 to 4 Weeks (Fast-track)</option>
-                      <option value="4 to 8 Weeks">4 to 8 Weeks (Standard)</option>
-                      <option value="8 to 12 Weeks">8 to 12 Weeks (Comprehensive)</option>
-                      <option value="Ongoing / Retainer">Ongoing Sprint Retainer</option>
-                    </select>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <select
+                        id="budgetRange"
+                        value={formData.budgetRange}
+                        onChange={(e) => setFormData({ ...formData, budgetRange: e.target.value })}
+                        className="w-full px-4 py-3 bg-obsidian border border-obsidian-border text-ivory text-sm font-sans focus:outline-none focus:border-acid transition-colors"
+                      >
+                        {BUDGET_OPTIONS[currency].map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <select
+                        id="timeline"
+                        value={formData.timeline}
+                        onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
+                        className="w-full px-4 py-3 bg-obsidian border border-obsidian-border text-ivory text-sm font-sans focus:outline-none focus:border-acid transition-colors"
+                        aria-label="Target Timeline"
+                      >
+                        <option value="2 to 4 Weeks">2 to 4 Weeks (Fast-track)</option>
+                        <option value="4 to 8 Weeks">4 to 8 Weeks (Standard)</option>
+                        <option value="8 to 12 Weeks">8 to 12 Weeks (Comprehensive)</option>
+                        <option value="Ongoing / Retainer">Ongoing Sprint Retainer</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
 

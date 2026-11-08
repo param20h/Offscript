@@ -59,7 +59,7 @@ export default function WorkIndex() {
             <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-obsidian-border font-mono text-xs">
               <div className="flex items-center gap-3">
                 <span className="text-acid font-bold">
-                  // 0{idx + 1}
+                  SYSTEM //
                 </span>
                 <span className="text-ivory-dim uppercase tracking-wider">
                   {project.category}

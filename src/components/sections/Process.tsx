@@ -12,7 +12,6 @@ export default function Process() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <SectionHeader
-          index="// 04. METHODOLOGY"
           badge="EXECUTION SYSTEM"
           title="ENGINEERING PROCESS."
           subtitle="A deterministic, 5-stage lifecycle from architectural discovery to continuous evolution."
@@ -24,21 +23,19 @@ export default function Process() {
         <div className="mt-12 space-y-6">
           {PROCESS_STEPS.map((step, idx) => (
             <MotionWrapper
-              key={step.step}
+              key={step.title}
               delay={idx * 0.08}
               className="group p-6 sm:p-8 border border-obsidian-border bg-obsidian-surface hover:border-ivory/40 transition-all duration-300"
             >
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-start">
                 {/* Step Indicator & Title */}
-                <div className="md:col-span-4 flex items-start gap-4">
-                  <span className="font-display text-4xl sm:text-5xl font-bold text-acid group-hover:scale-105 transition-transform">
-                    {step.step}
-                  </span>
+                <div className="md:col-span-4 flex items-start gap-3">
+                  <div className="w-1.5 h-10 bg-acid shrink-0 mt-1" />
                   <div>
                     <h3 className="font-display text-2xl font-bold text-ivory tracking-tight group-hover:text-acid transition-colors">
                       {step.title}
                     </h3>
-                    <p className="font-mono text-xs text-ivory-dim tracking-wider uppercase mt-1">
+                    <p className="font-mono text-xs text-ivory-dim tracking-wider uppercase mt-0.5">
                       {step.subtitle}
                     </p>
                   </div>

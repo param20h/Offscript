@@ -1,6 +1,7 @@
 import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SITE_CONFIG } from "@/lib/constants";
 import { SERVICES } from "@/content/services";
 import SectionHeader from "@/components/ui/SectionHeader";
 import Tag from "@/components/ui/Tag";
@@ -12,13 +13,21 @@ export const metadata: Metadata = {
   title: "Services — Digital Engineering Practices & Disciplines",
   description:
     "Comprehensive engineering practices spanning intelligent AI systems, web development, cloud backends, and creative engineering.",
+  alternates: {
+    canonical: `${SITE_CONFIG.url}/services`,
+  },
+  openGraph: {
+    title: "Services — Digital Engineering Practices | OFFSCRIPT",
+    description:
+      "Comprehensive engineering practices spanning intelligent AI systems, web development, cloud backends, and creative engineering.",
+    url: `${SITE_CONFIG.url}/services`,
+  },
 };
 
 export default function ServicesPage() {
   return (
     <div className="w-full py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <SectionHeader
-        index="// SERVICES DIRECTORY"
         badge="ENGINEERING PRACTICES"
         title="TECHNICAL DISCIPLINES."
         subtitle="End-to-end capabilities designed for founders and engineering teams who demand precision."
@@ -40,10 +49,10 @@ export default function ServicesPage() {
               {/* Header Ribbon */}
               <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-obsidian-border font-mono text-xs">
                 <div className="flex items-center gap-3">
-                  <span className="text-acid font-bold">
-                    DISCIPLINE // {service.number}
+                  <span className="text-acid font-bold tracking-wider">
+                    DISCIPLINE
                   </span>
-                  <span className="text-ivory-dim">// {service.id.toUpperCase()}</span>
+                  <span className="text-ivory font-medium">{service.id.toUpperCase()}</span>
                 </div>
                 <div className="flex items-center gap-2 text-ivory-dim">
                   <Clock className="w-3.5 h-3.5 text-acid" />

@@ -1,5 +1,6 @@
 import React from "react";
 import type { Metadata } from "next";
+import { SITE_CONFIG } from "@/lib/constants";
 import SectionHeader from "@/components/ui/SectionHeader";
 import Tag from "@/components/ui/Tag";
 import Button from "@/components/ui/Button";
@@ -10,6 +11,15 @@ export const metadata: Metadata = {
   title: "Packages — Scope & Engagement Models",
   description:
     "Transparently scoped digital engineering models: Launch, Scale, Intelligence, and Custom Engineering.",
+  alternates: {
+    canonical: `${SITE_CONFIG.url}/packages`,
+  },
+  openGraph: {
+    title: "Packages — Scope & Engagement Models | OFFSCRIPT",
+    description:
+      "Transparently scoped digital engineering models: Launch, Scale, Intelligence, and Custom Engineering.",
+    url: `${SITE_CONFIG.url}/packages`,
+  },
 };
 
 const PACKAGES = [
@@ -118,7 +128,6 @@ export default function PackagesPage() {
   return (
     <div className="w-full py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <SectionHeader
-        index="// ENGAGEMENT MODELS"
         badge="TRANSPARENT SCOPING"
         title="ENGINEERING PACKAGES."
         subtitle="Predictable delivery models tailored to architectural complexity and commercial velocity."
@@ -136,7 +145,7 @@ export default function PackagesPage() {
             <div>
               {/* Top Bar */}
               <div className="flex justify-between items-center pb-4 border-b border-obsidian-border font-mono text-xs">
-                <span className="text-acid font-bold">PACKAGE // 0{idx + 1}</span>
+                <span className="text-acid font-bold tracking-wider">{pkg.name.toUpperCase()}</span>
                 <span className="text-ivory-dim flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5 text-acid" />
                   {pkg.timeline}

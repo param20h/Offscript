@@ -18,7 +18,6 @@ export default function ServicesPreview() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <SectionHeader
-          index="// 03. CAPABILITIES"
           badge="ENGINEERING SERVICES"
           title="TECHNICAL PRACTICES."
           subtitle="Specialized capabilities spanning intelligent systems, cloud backends, and creative engineering."
@@ -42,26 +41,16 @@ export default function ServicesPreview() {
                   type="button"
                   onClick={() => setSelectedService(service)}
                   className={cn(
-                    "w-full text-left py-5 px-4 transition-all duration-200 flex items-center justify-between group focus-visible:outline-none focus-visible:bg-obsidian-subtle",
+                    "w-full text-left py-5 px-4 transition-all duration-200 flex items-center justify-between group focus-visible:outline-none focus-visible:bg-obsidian-subtle cursor-pointer",
                     isSelected
                       ? "bg-obsidian text-acid border-l-2 border-l-acid pl-5"
                       : "hover:bg-obsidian/50 text-ivory hover:text-ivory-pure"
                   )}
                   aria-pressed={isSelected}
                 >
-                  <div className="flex items-center gap-4">
-                    <span
-                      className={cn(
-                        "font-mono text-xs transition-colors",
-                        isSelected ? "text-acid font-bold" : "text-ivory-dim group-hover:text-acid"
-                      )}
-                    >
-                      {service.number}
-                    </span>
-                    <span className="font-display text-lg sm:text-xl font-bold tracking-tight">
-                      {service.title}
-                    </span>
-                  </div>
+                  <span className="font-display text-lg sm:text-xl font-bold tracking-tight">
+                    {service.title}
+                  </span>
 
                   <ChevronRight
                     className={cn(
@@ -90,9 +79,9 @@ export default function ServicesPreview() {
                 <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-obsidian-border font-mono text-xs">
                   <div className="flex items-center gap-2">
                     <span className="text-acid font-bold">
-                      SPEC // {selectedService.number}
+                      DISCIPLINE //
                     </span>
-                    <span className="text-ivory-dim">// {selectedService.id.toUpperCase()}</span>
+                    <span className="text-ivory">{selectedService.id.toUpperCase()}</span>
                   </div>
                   <Tag variant="acid" size="sm">
                     CAPABILITY ACTIVE

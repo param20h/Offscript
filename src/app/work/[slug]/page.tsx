@@ -2,6 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { SITE_CONFIG } from "@/lib/constants";
 import { PROJECTS, Project } from "@/content/projects";
 import Tag from "@/components/ui/Tag";
 import Button from "@/components/ui/Button";
@@ -18,6 +19,9 @@ import {
   Zap,
   ArrowUpRight,
   ExternalLink,
+  Code2,
+  Clock,
+  Sparkles,
 } from "lucide-react";
 
 interface Props {
@@ -38,9 +42,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: "Project Not Found" };
   }
 
+  const url = `${SITE_CONFIG.url}/work/${project.slug}`;
+
   return {
     title: `${project.title} — System Architecture Case Study`,
     description: project.description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      type: "article",
+      url,
+      title: `${project.title} — OFFSCRIPT Studio Architecture Case Study`,
+      description: project.description,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${project.title} — OFFSCRIPT Studio`,
+      description: project.description,
+    },
   };
 }
 
@@ -74,8 +94,9 @@ export default async function ProjectDetailPage({ params }: Props) {
           <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-obsidian-border font-mono text-xs">
             <div className="flex items-center gap-3">
               <span className="text-acid font-bold">
-                ARCHITECTURAL DOSSIER // {project.slug.toUpperCase()}
+                ARCHITECTURAL DOSSIER //
               </span>
+              <span className="text-ivory font-medium">{project.slug.toUpperCase()}</span>
               <span className="text-ivory-dim">// {project.category.toUpperCase()}</span>
             </div>
 
@@ -122,7 +143,7 @@ export default async function ProjectDetailPage({ params }: Props) {
               <span className="text-[10px] text-ivory-dim uppercase tracking-wider block mb-1">
                 Repository Access
               </span>
-              <span className="text-ivory-muted">Available Upon Request</span>
+              <span className="text-ivory-muted">Verified Codebase</span>
             </div>
           </div>
         </div>
@@ -130,11 +151,11 @@ export default async function ProjectDetailPage({ params }: Props) {
 
       {/* Main Case Study Editorial Layout */}
       <div className="space-y-16">
-        {/* Section 1: Overview & Context */}
+        {/* Section: Overview & Context */}
         <section className="p-8 sm:p-10 border border-obsidian-border bg-obsidian">
           <div className="flex items-center gap-2 font-mono text-xs text-acid uppercase tracking-widest mb-4">
             <Terminal className="w-4 h-4" />
-            <span>01 // System Overview &amp; Context</span>
+            <span>System Overview &amp; Context</span>
           </div>
           <h2 className="font-display text-2xl sm:text-3xl font-bold text-ivory tracking-tight mb-4">
             The Context
@@ -144,14 +165,14 @@ export default async function ProjectDetailPage({ params }: Props) {
           </p>
         </section>
 
-        {/* Section 2: Problem Statement vs Engineering Approach */}
+        {/* Section: Problem Statement vs Engineering Approach */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Problem Card */}
           <div className="p-8 border border-obsidian-border bg-obsidian-surface flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 font-mono text-xs text-red-400 uppercase tracking-widest mb-4">
                 <AlertTriangle className="w-4 h-4 text-red-400" />
-                <span>02 // The Problem</span>
+                <span>The Problem</span>
               </div>
               <h3 className="font-display text-2xl font-bold text-ivory tracking-tight mb-4">
                 Core Constraints &amp; Failure Modes
@@ -171,7 +192,7 @@ export default async function ProjectDetailPage({ params }: Props) {
             <div>
               <div className="flex items-center gap-2 font-mono text-xs text-acid uppercase tracking-widest mb-4">
                 <CheckCircle2 className="w-4 h-4 text-acid" />
-                <span>03 // Engineering Approach</span>
+                <span>Engineering Approach</span>
               </div>
               <h3 className="font-display text-2xl font-bold text-ivory tracking-tight mb-4">
                 Architectural Solution
@@ -186,18 +207,83 @@ export default async function ProjectDetailPage({ params }: Props) {
           </div>
         </section>
 
-        {/* Section 3: Technical Architecture & Key Components */}
+        {/* Section: Verification Matrix (Implemented vs Prototype Boundary vs Planned) */}
         <section className="p-8 sm:p-10 border border-obsidian-border bg-obsidian-surface">
           <div className="flex items-center gap-2 font-mono text-xs text-acid uppercase tracking-widest mb-4">
+            <ShieldCheck className="w-4 h-4" />
+            <span>Implementation Audit Matrix</span>
+          </div>
+
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-ivory tracking-tight mb-2">
+            Verified Scope &amp; Lifecycle Boundaries
+          </h2>
+          <p className="font-sans text-sm text-ivory-muted mb-8 font-light">
+            Strict truth in engineering: we clearly separate what is functional in code, what is bounded by prototype scope, and what represents future architectural roadmap.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Column 1: Implemented Functionality */}
+            <div className="p-6 border border-acid/30 bg-obsidian">
+              <div className="flex items-center gap-2 mb-4 pb-2 border-b border-obsidian-border font-mono text-xs text-acid">
+                <CheckCircle2 className="w-4 h-4" />
+                <span className="font-bold uppercase tracking-wider">Implemented in Code</span>
+              </div>
+              <ul className="space-y-2.5 font-sans text-xs sm:text-sm text-ivory leading-relaxed">
+                {project.implementedFunctionality.map((item) => (
+                  <li key={item} className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 bg-acid rounded-none inline-block shrink-0 mt-1.5" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Column 2: Prototype Boundaries */}
+            <div className="p-6 border border-obsidian-border bg-obsidian">
+              <div className="flex items-center gap-2 mb-4 pb-2 border-b border-obsidian-border font-mono text-xs text-ivory-dim">
+                <Clock className="w-4 h-4 text-ivory-muted" />
+                <span className="font-bold uppercase tracking-wider text-ivory">Prototype Boundary</span>
+              </div>
+              <ul className="space-y-2.5 font-sans text-xs sm:text-sm text-ivory-muted leading-relaxed">
+                {project.prototypeBoundaries.map((item) => (
+                  <li key={item} className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 bg-ivory-dim rounded-none inline-block shrink-0 mt-1.5" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Column 3: Planned Increments */}
+            <div className="p-6 border border-obsidian-border bg-obsidian">
+              <div className="flex items-center gap-2 mb-4 pb-2 border-b border-obsidian-border font-mono text-xs text-ivory-dim">
+                <Sparkles className="w-4 h-4 text-acid/60" />
+                <span className="font-bold uppercase tracking-wider text-ivory">Planned Increments</span>
+              </div>
+              <ul className="space-y-2.5 font-sans text-xs sm:text-sm text-ivory-dim leading-relaxed">
+                {project.plannedIncrements.map((item) => (
+                  <li key={item} className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 bg-acid/40 rounded-none inline-block shrink-0 mt-1.5" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* Section: Technical Architecture & Key Components */}
+        <section className="p-8 sm:p-10 border border-obsidian-border bg-obsidian">
+          <div className="flex items-center gap-2 font-mono text-xs text-acid uppercase tracking-widest mb-4">
             <Layers className="w-4 h-4" />
-            <span>04 // Technical Architecture</span>
+            <span>Technical Architecture</span>
           </div>
 
           <h2 className="font-display text-2xl sm:text-3xl font-bold text-ivory tracking-tight mb-4">
             System Topology &amp; Component Decomposition
           </h2>
 
-          <div className="p-4 bg-obsidian border border-obsidian-border font-mono text-xs text-ivory-muted mb-8 flex items-start gap-3">
+          <div className="p-4 bg-obsidian-surface border border-obsidian-border font-mono text-xs text-ivory-muted mb-8 flex items-start gap-3">
             <Terminal className="w-4 h-4 text-acid shrink-0 mt-0.5" />
             <div>
               <span className="text-ivory font-semibold block mb-1">Architecture Summary:</span>
@@ -210,7 +296,7 @@ export default async function ProjectDetailPage({ params }: Props) {
             {project.keyComponents.map((comp) => (
               <div
                 key={comp.name}
-                className="p-5 border border-obsidian-border bg-obsidian hover:border-ivory/30 transition-colors"
+                className="p-5 border border-obsidian-border bg-obsidian-surface hover:border-ivory/30 transition-colors"
               >
                 <div className="flex justify-between items-start gap-2 mb-2">
                   <h4 className="font-display text-lg font-bold text-ivory">
@@ -228,11 +314,11 @@ export default async function ProjectDetailPage({ params }: Props) {
           </div>
         </section>
 
-        {/* Section 4: Engineering Decisions & Trade-offs */}
-        <section className="p-8 sm:p-10 border border-obsidian-border bg-obsidian">
+        {/* Section: Engineering Decisions & Trade-offs */}
+        <section className="p-8 sm:p-10 border border-obsidian-border bg-obsidian-surface">
           <div className="flex items-center gap-2 font-mono text-xs text-acid uppercase tracking-widest mb-4">
             <Cpu className="w-4 h-4" />
-            <span>05 // Engineering Decisions &amp; Trade-offs</span>
+            <span>Engineering Decisions &amp; Trade-offs</span>
           </div>
 
           <h2 className="font-display text-2xl sm:text-3xl font-bold text-ivory tracking-tight mb-6">
@@ -240,22 +326,17 @@ export default async function ProjectDetailPage({ params }: Props) {
           </h2>
 
           <div className="space-y-6">
-            {project.engineeringDecisions.map((dec, i) => (
+            {project.engineeringDecisions.map((dec) => (
               <div
                 key={dec.title}
-                className="p-6 border border-obsidian-border bg-obsidian-surface space-y-3"
+                className="p-6 border border-obsidian-border bg-obsidian space-y-3"
               >
-                <div className="flex items-center gap-3">
-                  <span className="font-mono text-xs text-acid font-bold">
-                    DECISION // 0{i + 1}
-                  </span>
-                  <h3 className="font-display text-lg font-bold text-ivory">
-                    {dec.title}
-                  </h3>
-                </div>
+                <h3 className="font-display text-lg font-bold text-ivory">
+                  {dec.title}
+                </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 font-sans text-sm">
-                  <div className="p-3 bg-obsidian border border-obsidian-border/80">
+                  <div className="p-3 bg-obsidian-surface border border-obsidian-border/80">
                     <span className="font-mono text-[10px] text-ivory-dim uppercase tracking-wider block mb-1">
                       Rationale &amp; Trade-off
                     </span>
@@ -264,7 +345,7 @@ export default async function ProjectDetailPage({ params }: Props) {
                     </p>
                   </div>
 
-                  <div className="p-3 bg-obsidian border border-acid/30">
+                  <div className="p-3 bg-obsidian-surface border border-acid/30">
                     <span className="font-mono text-[10px] text-acid uppercase tracking-wider block mb-1">
                       Engineering Outcome
                     </span>
@@ -278,8 +359,8 @@ export default async function ProjectDetailPage({ params }: Props) {
           </div>
         </section>
 
-        {/* Section 5: Full Technology Stack */}
-        <section className="p-8 border border-obsidian-border bg-obsidian-surface">
+        {/* Section: Full Technology Stack */}
+        <section className="p-8 border border-obsidian-border bg-obsidian">
           <h3 className="font-mono text-xs text-ivory-dim uppercase tracking-wider mb-4">
             Complete Technology Stack
           </h3>
@@ -292,8 +373,8 @@ export default async function ProjectDetailPage({ params }: Props) {
           </div>
         </section>
 
-        {/* Section 6: Provenance & Next Engagement CTA */}
-        <section className="p-8 sm:p-10 border border-obsidian-border bg-obsidian flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        {/* Section: Provenance & Next Engagement CTA */}
+        <section className="p-8 sm:p-10 border border-obsidian-border bg-obsidian-surface flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="max-w-xl">
             <div className="flex items-center gap-2 font-mono text-xs text-acid uppercase tracking-wider mb-2">
               <ShieldCheck className="w-4 h-4 text-acid" />

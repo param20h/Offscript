@@ -18,7 +18,6 @@ export default function SelectedWork() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Editorial Section Header */}
         <SectionHeader
-          index="// 02. SELECTED WORK"
           badge="PORTFOLIO INDEX"
           title="ENGINEERED SYSTEMS."
           subtitle="Real software architecture, autonomous AI agents, and intelligent products."
@@ -47,7 +46,7 @@ export default function SelectedWork() {
                 <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-obsidian-border font-mono text-xs">
                   <div className="flex items-center gap-3">
                     <span className="text-acid font-bold">
-                      0{index + 1} //
+                      SYSTEM //
                     </span>
                     <span className="text-ivory-dim uppercase tracking-wider">
                       {project.category}

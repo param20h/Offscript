@@ -6,7 +6,6 @@ export interface RelevantProjectRef {
 
 export interface ServiceItem {
   id: string;
-  number: string;
   title: string;
   tagline: string;
   description: string;
@@ -21,11 +20,10 @@ export interface ServiceItem {
 export const SERVICES: ServiceItem[] = [
   {
     id: "web-development",
-    number: "01",
     title: "Web Development",
     tagline: "High-performance digital flagships, web apps, and design systems.",
     description:
-      "We engineer modern web applications and flagship brand platforms with strict semantic standards, sub-second Core Web Vitals, and resilient reactive architectures. Every build combines editorial art direction with production-grade TypeScript.",
+      "We engineer modern web applications and flagship brand platforms with strict semantic standards, optimized Core Web Vitals, and resilient reactive architectures. Every build combines editorial art direction with production-grade TypeScript.",
     capabilities: [
       "Next.js App Router Architecture & Turbopack",
       "Design Systems & Token Architectures",
@@ -36,13 +34,13 @@ export const SERVICES: ServiceItem[] = [
     deliverables: [
       "Production-Grade Web Application Codebase",
       "Reusable Component & Token System",
-      "100% Core Web Vitals & Lighthouse Guarantee",
+      "Core Web Vitals & Lighthouse Optimization",
       "Automated CI/CD Deployment Pipeline",
     ],
     techFocus: ["Next.js", "TypeScript", "Tailwind CSS", "React", "Node.js", "Vercel"],
     typicalScope:
-      "Full digital redesigns, bespoke agency/brand flagships, enterprise marketing sites, and high-conversion SaaS web applications.",
-    deliveryTimeline: "2 to 6 weeks depending on architectural complexity",
+      "Full digital flagships, custom brand platforms, portfolio experiences, and interactive web applications.",
+    deliveryTimeline: "2 to 6 weeks depending on architectural scope",
     relevantProjects: [
       { title: "ZenithFlow", slug: "zenithflow", category: "Web Application" },
       { title: "CampusIQ", slug: "campusiq", category: "Full-Stack Web Platform" },
@@ -50,27 +48,26 @@ export const SERVICES: ServiceItem[] = [
   },
   {
     id: "ai-intelligent-systems",
-    number: "02",
     title: "AI & Intelligent Systems",
     tagline: "Autonomous agents, verified RAG pipelines, and operational intelligence.",
     description:
-      "Beyond superficial API wrappers: we engineer robust multi-agent orchestration, verifiable retrieval-augmented generation (RAG) with ground-truth citations, and deterministic domain classifiers that solve high-friction operational workflows.",
+      "Beyond superficial API wrappers: we engineer multi-agent orchestration, verifiable retrieval-augmented generation (RAG) with ground-truth citations, and deterministic domain classifiers that resolve specific operational bottlenecks.",
     capabilities: [
-      "Multi-Agent Workflow Pipelines (LangGraph / State Graphs)",
+      "Multi-Agent Workflow Pipelines (State Graphs)",
       "Vector Search & Hierarchical Document RAG",
-      "Citation Verification & Hallucination Elimination",
+      "Citation Verification & Hallucination Mitigation",
       "Deterministic Guardrails & Evaluation Harnesses",
       "Autonomous Tool-Calling & Structured Extraction",
     ],
     deliverables: [
       "Custom Multi-Agent Orchestration Engine",
       "Vector Embedding & Indexing Pipeline",
-      "Deterministic Evaluation & Test Harness",
+      "Deterministic Evaluation & Benchmark Harness",
       "Operational Telemetry & LLM Observability",
     ],
     techFocus: ["Python", "FastAPI", "LangChain / LangGraph", "pgvector", "OpenAI / Claude API"],
     typicalScope:
-      "Autonomous research agents, intelligent document analyzers, automated support triage engines, and proprietary internal knowledge copilots.",
+      "Autonomous research agents, document extraction systems, automated triage classifiers, and verified domain copilots.",
     deliveryTimeline: "3 to 8 weeks",
     relevantProjects: [
       { title: "Vesta AI", slug: "vesta-ai", category: "Multi-Agent Financial Research" },
@@ -79,11 +76,10 @@ export const SERVICES: ServiceItem[] = [
   },
   {
     id: "backend-cloud-engineering",
-    number: "03",
     title: "Backend & Cloud Engineering",
     tagline: "Fault-tolerant APIs, distributed microservices, and resilient infra.",
     description:
-      "High-throughput data layers, asynchronous worker queues, containerized environments, and cloud infrastructure engineered for zero-downtime reliability and enterprise concurrency.",
+      "Structured data layers, asynchronous worker queues, containerized environments, and cloud infrastructure engineered for concurrency, automated recovery, and clean API contracts.",
     capabilities: [
       "RESTful & Event-Driven API Architectures",
       "PostgreSQL & Document Database Schema Design",
@@ -95,20 +91,19 @@ export const SERVICES: ServiceItem[] = [
       "Scalable REST/WebSocket Backend Service",
       "Optimized Database Schema & Migration Suite",
       "Automated CI/CD & Testing Matrix",
-      "System Telemetry & Health Monitoring",
+      "System Telemetry & Health Probes",
     ],
     techFocus: ["FastAPI", "Node.js", "PostgreSQL", "Redis", "Docker", "AWS / Vercel"],
     typicalScope:
-      "High-traffic backend services, payment and subscription infrastructure, webhook ingestion middleware, and distributed microservices.",
+      "Backend services, subscription infrastructure, webhook ingestion middleware, and distributed service components.",
     deliveryTimeline: "4 to 8 weeks",
     relevantProjects: [
-      { title: "CampusIQ", slug: "campusiq", category: "High-Throughput Concurrent Engine" },
+      { title: "CampusIQ", slug: "campusiq", category: "Concurrent Registration Engine" },
       { title: "Myco PR Intelligence", slug: "myco-pr-intelligence", category: "FastAPI Static Analysis Service" },
     ],
   },
   {
     id: "creative-development",
-    number: "04",
     title: "Creative Development",
     tagline: "Choreographed motion, WebGL experiences, and editorial typography.",
     description:
@@ -128,7 +123,7 @@ export const SERVICES: ServiceItem[] = [
     ],
     techFocus: ["Three.js", "Motion for React", "GSAP", "GLSL Shaders", "Canvas API"],
     typicalScope:
-      "Signature interactive visualizers, art-directed launch experiences, interactive product showcases, and kinetic typographic websites.",
+      "Interactive visualizers, art-directed launch experiences, product showcases, and kinetic typographic websites.",
     deliveryTimeline: "2 to 5 weeks",
     relevantProjects: [
       { title: "OFFSCRIPT Studio Engine", slug: "zenithflow", category: "Signature WebGL & Motion" },
@@ -136,7 +131,6 @@ export const SERVICES: ServiceItem[] = [
   },
   {
     id: "automation-integrations",
-    number: "05",
     title: "Automation & Integrations",
     tagline: "Connecting disconnected systems into continuous operational pipelines.",
     description:
@@ -156,7 +150,7 @@ export const SERVICES: ServiceItem[] = [
     ],
     techFocus: ["TypeScript", "Python", "Stripe API", "GitHub API", "REST / GraphQL", "Webhooks"],
     typicalScope:
-      "Automating code quality checks, multi-app synchronization, financial data aggregation, and CRM/ERP integrations.",
+      "Automating code quality checks, multi-app synchronization, data aggregation, and CRM/payment workflows.",
     deliveryTimeline: "2 to 4 weeks",
     relevantProjects: [
       { title: "Myco PR Intelligence", slug: "myco-pr-intelligence", category: "GitHub Webhook & AST Engine" },
@@ -165,7 +159,6 @@ export const SERVICES: ServiceItem[] = [
   },
   {
     id: "product-engineering",
-    number: "06",
     title: "Product Engineering",
     tagline: "End-to-end product realization from architecture to production launch.",
     description:
@@ -185,11 +178,11 @@ export const SERVICES: ServiceItem[] = [
     ],
     techFocus: ["Full-Stack TypeScript", "Next.js", "PostgreSQL", "System Architecture", "Cloud Runtimes"],
     typicalScope:
-      "Founding technical partnership for pre-seed/seed startups, new product spin-outs, or comprehensive legacy platform modernizations.",
+      "Technical partnership for startups, new product spin-outs, or legacy platform modernizations.",
     deliveryTimeline: "6 to 12 weeks",
     relevantProjects: [
       { title: "ZenithFlow", slug: "zenithflow", category: "End-to-End Workspace OS" },
-      { title: "CampusIQ", slug: "campusiq", category: "Enterprise Academic Operations Platform" },
+      { title: "CampusIQ", slug: "campusiq", category: "Academic Platform Architecture" },
     ],
   },
 ];

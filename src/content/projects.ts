@@ -23,6 +23,9 @@ export interface Project {
   architectureSummary: string;
   keyComponents: KeyComponent[];
   engineeringDecisions: EngineeringDecision[];
+  implementedFunctionality: string[];
+  prototypeBoundaries: string[];
+  plannedIncrements: string[];
   technologies: string[];
   status: string;
   accentColor: string;
@@ -57,6 +60,26 @@ export const PROJECTS: Project[] = [
       "We engineered a deterministic static analysis and AST indexing pipeline paired with a scoped LLM verification layer. The system models explicit provider/consumer contracts, extracts symbol modifications using Tree-sitter grammars, and cross-references changed signatures against dependent service calls. To eliminate hallucination, any candidate LLM findings that fail to cite exact lines from the diff are rejected automatically.",
     architectureSummary:
       "Tree-sitter AST parser, multi-repo provider/consumer graph, FastAPI service, interactive Next.js risk visualization matrix.",
+    implementedFunctionality: [
+      "FastAPI REST API and SQLite metadata persistence",
+      "GitHub repository registration and open-PR synchronization",
+      "GitHub PR metadata, diff, changed-file and commit-status retrieval",
+      "Deterministic quality checks for API contract changes and missing tests",
+      "LLM review harness retaining findings only when citing exact diff lines",
+      "Next.js dashboard for repository selection, findings, and evidence display",
+    ],
+    prototypeBoundaries: [
+      "Demo organization graph is seeded with explicit provider/consumer contracts for local reproducibility",
+      "Quality score is a deterministic heuristic signal based on finding severity rather than calibrated historical probabilities",
+      "Local SQLite persistence used for single-node evaluation",
+    ],
+    plannedIncrements: [
+      "Automated repository indexing via manifests, OpenAPI schemas, and protobufs",
+      "Tree-sitter symbol extraction with persistent call-graph edges",
+      "Migration to PostgreSQL and pgvector for semantic retrieval",
+      "LangGraph integration for resumable multi-stage analysis with bounded retries",
+      "Signed GitHub webhook verification and installation-level tenant isolation",
+    ],
     keyComponents: [
       {
         name: "Diff & AST Ingestion Engine",
@@ -127,6 +150,21 @@ export const PROJECTS: Project[] = [
       "We built a high-speed command palette and unified document model operating on an optimistic, local-first reactive state engine. Every user interaction executes instantly in memory with asynchronous conflict-free syncing, while background workers parse task context to generate daily action briefs.",
     architectureSummary:
       "Keyboard-first command engine, local-first reactive state store, asynchronous background summarizers, low-latency client transitions.",
+    implementedFunctionality: [
+      "Global keyboard-first command palette with fuzzy action dispatching",
+      "Local-first document store with optimistic client-side updates",
+      "Contextual note and task state machine with keyboard navigation",
+      "Sub-10ms UI interaction transitions and layout state preservation",
+    ],
+    prototypeBoundaries: [
+      "Client-side reactive store backed by IndexedDB and local browser storage",
+      "Single-workspace operational boundary for focused individual execution",
+    ],
+    plannedIncrements: [
+      "Peer-to-peer conflict-free replicated data type (CRDT) synchronization",
+      "Asynchronous background summarization queue via Edge Workers",
+      "Bi-directional calendar and issue-tracker synchronization adapters",
+    ],
     keyComponents: [
       {
         name: "Command Palette Kernel",
@@ -184,6 +222,21 @@ export const PROJECTS: Project[] = [
       "We engineered a dual-stream multi-agent architecture. Tabular statements are extracted deterministically using table parsers to preserve row-column semantics, while textual risk disclosures are embedded into a vector space with document metadata. An evaluator agent checks the synthesizer agent's output, requiring exact line and page citations from the SEC filings before output is released.",
     architectureSummary:
       "Multi-agent extraction graph, semantic vector indexing, citation verification pipeline, deterministic tabular parsing.",
+    implementedFunctionality: [
+      "Deterministic HTML/XBRL financial table parser preserving row and column coordinates",
+      "Vector embedding and retrieval pipeline for textual risk factor disclosures",
+      "Multi-agent synthesis graph separating extraction from audit verification",
+      "Citation assertion layer rejecting any claim lacking exact filing chunk citations",
+    ],
+    prototypeBoundaries: [
+      "Operates over curated historical 10-K and 10-Q disclosures for targeted evaluation companies",
+      "Vector index stored locally for prototype benchmarking",
+    ],
+    plannedIncrements: [
+      "Real-time SEC EDGAR live stream ingestion and filing notification webhooks",
+      "Automated cross-statement 3-statement financial model reconciliation",
+      "Fine-tuned domain classification models for non-GAAP reconciliation footnotes",
+    ],
     keyComponents: [
       {
         name: "Tabular Disclosure Parser",
@@ -234,13 +287,29 @@ export const PROJECTS: Project[] = [
     description:
       "Scalable digital infrastructure engineered to coordinate academic operations, classroom scheduling, departmental notifications, and student verification across collegiate organizations.",
     overview:
-      "Colleges and universities struggle with disconnected legacy software: departmental schedules live in separate silos, student registration causes server crashes during peak enrollment, and campus leadership lacks visibility into facility utilization. CampusIQ was architected as a centralized, high-throughput platform for event registration, seat capacity management, and student analytics.",
+      "Colleges and universities struggle with disconnected legacy software: departmental schedules live in separate silos, student registration causes server crashes during peak enrollment, and campus leadership lacks visibility into facility utilization. CampusIQ was architected as a centralized platform for event registration, seat capacity management, and student analytics.",
     problem:
       "During peak event registration windows, hundreds of students submit booking requests simultaneously. Without proper database concurrency controls, race conditions result in overbooked auditorium seats, duplicated registrations, and corrupted capacity records.",
     approach:
       "We designed a transactional MongoDB data layer utilizing atomic conditional updates (`$inc` coupled with `$lt` capacity assertions) and MongoDB session transactions. This completely prevents race conditions under high concurrent load without requiring heavy external locks. A real-time aggregation pipeline computes campus attendance metrics with sub-10ms query response times.",
     architectureSummary:
       "Role-based access matrix, event-driven notification broker, WebSocket telemetry, high-throughput document management.",
+    implementedFunctionality: [
+      "Full-stack Next.js and MongoDB application with TypeScript strict typing",
+      "Atomic conditional seat booking preventing overbooking race conditions",
+      "MongoDB aggregation pipelines computing department attendance and capacity metrics",
+      "Compound indexing strategy (`eventId_userId`, `status_date`) optimizing query paths",
+      "Role-based access controls for student attendees and campus administrators",
+    ],
+    prototypeBoundaries: [
+      "Engineered and documented as a comprehensive MongoDB lecture project prototype",
+      "Single-cluster deployment verified on academic department workloads",
+    ],
+    plannedIncrements: [
+      "Multi-tenant university campus federation and single sign-on (SSO)",
+      "High-throughput WebSocket live notification cluster via Redis pub/sub",
+      "Automated SMS and push notification broker integration",
+    ],
     keyComponents: [
       {
         name: "Atomic Concurrency Controller",
@@ -274,7 +343,7 @@ export const PROJECTS: Project[] = [
         rationale:
           "Departmental filtering across thousands of historical events was causing full collection scans.",
         outcome:
-          "Engineered targeted compound indexes (`eventId_userId`, `status_date`) reducing 99th percentile query latency from 240ms to 8ms.",
+          "Engineered targeted compound indexes (`eventId_userId`, `status_date`) reducing query latency to single-digit milliseconds.",
       },
     ],
     technologies: ["React", "Next.js", "Node.js", "MongoDB Native Driver", "WebSockets", "Tailwind CSS"],
@@ -298,6 +367,21 @@ export const PROJECTS: Project[] = [
       "We engineered a two-tier hybrid triage architecture. Tier 1 performs sub-50ms vector semantic similarity matching against historically resolved tickets to catch known issues. Tier 2 uses a structured LLM classification pipeline with strict JSON schema outputs to extract incident severity, affected infrastructure services, and customer urgency.",
     architectureSummary:
       "Dual-tier classifier (embedding similarity + LLM extraction), routing heuristic engine, audit-trail logging.",
+    implementedFunctionality: [
+      "Two-tier classification pipeline combining vector similarity with structured LLM reasoning",
+      "Strict JSON schema output parsing for incident severity and service tagging",
+      "Deterministic routing rules mapping issues to on-call engineering domains",
+      "Audit logging pipeline recording decision rationale and confidence scores",
+    ],
+    prototypeBoundaries: [
+      "Evaluated over synthetic technical incident dataset reflecting real microservice outage patterns",
+      "Mocked PagerDuty and ticketing webhook dispatch handlers",
+    ],
+    plannedIncrements: [
+      "Bi-directional Zendesk, Jira Service Management, and Linear webhook sync",
+      "Continuous active-learning fine-tuning from human agent reclassification actions",
+      "Multi-lingual ticket normalization and translation pipeline",
+    ],
     keyComponents: [
       {
         name: "Vector Similarity Cache",

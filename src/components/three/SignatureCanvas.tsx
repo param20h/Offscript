@@ -315,7 +315,7 @@ export default function SignatureCanvas() {
       {/* Precision Corner Crosshair Accents */}
       <div className="absolute top-2 left-2 font-mono text-[9px] text-ivory-dim/70 tracking-widest flex items-center gap-1.5 pointer-events-none">
         <span className="w-1.5 h-1.5 bg-acid rounded-none inline-block animate-pulse" />
-        <span>SCULPTURE // ISO_ARCH_01</span>
+        <span>SCULPTURE // ISO_ARCH</span>
       </div>
       <div className="absolute top-2 right-2 font-mono text-[9px] text-ivory-dim/70 tracking-widest pointer-events-none">
         3D_AXIS: REACTIVE

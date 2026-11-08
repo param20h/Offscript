@@ -55,9 +55,6 @@ export default function Footer() {
                     className="text-ivory-muted hover:text-acid transition-colors flex items-center justify-between group py-1"
                   >
                     <span>{link.label}</span>
-                    <span className="text-[10px] text-ivory-dim opacity-0 group-hover:opacity-100 transition-opacity">
-                      // 0{idx + 1}
-                    </span>
                   </Link>
                 </li>
               ))}

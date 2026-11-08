@@ -12,7 +12,7 @@ export default function CanvasFallback() {
       {/* Crosshairs & Technical Corner Markers */}
       <div className="absolute top-2 left-2 font-mono text-[9px] text-ivory-dim/70 tracking-widest flex items-center gap-1.5">
         <span className="w-1.5 h-1.5 bg-acid inline-block" />
-        SCHEMATIC // ISO_ARCH_01
+        SCHEMATIC // ISO_ARCH
       </div>
       <div className="absolute top-2 right-2 font-mono text-[9px] text-ivory-dim/70 tracking-widest">
         AXIS: 32.4° // -18.7°

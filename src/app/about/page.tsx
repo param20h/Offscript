@@ -21,29 +21,34 @@ export const metadata: Metadata = {
   title: "Studio — Philosophy, Engineering Principles & Values",
   description:
     "OFFSCRIPT is an independent digital engineering studio dedicated to craftsmanship, technical depth, and uncompromised execution.",
+  alternates: {
+    canonical: `${SITE_CONFIG.url}/about`,
+  },
+  openGraph: {
+    title: "Studio — Philosophy & Principles | OFFSCRIPT",
+    description:
+      "OFFSCRIPT is an independent digital engineering studio dedicated to craftsmanship, technical depth, and uncompromised execution.",
+    url: `${SITE_CONFIG.url}/about`,
+  },
 };
 
 const DESIGN_PRINCIPLES = [
   {
-    number: "01",
     title: "Editorial Precision",
     description:
       "We design with oversized grotesk typography, disciplined whitespace, asymmetric grids, and sharp hairline boundaries. We reject rounded generic SaaS templates and decorative noise.",
   },
   {
-    number: "02",
     title: "Substance Precedes Aesthetics",
     description:
       "Visual polish cannot rescue a sluggish or buggy platform. Every interface we build is backed by clean schema contracts, sub-second latency, and rigorous error boundaries.",
   },
   {
-    number: "03",
     title: "Purposeful Motion",
     description:
       "Every transition, hover interaction, and 3D visual must communicate state, hierarchy, or brand identity. We strictly respect reduced-motion settings and never hijack scroll mechanics.",
   },
   {
-    number: "04",
     title: "Verifiable Truth",
     description:
       "We never fabricate metrics, awards, client lists, or case-study outcomes. Our reputation is built solely on verifiable code, demonstrable architecture, and measurable impact.",
@@ -64,7 +69,6 @@ export default function AboutPage() {
     <div className="w-full py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Studio Dossier Header */}
       <SectionHeader
-        index="// STUDIO PROFILE"
         badge="STUDIO DOSSIER"
         title="BUILT DIFFERENT. ENGINEERED PROPERLY."
         subtitle="An independent digital engineering studio operating at the intersection of technical depth and art direction."
@@ -141,7 +145,7 @@ export default function AboutPage() {
       <div className="mt-24 pt-16 border-t border-obsidian-border">
         <div className="mb-12">
           <span className="font-mono text-xs uppercase tracking-widest text-acid block mb-2">
-            // OPERATING FOUNDATIONS
+            OPERATING FOUNDATIONS
           </span>
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-ivory tracking-tight">
             Design &amp; Engineering Principles
@@ -151,13 +155,11 @@ export default function AboutPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {DESIGN_PRINCIPLES.map((principle) => (
             <MotionWrapper
-              key={principle.number}
+              key={principle.title}
               className="p-8 border border-obsidian-border bg-obsidian-surface hover:border-ivory/30 transition-colors"
             >
               <div className="flex items-center gap-3 mb-4">
-                <span className="font-mono text-xs font-bold text-acid">
-                  [{principle.number}]
-                </span>
+                <span className="w-2 h-2 bg-acid shrink-0 inline-block" />
                 <h3 className="font-display text-xl font-bold text-ivory tracking-tight">
                   {principle.title}
                 </h3>

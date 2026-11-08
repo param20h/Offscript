@@ -23,7 +23,7 @@ export default function ContactCTA() {
           {/* Section Indicator */}
           <MotionWrapper className="mb-6">
             <span className="font-mono text-xs uppercase tracking-widest text-acid">
-              // 05. INITIATION
+              // INITIATION
             </span>
           </MotionWrapper>
 

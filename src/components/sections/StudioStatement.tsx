@@ -7,19 +7,16 @@ import { SITE_CONFIG } from "@/lib/constants";
 export default function StudioStatement() {
   const tenets = [
     {
-      index: "01",
       title: "Substance Over Noise",
       description:
         "We reject empty buzzwords, template libraries, and superficial polish. We build bespoke software architectures designed to solve concrete operational and business bottlenecks.",
     },
     {
-      index: "02",
       title: "Architecture Before Aesthetics",
       description:
         "Exceptional design falls apart without technical rigor. We engineer sub-second response times, strictly-typed schemas, and resilient failure recovery from line one.",
     },
     {
-      index: "03",
       title: "Authentic Intelligence",
       description:
         "AI is not a marketing veneer. We implement verifiable RAG systems, structured multi-agent loops, and deterministic domain classifiers that deliver predictable utility.",
@@ -38,7 +35,7 @@ export default function StudioStatement() {
         <MotionWrapper className="mb-12 sm:mb-16">
           <div className="flex items-center gap-3">
             <span className="font-mono text-xs uppercase tracking-widest text-acid">
-              // 01. PHILOSOPHY
+              PHILOSOPHY
             </span>
             <span className="font-mono text-[10px] uppercase tracking-widest text-ivory-dim border-l border-obsidian-border pl-3">
               EDITORIAL MANIFESTO
@@ -72,14 +69,11 @@ export default function StudioStatement() {
         <div className="mt-20 lg:mt-28 grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 pt-12 border-t border-obsidian-border">
           {tenets.map((tenet, idx) => (
             <MotionWrapper
-              key={tenet.index}
+              key={tenet.title}
               delay={0.15 + idx * 0.1}
               className="flex flex-col justify-between"
             >
               <div>
-                <span className="font-mono text-xs text-acid font-bold tracking-widest block mb-4">
-                  [{tenet.index}]
-                </span>
                 <h3 className="font-display text-xl sm:text-2xl font-bold text-ivory mb-3 tracking-tight">
                   {tenet.title}
                 </h3>
@@ -89,7 +83,7 @@ export default function StudioStatement() {
               </div>
 
               <div className="mt-8 pt-4 border-t border-obsidian-border/50 font-mono text-[10px] text-ivory-dim uppercase tracking-widest flex items-center justify-between">
-                <span>TENET_{tenet.index}</span>
+                <span>CORE PRINCIPLE</span>
                 <span className="text-acid">VERIFIED</span>
               </div>
             </MotionWrapper>

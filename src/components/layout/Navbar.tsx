@@ -85,9 +85,6 @@ export default function Navbar() {
                       : "text-ivory-muted hover:text-ivory"
                   )}
                 >
-                  <span className="text-[9px] text-ivory-dim mr-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    0{idx + 1}.
-                  </span>
                   {link.label}
                   {isActive && (
                     <span className="absolute bottom-0 left-0 w-full h-[2px] bg-acid" />
@@ -151,9 +148,6 @@ export default function Navbar() {
                     )}
                   >
                     <span>{link.label}</span>
-                    <span className="font-mono text-xs text-ivory-dim">
-                      0{idx + 1}
-                    </span>
                   </Link>
                 );
               })}
