@@ -6,7 +6,9 @@ import { PROJECTS, Project } from "@/content/projects";
 import Button from "@/components/ui/Button";
 import Tag from "@/components/ui/Tag";
 import {
-  GitBranch,
+  Calendar,
+  BookOpen,
+  Terminal,
   Workflow,
   Sparkles,
   Layers,
@@ -14,6 +16,7 @@ import {
   Cpu,
   ShieldCheck,
   Zap,
+  ExternalLink,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import gsap from "gsap";
@@ -33,7 +36,7 @@ type Stage =
   | { type: "conclusion"; stageNumber: number };
 
 const EXHIBITION_STAGES: Stage[] = [
-  // 1. Myco PR Intelligence — dark
+  // 1. ZenithFlow — dark
   { type: "project", project: PROJECTS[0], stageNumber: 1 },
   // 2. Full Ivory Editorial Interlude 1
   {
@@ -44,13 +47,13 @@ const EXHIBITION_STAGES: Stage[] = [
     quote:
       "We reject superficial AI wrappers and disposable marketing boilerplate. Every system we build is grounded in deterministic schema contracts, observable latency boundaries, and verifiable test harnesses.",
     pillars: [
-      "Deterministic AST Parsing",
       "Strict Schema Contracts",
-      "Zero-Hallucination Retrieval",
+      "Row Level Security Isolation",
+      "Idempotent Webhook Queues",
     ],
     stageNumber: 2,
   },
-  // 3. ZenithFlow — dark
+  // 3. Vesta AI — dark
   { type: "project", project: PROJECTS[1], stageNumber: 3 },
   // 4. Full Ivory Editorial Interlude 2
   {
@@ -59,7 +62,7 @@ const EXHIBITION_STAGES: Stage[] = [
     title: "BUILT FOR PRODUCTION STRESS.",
     subtitle: "Concurrency, Resilience & Zero-Leak Architecture",
     quote:
-      "Concurrency, state isolation, and graceful failure handling are not afterthoughts. From sub-50ms event-driven DAG execution to atomic database operations, our software is designed to survive hostile network conditions.",
+      "Concurrency, state isolation, and graceful failure handling are not afterthoughts. From sub-50ms event-driven execution to atomic database operations, our software is designed to survive hostile network conditions.",
     pillars: [
       "ACID Session Guards",
       "Atomic Concurrency Locks",
@@ -67,7 +70,7 @@ const EXHIBITION_STAGES: Stage[] = [
     ],
     stageNumber: 4,
   },
-  // 5. Vesta AI — dark
+  // 5. CampusIQ — dark
   { type: "project", project: PROJECTS[2], stageNumber: 5 },
   // 6. Full Ivory Editorial Interlude 3
   {
@@ -84,24 +87,24 @@ const EXHIBITION_STAGES: Stage[] = [
     ],
     stageNumber: 6,
   },
-  // 7. CampusIQ — dark
+  // 7. Auto Care On Wheels — dark
   { type: "project", project: PROJECTS[3], stageNumber: 7 },
   // 8. Full Ivory Editorial Interlude 4
   {
     type: "interlude",
     id: "interlude-4",
     title: "SOFTWARE AS A DURABLE ASSET.",
-    subtitle: "Disciplined Engineering & Long-Term Viability",
+    subtitle: "Commercial Viability & Long-Term Reliability",
     quote:
-      "We do not build throwaway prototypes. We write strict TypeScript, design scalable data models, and document operational runbooks so engineering teams inherit clean, maintainable systems they can run for years.",
+      "We build durable operational platforms for real-world businesses. We write strict TypeScript, design relational data integrity schemas, and deploy resilient architectures that power daily commercial operations.",
     pillars: [
-      "Strict TypeScript Boundaries",
-      "Self-Documenting Schemas",
-      "Turnkey CI/CD Pipelines",
+      "Strict Prisma Relational Schemas",
+      "Sub-Second Mobile Interactivity",
+      "Automated Dispatch Telemetry",
     ],
     stageNumber: 8,
   },
-  // 9. TriageAI — dark
+  // 9. Star Computer Center — dark
   { type: "project", project: PROJECTS[4], stageNumber: 9 },
   // 10. Full Ivory Exhibition Conclusion
   { type: "conclusion", stageNumber: 10 },
@@ -158,7 +161,6 @@ export default function SelectedWork() {
     const track = trackRef.current;
     if (!section || !track) return;
 
-    // Apply exact geometry immediately
     applyStageGeometry();
 
     const totalStages = EXHIBITION_STAGES.length;
@@ -224,7 +226,7 @@ export default function SelectedWork() {
           // ==========================================
           if (stage.type === "project") {
             const project = stage.project;
-            const isInverted = idx % 4 === 2; // Alternating layout variety for Vesta AI & TriageAI
+            const isInverted = idx % 4 === 2; // Alternating layout variety for Vesta AI & Auto Care On Wheels
 
             return (
               <div
@@ -261,7 +263,7 @@ export default function SelectedWork() {
                     </div>
 
                     <Button href="/work" variant="outline" size="sm" withArrow>
-                      ALL REPOSITORIES
+                      ALL WORK
                     </Button>
                   </div>
                 </div>
@@ -285,9 +287,22 @@ export default function SelectedWork() {
                             {project.category}
                           </span>
                         </div>
-                        <Tag variant="acid" size="sm">
-                          {project.status}
-                        </Tag>
+                        <div className="flex items-center gap-3">
+                          {project.demoUrl && (
+                            <a
+                              href={project.demoUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="font-mono text-xs text-acid hover:text-ivory flex items-center gap-1 transition-colors uppercase tracking-wider font-semibold"
+                            >
+                              <span>Visit Live Site</span>
+                              <ExternalLink className="w-3 h-3" />
+                            </a>
+                          )}
+                          <Tag variant="acid" size="sm">
+                            {project.status}
+                          </Tag>
+                        </div>
                       </div>
 
                       {/* Main Composition Grid */}
@@ -680,46 +695,24 @@ function renderProjectVisual(project: Project) {
       {/* Schematic Diagram */}
       <div className="relative z-10 flex-1 flex items-center justify-center py-2">
         <div className="w-full max-w-xs space-y-2 font-mono text-[11px]">
-          {project.slug === "myco-pr-intelligence" && (
-            <>
-              <div className="flex items-center justify-between p-2 border border-obsidian-border bg-obsidian-surface/90">
-                <span className="text-ivory flex items-center gap-1.5">
-                  <GitBranch className="w-3.5 h-3.5 text-acid" />
-                  GitHub PR Diff Ingestion
-                </span>
-                <span className="text-ivory-dim text-[10px]">Tree-sitter AST</span>
-              </div>
-              <div className="flex justify-center text-ivory-dim text-[10px]">
-                ↓ [Deterministic Rule Engine]
-              </div>
-              <div className="flex items-center justify-between p-2 border border-acid/50 bg-acid/5">
-                <span className="text-ivory flex items-center gap-1.5">
-                  <Zap className="w-3.5 h-3.5 text-acid" />
-                  Breaking Contract Matrix
-                </span>
-                <span className="text-acid text-[10px] font-bold">0-100 Impact</span>
-              </div>
-            </>
-          )}
-
           {project.slug === "zenithflow" && (
             <>
               <div className="flex items-center justify-between p-2 border border-obsidian-border bg-obsidian-surface/90">
                 <span className="text-ivory flex items-center gap-1.5">
-                  <Workflow className="w-3.5 h-3.5 text-acid" />
-                  DAG Trigger Event
+                  <Terminal className="w-3.5 h-3.5 text-acid" />
+                  Supabase Auth &amp; Session
                 </span>
-                <span className="text-ivory-dim text-[10px]">Async FastStream</span>
+                <span className="text-ivory-dim text-[10px]">Next.js 14</span>
               </div>
               <div className="flex justify-center text-ivory-dim text-[10px]">
-                ↓ [Topological Dependency Sort]
+                ↓ [HMAC Razorpay Webhook Ingestion]
               </div>
               <div className="flex items-center justify-between p-2 border border-acid/50 bg-acid/5">
                 <span className="text-ivory flex items-center gap-1.5">
-                  <Cpu className="w-3.5 h-3.5 text-acid" />
-                  Reactive Concurrency Queue
+                  <Database className="w-3.5 h-3.5 text-acid" />
+                  Tenant-Isolated PostgreSQL
                 </span>
-                <span className="text-acid text-[10px] font-bold">&lt; 50ms State</span>
+                <span className="text-acid text-[10px] font-bold">RLS Policies</span>
               </div>
             </>
           )}
@@ -761,31 +754,53 @@ function renderProjectVisual(project: Project) {
               <div className="flex items-center justify-between p-2 border border-acid/50 bg-acid/5">
                 <span className="text-ivory flex items-center gap-1.5">
                   <Layers className="w-3.5 h-3.5 text-acid" />
-                  ACID PostgreSQL Reservation
+                  ACID Capacity Reservation
                 </span>
                 <span className="text-acid text-[10px] font-bold">Zero Conflicts</span>
               </div>
             </>
           )}
 
-          {(project.slug === "triage-ai" || project.slug === "triageai") && (
+          {project.slug === "auto-care-on-wheels" && (
             <>
               <div className="flex items-center justify-between p-2 border border-obsidian-border bg-obsidian-surface/90">
                 <span className="text-ivory flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-acid" />
-                  FHIR-Compliant Intake Stream
+                  <Calendar className="w-3.5 h-3.5 text-acid" />
+                  Customer Booking Interface
                 </span>
-                <span className="text-ivory-dim text-[10px]">Strict Schema</span>
+                <span className="text-ivory-dim text-[10px]">React 18 / Vite</span>
               </div>
               <div className="flex justify-center text-ivory-dim text-[10px]">
-                ↓ [Deterministic Rule Scoring]
+                ↓ [Express API &amp; Availability Engine]
               </div>
               <div className="flex items-center justify-between p-2 border border-acid/50 bg-acid/5">
                 <span className="text-ivory flex items-center gap-1.5">
-                  <Zap className="w-3.5 h-3.5 text-acid" />
-                  Clinician Verification Guard
+                  <Database className="w-3.5 h-3.5 text-acid" />
+                  Prisma ORM &amp; MySQL Dispatch
                 </span>
-                <span className="text-acid text-[10px] font-bold">ESI Tier 1-5</span>
+                <span className="text-acid text-[10px] font-bold">Hostinger Live</span>
+              </div>
+            </>
+          )}
+
+          {project.slug === "star-computer-center" && (
+            <>
+              <div className="flex items-center justify-between p-2 border border-obsidian-border bg-obsidian-surface/90">
+                <span className="text-ivory flex items-center gap-1.5">
+                  <BookOpen className="w-3.5 h-3.5 text-acid" />
+                  Student Interface &amp; Catalog
+                </span>
+                <span className="text-ivory-dim text-[10px]">React / Tailwind</span>
+              </div>
+              <div className="flex justify-center text-ivory-dim text-[10px]">
+                ↓ [Syllabus Content &amp; Input Validation]
+              </div>
+              <div className="flex items-center justify-between p-2 border border-acid/50 bg-acid/5">
+                <span className="text-ivory flex items-center gap-1.5">
+                  <Cpu className="w-3.5 h-3.5 text-acid" />
+                  Inquiry Submission &amp; Backend API
+                </span>
+                <span className="text-acid text-[10px] font-bold">Node / Express</span>
               </div>
             </>
           )}

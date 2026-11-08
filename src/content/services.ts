@@ -42,8 +42,8 @@ export const SERVICES: ServiceItem[] = [
       "Full digital flagships, custom brand platforms, portfolio experiences, and interactive web applications.",
     deliveryTimeline: "2 to 6 weeks depending on architectural scope",
     relevantProjects: [
-      { title: "ZenithFlow", slug: "zenithflow", category: "Web Application" },
-      { title: "CampusIQ", slug: "campusiq", category: "Full-Stack Web Platform" },
+      { title: "Auto Care On Wheels", slug: "auto-care-on-wheels", category: "Commercial Web Application" },
+      { title: "Star Computer Center", slug: "star-computer-center", category: "Educational Web Platform" },
     ],
   },
   {
@@ -67,11 +67,11 @@ export const SERVICES: ServiceItem[] = [
     ],
     techFocus: ["Python", "FastAPI", "LangChain / LangGraph", "pgvector", "OpenAI / Claude API"],
     typicalScope:
-      "Autonomous research agents, document extraction systems, automated triage classifiers, and verified domain copilots.",
+      "Autonomous research agents, document extraction systems, structured intelligence pipelines, and verified domain copilots.",
     deliveryTimeline: "3 to 8 weeks",
     relevantProjects: [
       { title: "Vesta AI", slug: "vesta-ai", category: "Multi-Agent Financial Research" },
-      { title: "TriageAI", slug: "triage-ai", category: "Semantic Incident Classification" },
+      { title: "ZenithFlow", slug: "zenithflow", category: "Productivity & Wellness Intelligence" },
     ],
   },
   {
@@ -99,7 +99,7 @@ export const SERVICES: ServiceItem[] = [
     deliveryTimeline: "4 to 8 weeks",
     relevantProjects: [
       { title: "CampusIQ", slug: "campusiq", category: "Concurrent Registration Engine" },
-      { title: "Myco PR Intelligence", slug: "myco-pr-intelligence", category: "FastAPI Static Analysis Service" },
+      { title: "Auto Care On Wheels", slug: "auto-care-on-wheels", category: "Prisma & MySQL Booking Backend" },
     ],
   },
   {
@@ -126,7 +126,7 @@ export const SERVICES: ServiceItem[] = [
       "Interactive visualizers, art-directed launch experiences, product showcases, and kinetic typographic websites.",
     deliveryTimeline: "2 to 5 weeks",
     relevantProjects: [
-      { title: "OFFSCRIPT Studio Engine", slug: "zenithflow", category: "Signature WebGL & Motion" },
+      { title: "ZenithFlow", slug: "zenithflow", category: "Interactive Dashboard & Motion" },
     ],
   },
   {
@@ -153,8 +153,8 @@ export const SERVICES: ServiceItem[] = [
       "Automating code quality checks, multi-app synchronization, data aggregation, and CRM/payment workflows.",
     deliveryTimeline: "2 to 4 weeks",
     relevantProjects: [
-      { title: "Myco PR Intelligence", slug: "myco-pr-intelligence", category: "GitHub Webhook & AST Engine" },
-      { title: "TriageAI", slug: "triage-ai", category: "Incident Queue Automated Routing" },
+      { title: "Auto Care On Wheels", slug: "auto-care-on-wheels", category: "Automated Booking & Dispatch" },
+      { title: "ZenithFlow", slug: "zenithflow", category: "Razorpay Webhook Subscription Engine" },
     ],
   },
   {

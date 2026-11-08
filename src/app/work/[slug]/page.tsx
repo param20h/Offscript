@@ -98,10 +98,21 @@ export default async function ProjectDetailPage({ params }: Props) {
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <Tag variant="acid" size="sm">
                 {project.status}
               </Tag>
+              {project.demoUrl && (
+                <a
+                  href={project.demoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 bg-acid text-obsidian font-mono text-xs font-semibold hover:bg-acid-hover transition-colors"
+                >
+                  <span>Visit Live Site</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              )}
             </div>
           </div>
 

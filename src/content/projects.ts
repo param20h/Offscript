@@ -37,175 +37,99 @@ export interface Project {
 
 export const CATEGORIES = [
   "All",
+  "Productivity & Wellness Ecosystem",
   "Intelligent Systems",
-  "Developer Tooling",
   "Platform Engineering",
-  "Web Applications",
+  "Commercial Web Application",
+  "Educational Web Platform",
 ] as const;
 
 export const PROJECTS: Project[] = [
-  {
-    slug: "myco-pr-intelligence",
-    title: "Myco PR Intelligence",
-    subtitle: "Cross-Repository Software Quality Intelligence",
-    category: "Developer Tooling",
-    tagline: "Detecting breaking API contracts across organizational codebases before merge.",
-    description:
-      "A software quality intelligence platform that analyzes how a single pull request affects an entire engineering ecosystem. Combines Tree-sitter AST parsing, cross-repository dependency graphs, validation evidence, and deterministic risk scoring.",
-    overview:
-      "Modern microservice architectures frequently suffer from silent breaking changes: an engineer updates an internal API endpoint in one repository, passes local CI, and merges, unknowingly breaking downstream consuming services. Myco PR Intelligence was architected as a local and CI-integrated platform that continuously analyzes pull-request diffs against an organizational dependency brain to identify breaking contract violations, missing test evidence, and blast-radius risks before merging.",
-    problem:
-      "Traditional CI/CD pipelines evaluate pull requests in strict isolation. Unless an enterprise runs expensive, flaky end-to-end integration suites across dozens of services on every commit, contract drift slips into staging. Existing linters cannot resolve multi-repository AST symbol dependencies, while generic AI code reviewers hallucinate issues without ground-truth repository context.",
-    approach:
-      "We engineered a deterministic static analysis and AST indexing pipeline paired with a scoped LLM verification layer. The system models explicit provider/consumer contracts, extracts symbol modifications using Tree-sitter grammars, and cross-references changed signatures against dependent service calls. To eliminate hallucination, any candidate LLM findings that fail to cite exact lines from the diff are rejected automatically.",
-    architectureSummary:
-      "Tree-sitter AST parser, multi-repo provider/consumer graph, FastAPI service, interactive Next.js risk visualization matrix.",
-    implementedFunctionality: [
-      "FastAPI REST API and SQLite metadata persistence",
-      "GitHub repository registration and open-PR synchronization",
-      "GitHub PR metadata, diff, changed-file and commit-status retrieval",
-      "Deterministic quality checks for API contract changes and missing tests",
-      "LLM review harness retaining findings only when citing exact diff lines",
-      "Next.js dashboard for repository selection, findings, and evidence display",
-    ],
-    prototypeBoundaries: [
-      "Demo organization graph is seeded with explicit provider/consumer contracts for local reproducibility",
-      "Quality score is a deterministic heuristic signal based on finding severity rather than calibrated historical probabilities",
-      "Local SQLite persistence used for single-node evaluation",
-    ],
-    plannedIncrements: [
-      "Automated repository indexing via manifests, OpenAPI schemas, and protobufs",
-      "Tree-sitter symbol extraction with persistent call-graph edges",
-      "Migration to PostgreSQL and pgvector for semantic retrieval",
-      "LangGraph integration for resumable multi-stage analysis with bounded retries",
-      "Signed GitHub webhook verification and installation-level tenant isolation",
-    ],
-    keyComponents: [
-      {
-        name: "Diff & AST Ingestion Engine",
-        description:
-          "Connects to GitHub REST/GraphQL APIs, synchronizes pull request diffs, and constructs abstract syntax trees for Python, TypeScript, and JavaScript source files.",
-        tech: "Tree-sitter / Python",
-      },
-      {
-        name: "Company Brain Graph",
-        description:
-          "Maintains cross-repository provider and consumer relationships, identifying which services depend on modified schemas, endpoints, or protobuf contracts.",
-        tech: "SQLite / Graph Schema",
-      },
-      {
-        name: "Deterministic Verification Engine",
-        description:
-          "Applies rule-based scoring to breaking contract modifications, missing test evidence, and manifest edits, calculating an explainable 0–100 quality score.",
-        tech: "FastAPI / Pydantic",
-      },
-      {
-        name: "Impact Visualization Matrix",
-        description:
-          "Interactive dashboard presenting risk levels, exact file findings, evidence citations, and remediation steps for engineering leads.",
-        tech: "Next.js / Tailwind CSS",
-      },
-    ],
-    engineeringDecisions: [
-      {
-        title: "Deterministic Ground Truth Over Pure LLM Review",
-        rationale:
-          "LLMs frequently generate false positives when reviewing complex git diffs without AST context. We mandated that LLM analysis can only augment—never replace—deterministic Tree-sitter contract checks.",
-        outcome:
-          "Candidate LLM findings that cannot cite verified diff line numbers are automatically discarded, eliminating reviewer hallucination.",
-      },
-      {
-        title: "Explicit State for Test Verification",
-        rationale:
-          "A missing test file in a diff is a coverage signal, not definitive proof that no tests exist. Marking tests as 'failed' based solely on diffs causes false alerts.",
-        outcome:
-          "The engine models explicit verification states: Verified, Not-Run, and Unknown, preventing misleading automated rejections.",
-      },
-      {
-        title: "Untrusted Code Input Boundary",
-        rationale:
-          "Repository files and pull-request comments may contain prompt injection payloads or malformed unicode designed to exploit evaluation pipelines.",
-        outcome:
-          "Source code is treated strictly as data payloads with rigorous sanitization and never interpolated into system prompt instructions.",
-      },
-    ],
-    technologies: ["Tree-sitter AST", "FastAPI", "Python", "Next.js", "GitHub API", "Docker", "SQLite"],
-    status: "Verified Prototype",
-    accentColor: "#D6FF35",
-    verificationBadge: "Source Code & Docs Verified",
-  },
+  // 1. ZenithFlow
   {
     slug: "zenithflow",
     title: "ZenithFlow",
-    subtitle: "Intelligent Productivity OS",
-    category: "Intelligent Systems",
-    tagline: "Contextual task orchestration and multi-modal workspace intelligence.",
+    subtitle: "Velocity Planning & Biometric Habit Analytics",
+    category: "Productivity & Wellness Ecosystem",
+    tagline: "All-in-one productivity and wellness platform combining velocity planning with biometric habit analytics.",
     description:
-      "An adaptive workspace OS designed to eliminate context fragmentation. Unifies asynchronous task planning, contextual documentation, and continuous workflow indexing into a single keyboard-first command interface.",
+      "All-in-one productivity and wellness platform designed to combine velocity planning with biometric habit analytics. Built with tenant-isolated PostgreSQL, Row Level Security, and automated Razorpay subscription webhooks.",
     overview:
-      "Knowledge workers lose up to 4 hours daily context-switching between fragmented tools: issue trackers, note applications, chat threads, and command-line scripts. ZenithFlow was designed to replace this fragmented stack with a unified, keyboard-first operating canvas that couples local-first reactive state with background intelligence pipelines.",
+      "Modern professionals juggle fragmented task managers, habit trackers, and wellness applications, creating cognitive friction and disjointed execution. ZenithFlow unifies sprint-based velocity planning with biometric habit analytics into a single responsive SaaS ecosystem.",
     problem:
-      "Most modern web productivity tools are bloated with slow electron wrappers, sluggish cloud round-trips, and disconnected feature silos. Users experience input lag on keyboard strokes and must manually re-enter context across disparate apps, breaking cognitive flow states.",
+      "Synchronizing real-time habit tracking and asynchronous subscription billing requires strict transaction safety. Subscription renewals, cancellations, and tier upgrades must reconcile idempotently with payment provider webhooks without race conditions or access leakage.",
     approach:
-      "We built a high-speed command palette and unified document model operating on an optimistic, local-first reactive state engine. Every user interaction executes instantly in memory with asynchronous conflict-free syncing, while background workers parse task context to generate daily action briefs.",
+      "We engineered a production Next.js application backed by Supabase Auth and tenant-isolated PostgreSQL with Row Level Security (RLS). A secure Razorpay webhook processing pipeline verifies cryptographic signatures, processes subscription lifecycle events idempotently, and updates subscriber tier entitlements in real time.",
     architectureSummary:
-      "Keyboard-first command engine, local-first reactive state store, asynchronous background summarizers, low-latency client transitions.",
+      "Next.js application, Supabase Auth session validation, Razorpay subscription webhook listener, tenant-isolated PostgreSQL with Row Level Security (RLS).",
     implementedFunctionality: [
-      "Global keyboard-first command palette with fuzzy action dispatching",
-      "Local-first document store with optimistic client-side updates",
-      "Contextual note and task state machine with keyboard navigation",
-      "Sub-10ms UI interaction transitions and layout state preservation",
+      "Production Next.js application with modular responsive dashboard",
+      "Supabase Auth integration for secure user onboarding and session management",
+      "Razorpay webhook pipeline with HMAC-SHA256 signature verification",
+      "PostgreSQL database with Row Level Security (RLS) guaranteeing tenant isolation",
+      "Real-time habit tracking and velocity metric synchronization",
+      "Automated subscription tier provisioning and renewal lifecycle handling",
     ],
     prototypeBoundaries: [
-      "Client-side reactive store backed by IndexedDB and local browser storage",
-      "Single-workspace operational boundary for focused individual execution",
+      "Production SaaS deployed on Vercel and Supabase cloud infrastructure",
+      "Active payment gateway configured for subscription billing",
     ],
     plannedIncrements: [
-      "Peer-to-peer conflict-free replicated data type (CRDT) synchronization",
-      "Asynchronous background summarization queue via Edge Workers",
-      "Bi-directional calendar and issue-tracker synchronization adapters",
+      "Native mobile companion application using React Native",
+      "HealthKit and Google Fit biometric API sync adapters",
+      "Team workspace federation for cross-organizational velocity boards",
     ],
     keyComponents: [
       {
-        name: "Command Palette Kernel",
+        name: "Subscription Webhook Engine",
         description:
-          "Zero-latency search and action dispatcher supporting fuzzy matching, nested command workflows, and contextual keyboard shortcuts.",
-        tech: "TypeScript / Custom State Machine",
+          "Verifies Razorpay HMAC signatures, processes recurring billing events idempotently, and provisions tenant tier flags.",
+        tech: "Next.js Route Handlers / Razorpay SDK",
       },
       {
-        name: "Local-First Document Store",
+        name: "Tenant-Isolated Data Core",
         description:
-          "Optimistic client-side cache with indexDB backing, enabling seamless offline execution and sub-10ms UI state transitions.",
-        tech: "Reactive Store / IndexedDB",
+          "Enforces PostgreSQL Row Level Security policies ensuring strict isolation between user workspaces.",
+        tech: "PostgreSQL / Supabase RLS",
       },
       {
-        name: "Context Extraction Pipeline",
+        name: "Velocity Analytics Canvas",
         description:
-          "Lightweight asynchronous summarizer that extracts high-priority blockers, mentions, and dependencies from active workspace notes.",
-        tech: "Edge Functions / Vector Indexing",
+          "Renders real-time habit completion metrics, sprint burn-down rates, and productivity scores.",
+        tech: "React / Tailwind CSS / Recharts",
       },
     ],
     engineeringDecisions: [
       {
-        title: "Optimistic State Over Network Awaiting",
+        title: "Row Level Security Over Application-Layer Filtering",
         rationale:
-          "Waiting for cloud round-trips on every task creation or toggle ruins tactile keyboard feedback.",
+          "Relying solely on ORM where-clauses for tenant isolation risks catastrophic data leakage if an endpoint omits a filter.",
         outcome:
-          "All state changes update the view immediately with automatic background rollback if the server reports a schema or network failure.",
+          "PostgreSQL RLS policies enforce isolation directly at the database engine level across every query.",
       },
       {
-        title: "Keyboard-First Command Architecture",
+        title: "Idempotent Webhook Processing",
         rationale:
-          "Power users work 3x faster when workflows can be triggered without leaving the home row.",
+          "Payment gateways occasionally retry webhooks on transient network blips, risking double-provisioning or duplicated invoices.",
         outcome:
-          "Every action—from creating subtasks to querying AI briefs—is accessible via global `Cmd+K` keystrokes with zero mouse dependency.",
+          "Implemented transactional event deduplication keys to ensure every webhook payload executes exactly once.",
       },
     ],
-    technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Motion", "State Architecture", "IndexedDB"],
-    status: "Active System",
-    accentColor: "#F0EDE5",
-    verificationBadge: "System Architecture Verified",
+    technologies: [
+      "Next.js",
+      "Supabase Auth",
+      "Node.js",
+      "Razorpay API",
+      "PostgreSQL",
+      "Tailwind CSS",
+    ],
+    status: "Production Platform",
+    accentColor: "#D6FF35",
+    verificationBadge: "Live SaaS Deployed",
+    demoUrl: "https://zenithflow.dev/",
   },
+
+  // 2. Vesta AI
   {
     slug: "vesta-ai",
     title: "Vesta AI",
@@ -273,17 +197,26 @@ export const PROJECTS: Project[] = [
           "The secondary Auditor agent cross-checks every synthesized number; unverified statements are flagged and omitted from the final brief.",
       },
     ],
-    technologies: ["Python", "FastAPI", "LangChain / LangGraph", "Vector RAG", "Next.js", "TypeScript"],
+    technologies: [
+      "Python",
+      "FastAPI",
+      "LangChain / LangGraph",
+      "Vector RAG",
+      "Next.js",
+      "TypeScript",
+    ],
     status: "Engineering Prototype",
     accentColor: "#D6FF35",
     verificationBadge: "Algorithmic Pipeline Verified",
   },
+
+  // 3. CampusIQ
   {
     slug: "campusiq",
     title: "CampusIQ",
-    subtitle: "Smart Campus Platform",
+    subtitle: "Smart Campus Event Management & Analytics Platform",
     category: "Platform Engineering",
-    tagline: "Unified administrative workflows and real-time student operations.",
+    tagline: "Event management, classroom scheduling, and student attendance analytics.",
     description:
       "Scalable digital infrastructure engineered to coordinate academic operations, classroom scheduling, departmental notifications, and student verification across collegiate organizations.",
     overview:
@@ -291,14 +224,14 @@ export const PROJECTS: Project[] = [
     problem:
       "During peak event registration windows, hundreds of students submit booking requests simultaneously. Without proper database concurrency controls, race conditions result in overbooked auditorium seats, duplicated registrations, and corrupted capacity records.",
     approach:
-      "We designed a transactional MongoDB data layer utilizing atomic conditional updates (`$inc` coupled with `$lt` capacity assertions) and MongoDB session transactions. This completely prevents race conditions under high concurrent load without requiring heavy external locks. A real-time aggregation pipeline computes campus attendance metrics with sub-10ms query response times.",
+      "We designed a transactional MongoDB data layer utilizing atomic conditional updates and MongoDB session transactions. This completely prevents race conditions under high concurrent load without requiring heavy external locks. A real-time aggregation pipeline computes campus attendance metrics with sub-10ms query response times.",
     architectureSummary:
       "Role-based access matrix, event-driven notification broker, WebSocket telemetry, high-throughput document management.",
     implementedFunctionality: [
       "Full-stack Next.js and MongoDB application with TypeScript strict typing",
       "Atomic conditional seat booking preventing overbooking race conditions",
       "MongoDB aggregation pipelines computing department attendance and capacity metrics",
-      "Compound indexing strategy (`eventId_userId`, `status_date`) optimizing query paths",
+      "Compound indexing strategy optimizing query paths",
       "Role-based access controls for student attendees and campus administrators",
     ],
     prototypeBoundaries: [
@@ -336,91 +269,195 @@ export const PROJECTS: Project[] = [
         rationale:
           "Application-level locking introduces latency bottlenecks and fails when scaling to multiple server instances.",
         outcome:
-          "Leveraging MongoDB's atomic document-level operations guarantees 100% capacity integrity with zero lock contention.",
+          "Leveraging MongoDB atomic document-level operations guarantees 100% capacity integrity with zero lock contention.",
       },
       {
         title: "Compound Indexing Optimization",
         rationale:
           "Departmental filtering across thousands of historical events was causing full collection scans.",
         outcome:
-          "Engineered targeted compound indexes (`eventId_userId`, `status_date`) reducing query latency to single-digit milliseconds.",
+          "Engineered targeted compound indexes reducing query latency to single-digit milliseconds.",
       },
     ],
-    technologies: ["React", "Next.js", "Node.js", "MongoDB Native Driver", "WebSockets", "Tailwind CSS"],
-    status: "Architectural Platform",
+    technologies: [
+      "React",
+      "Next.js",
+      "Node.js",
+      "MongoDB Native Driver",
+      "WebSockets",
+      "Tailwind CSS",
+    ],
+    status: "Production Architecture",
     accentColor: "#F0EDE5",
     verificationBadge: "Document Architecture Verified",
   },
+
+  // 4. Auto Care On Wheels
   {
-    slug: "triage-ai",
-    title: "TriageAI",
-    subtitle: "Support Ticket Intelligence",
-    category: "Intelligent Systems",
-    tagline: "Semantic triage and deterministic escalation for technical incident queues.",
+    slug: "auto-care-on-wheels",
+    title: "Auto Care On Wheels",
+    subtitle: "Mobile Mechanic Scheduling & Service Dispatch System",
+    category: "Commercial Web Application",
+    tagline: "Automated car service booking, scheduling confirmations, and dispatch management.",
     description:
-      "Automated issue classification and triage engine. Evaluates incoming support and incident tickets through zero-shot classification, context extraction, and automated routing to domain engineering groups.",
+      "A complete full-stack car service booking platform deployed for a real commercial mechanic business. The platform automates customer scheduling, booking confirmations, and administrative service dispatch.",
     overview:
-      "Enterprise support organizations receive thousands of tickets daily ranging from urgent production outages to routine billing inquiries. Manual triage takes up to 45 minutes per ticket, delaying critical engineering escalation and causing customer frustration. TriageAI automatically ingests, analyzes, and routes tickets within seconds.",
+      "Operating a mobile automotive mechanic service requires coordinating customer locations, vehicle specifications, technician availability, and service packages. Auto Care On Wheels was commissioned to transition an established automotive repair business from manual phone and paper bookings to a modern, automated online dispatch platform.",
     problem:
-      "Keyword-based routing algorithms break down on complex technical support tickets: a user saying 'my database query timed out during checkout' might be routed to billing because of the word 'checkout', rather than to the infrastructure or platform engineering team.",
+      "Manual booking via phone calls created severe scheduling bottlenecks during peak driving hours: double-booked time slots, missed inquiries, lack of structured vehicle detail collection, and delayed customer confirmations. Administrative staff spent hours daily manually re-typing job orders into calendars.",
     approach:
-      "We engineered a two-tier hybrid triage architecture. Tier 1 performs sub-50ms vector semantic similarity matching against historically resolved tickets to catch known issues. Tier 2 uses a structured LLM classification pipeline with strict JSON schema outputs to extract incident severity, affected infrastructure services, and customer urgency.",
+      "We engineered a full-stack booking system pairing a customer-facing appointment scheduling interface with an administrative dispatch portal. The client interface dynamically queries mechanic availability, enforces slot validation, and collects vehicle details (make, model, year, service type). Bookings are processed through an Express API and committed via Prisma ORM to MySQL, triggering automated confirmation alerts and administrative dashboard updates.",
     architectureSummary:
-      "Dual-tier classifier (embedding similarity + LLM extraction), routing heuristic engine, audit-trail logging.",
+      "Customer Interface → Appointment Availability → Booking API → Prisma ORM → MySQL, with an administrative dispatch layer.",
     implementedFunctionality: [
-      "Two-tier classification pipeline combining vector similarity with structured LLM reasoning",
-      "Strict JSON schema output parsing for incident severity and service tagging",
-      "Deterministic routing rules mapping issues to on-call engineering domains",
-      "Audit logging pipeline recording decision rationale and confidence scores",
+      "Full-stack web application built with React 18 and Vite for fast client rendering",
+      "Interactive calendar booking with dynamic date and time availability querying",
+      "Express.js REST API handling booking validation, scheduling constraints, and status updates",
+      "Prisma ORM schema modeling customers, appointments, service tiers, and vehicle data",
+      "MySQL database managing appointment persistence and scheduling transactions",
+      "Administrative control portal for viewing, confirming, and dispatching incoming jobs",
+      "Automated booking notification workflow dispatched upon reservation confirmation",
+      "Live production deployment and DNS configuration on Hostinger infrastructure",
     ],
     prototypeBoundaries: [
-      "Evaluated over synthetic technical incident dataset reflecting real microservice outage patterns",
-      "Mocked PagerDuty and ticketing webhook dispatch handlers",
+      "Commercial production deployment live in the Australian market (autocareonwheels.com.au)",
+      "Single-business operational tenancy configured for current mechanic fleet",
     ],
     plannedIncrements: [
-      "Bi-directional Zendesk, Jira Service Management, and Linear webhook sync",
-      "Continuous active-learning fine-tuning from human agent reclassification actions",
-      "Multi-lingual ticket normalization and translation pipeline",
+      "SMS gateway integration for two-way customer arrival reminders",
+      "Technician mobile progressive web app (PWA) with real-time GPS route dispatch",
+      "Integrated automated invoicing with Stripe / Square terminal reconciliation",
     ],
     keyComponents: [
       {
-        name: "Vector Similarity Cache",
+        name: "Customer Scheduling Canvas",
         description:
-          "High-speed semantic search layer that immediately matches new tickets against verified historical resolutions.",
-        tech: "Vector Index / PostgreSQL",
+          "Interactive booking workflow allowing vehicle owners to select services, inspect time slot availability, and submit service reservations.",
+        tech: "React 18 / Vite / Tailwind CSS",
       },
       {
-        name: "Structured Classifier",
+        name: "Booking & Availability API",
         description:
-          "Evaluates ambiguous tickets using zero-shot semantic reasoning, enforcing strict JSON schema output contracts.",
-        tech: "TypeScript / LLM Pipelines",
+          "Validates incoming appointment requests, verifies technician slot availability, and commits reservations with transaction locks.",
+        tech: "Node.js / Express.js / CORS",
       },
       {
-        name: "Deterministic Routing Engine",
+        name: "Prisma & MySQL Persistence Layer",
         description:
-          "Maps classified severity and affected services directly to engineering on-call rosters with complete audit-trail logging.",
-        tech: "PostgreSQL / Webhooks",
+          "Strict relational database modeling customers, vehicle specs, service logs, and dispatch states.",
+        tech: "Prisma ORM / MySQL",
+      },
+      {
+        name: "Administrative Dispatch Portal",
+        description:
+          "Secured management dashboard for the commercial business owner to review, reschedule, and dispatch service technicians.",
+        tech: "React / REST API / Hostinger",
       },
     ],
     engineeringDecisions: [
       {
-        title: "Two-Tier Routing Architecture",
+        title: "Prisma ORM for Strict Data Integrity",
         rationale:
-          "Sending every simple inquiry to an LLM introduces unnecessary API cost and 1-2 second latency.",
+          "Booking systems require strict relational guarantees between customers, vehicles, and appointment times to prevent orphaned records.",
         outcome:
-          "60% of common inquiries are classified in under 50ms via vector similarity, reserving deep LLM reasoning for complex incidents.",
+          "Prisma's typed schema enforces foreign key constraints and eliminates type drift between the backend API and database migrations.",
       },
       {
-        title: "Immutable Routing Audit Log",
+        title: "Vite + React 18 for Instant Mobile Loading",
         rationale:
-          "Automated routing can create organizational confusion if ticket assignments cannot be debugged or traced.",
+          "Automotive service inquiries predominantly originate on mobile devices by stranded drivers or roadside owners.",
         outcome:
-          "Every automated action records an immutable audit record containing classification confidence scores, extracted entities, and decision rules.",
+          "Sub-second initial client bundles with Vite deliver immediate interactivity even on mobile cellular connections.",
       },
     ],
-    technologies: ["Next.js", "TypeScript", "PostgreSQL", "LLM Pipelines", "Tailwind CSS"],
-    status: "Functional System",
+    technologies: [
+      "React 18",
+      "Vite",
+      "Node.js",
+      "Express.js",
+      "Prisma ORM",
+      "MySQL",
+      "Tailwind CSS",
+    ],
+    status: "Production Platform",
     accentColor: "#D6FF35",
-    verificationBadge: "Pipeline Architecture Verified",
+    verificationBadge: "Live Commercial Deployment",
+    demoUrl: "https://autocareonwheels.com.au",
+  },
+
+  // 5. Star Computer Center
+  {
+    slug: "star-computer-center",
+    title: "Star Computer Center",
+    subtitle: "Vocational Training Portal & Student Inquiry System",
+    category: "Educational Web Platform",
+    tagline: "Interactive course catalogs, student admission inquiries, and responsive syllabus viewing.",
+    description:
+      "A digital web portal for an educational training center, featuring interactive course catalogs, student admission inquiries, and responsive syllabus viewing.",
+    overview:
+      "Educational institutions offering computer and vocational training must communicate curriculum details, certificate accreditation, and batch timings to prospective students. Star Computer Center commissioned a modern digital presence to replace legacy printed brochures with an interactive, mobile-optimized course catalog and direct admission inquiry system.",
+    problem:
+      "Reliance on physical brochures and walk-in inquiries restricted the institution's reach. Prospective students could not inspect updated syllabi, check upcoming batch schedules, or submit enrollment questions outside of physical administrative office hours.",
+    approach:
+      "We designed a high-performance web portal built on React, Tailwind CSS, and a Node.js / Express backend. The platform provides structured course catalog navigation, collapsible syllabus modules, fee structure overviews, and an instant inquiry form. Inquiries are validated server-side, recorded with course references, and routed to admissions coordinators for immediate follow-up.",
+    architectureSummary:
+      "Student Interface → Course Catalog → Inquiry Submission → Backend API, with a syllabus/content delivery layer.",
+    implementedFunctionality: [
+      "Responsive institutional web portal with mobile-first navigation and clean typography",
+      "Interactive course catalog categorizing foundational, professional, and diploma programs",
+      "Structured syllabus viewing modules detailing weekly topics, practical labs, and certifications",
+      "Direct student inquiry submission form with client and server-side validation",
+      "Node.js / Express REST backend processing incoming admission inquiries",
+      "High-performance mobile UX achieving fast load times across low-bandwidth connections",
+    ],
+    prototypeBoundaries: [
+      "Institutional web application deployed on client-managed infrastructure",
+      "Admissions inquiries routed directly to administration records",
+    ],
+    plannedIncrements: [
+      "Student portal for downloading digital certificates and exam schedules",
+      "Automated WhatsApp notification bot for enrollment status confirmations",
+      "Integrated fee payment gateway for online course registration",
+    ],
+    keyComponents: [
+      {
+        name: "Course Discovery & Syllabus Viewer",
+        description:
+          "Interactive catalog presenting curriculum overviews, prerequisites, lab schedules, and certification badges.",
+        tech: "React / Tailwind CSS",
+      },
+      {
+        name: "Admissions Inquiry Engine",
+        description:
+          "Structured form handling prospective student inquiries with course-specific interest routing and input sanitization.",
+        tech: "Node.js / Express.js",
+      },
+      {
+        name: "Syllabus Content Layer",
+        description:
+          "Structured content layer organizing curriculum data into easily readable weekly modules and learning outcomes.",
+        tech: "JSON Schema / Modular React Components",
+      },
+    ],
+    engineeringDecisions: [
+      {
+        title: "Component-Driven Curriculum Architecture",
+        rationale:
+          "Course offerings change periodically; hardcoding syllabi into pages makes updates cumbersome and error-prone.",
+        outcome:
+          "Curriculum data is structured into modular schema-driven components, enabling seamless updates to course topics without redesigning views.",
+      },
+      {
+        title: "Mobile-First Accessibility & Light Footprint",
+        rationale:
+          "The majority of prospective vocational students access the web portal via budget smartphones on mobile data.",
+        outcome:
+          "Achieved an ultra-light client bundle with zero unnecessary dependencies, guaranteeing fast load times across 3G/4G networks.",
+      },
+    ],
+    technologies: ["React", "Tailwind CSS", "Node.js", "Express.js", "JavaScript"],
+    status: "Production Platform",
+    accentColor: "#F0EDE5",
+    verificationBadge: "Institutional System Deployed",
   },
 ];

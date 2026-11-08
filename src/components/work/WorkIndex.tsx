@@ -6,7 +6,19 @@ import { PROJECTS, CATEGORIES, Project } from "@/content/projects";
 import Tag from "@/components/ui/Tag";
 import Button from "@/components/ui/Button";
 import MotionWrapper from "@/components/motion/MotionWrapper";
-import { ArrowUpRight, Terminal, Layers, Cpu, ShieldCheck, GitBranch, Database, Zap } from "lucide-react";
+import {
+  ArrowUpRight,
+  Terminal,
+  Layers,
+  Cpu,
+  ShieldCheck,
+  GitBranch,
+  Database,
+  Zap,
+  ExternalLink,
+  Calendar,
+  BookOpen,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function WorkIndex() {
@@ -58,6 +70,7 @@ export default function WorkIndex() {
             {/* Top Metadata Ribbon */}
             <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-obsidian-border font-mono text-xs">
               <div className="flex items-center gap-3">
+                <span className="w-1.5 h-1.5 bg-acid" />
                 <span className="text-acid uppercase tracking-wider font-semibold">
                   {project.category}
                 </span>
@@ -128,46 +141,24 @@ export default function WorkIndex() {
                   {/* Project-Specific Custom Topology Diagram */}
                   <div className="relative z-10 flex-1 flex items-center justify-center py-4">
                     <div className="w-full max-w-xs space-y-2 font-mono text-[11px]">
-                      {project.slug === "myco-pr-intelligence" && (
-                        <>
-                          <div className="flex items-center justify-between p-2 border border-obsidian-border bg-obsidian-surface">
-                            <span className="text-ivory-muted flex items-center gap-1.5">
-                              <GitBranch className="w-3.5 h-3.5 text-acid" />
-                              GitHub PR AST Stream
-                            </span>
-                            <span className="text-acid text-[10px]">REST/Hook</span>
-                          </div>
-                          <div className="flex justify-center text-ivory-dim text-[10px]">
-                            ↓ [Tree-sitter Symbol Parser]
-                          </div>
-                          <div className="flex items-center justify-between p-2 border border-acid/40 bg-obsidian-surface">
-                            <span className="text-ivory flex items-center gap-1.5 font-medium">
-                              <Cpu className="w-3.5 h-3.5 text-acid" />
-                              Cross-Repo Breaking Risk
-                            </span>
-                            <span className="text-acid text-[10px]">0–100 Score</span>
-                          </div>
-                        </>
-                      )}
-
                       {project.slug === "zenithflow" && (
                         <>
                           <div className="flex items-center justify-between p-2 border border-obsidian-border bg-obsidian-surface">
                             <span className="text-ivory-muted flex items-center gap-1.5">
                               <Terminal className="w-3.5 h-3.5 text-acid" />
-                              Command Palette Engine
+                              Supabase Auth &amp; Session
                             </span>
-                            <span className="text-acid text-[10px]">Sub-10ms</span>
+                            <span className="text-acid text-[10px]">Next.js 14</span>
                           </div>
                           <div className="flex justify-center text-ivory-dim text-[10px]">
-                            ↓ [Optimistic Reactive Store]
+                            ↓ [HMAC Razorpay Webhook Ingestion]
                           </div>
                           <div className="flex items-center justify-between p-2 border border-acid/40 bg-obsidian-surface">
                             <span className="text-ivory flex items-center gap-1.5 font-medium">
-                              <Zap className="w-3.5 h-3.5 text-acid" />
-                              Async Task Orchestration
+                              <Database className="w-3.5 h-3.5 text-acid" />
+                              Tenant-Isolated PostgreSQL
                             </span>
-                            <span className="text-acid text-[10px]">Offline Cache</span>
+                            <span className="text-acid text-[10px]">RLS Policies</span>
                           </div>
                         </>
                       )}
@@ -177,9 +168,9 @@ export default function WorkIndex() {
                           <div className="flex items-center justify-between p-2 border border-obsidian-border bg-obsidian-surface">
                             <span className="text-ivory-muted flex items-center gap-1.5">
                               <Layers className="w-3.5 h-3.5 text-acid" />
-                              SEC Filings &amp; Transcripts
+                              Enterprise Corpus Ingestion
                             </span>
-                            <span className="text-acid text-[10px]">10-K/10-Q</span>
+                            <span className="text-acid text-[10px]">pgvector</span>
                           </div>
                           <div className="flex justify-center text-ivory-dim text-[10px]">
                             ↓ [Multi-Agent Evaluator Graph]
@@ -199,41 +190,63 @@ export default function WorkIndex() {
                           <div className="flex items-center justify-between p-2 border border-obsidian-border bg-obsidian-surface">
                             <span className="text-ivory-muted flex items-center gap-1.5">
                               <Database className="w-3.5 h-3.5 text-acid" />
-                              Concurrent Registration Stream
+                              Role-Based JWT Ingress
                             </span>
-                            <span className="text-acid text-[10px]">Atomic Writes</span>
+                            <span className="text-acid text-[10px]">Auth Guard</span>
                           </div>
                           <div className="flex justify-center text-ivory-dim text-[10px]">
-                            ↓ [Session Transactions + $inc]
+                            ↓ [Atomic Concurrency Lock]
                           </div>
                           <div className="flex items-center justify-between p-2 border border-acid/40 bg-obsidian-surface">
                             <span className="text-ivory flex items-center gap-1.5 font-medium">
                               <Layers className="w-3.5 h-3.5 text-acid" />
-                              Realtime Attendance Hub
+                              ACID Capacity Reservation
                             </span>
                             <span className="text-acid text-[10px]">Sub-10ms Agg</span>
                           </div>
                         </>
                       )}
 
-                      {project.slug === "triage-ai" && (
+                      {project.slug === "auto-care-on-wheels" && (
                         <>
                           <div className="flex items-center justify-between p-2 border border-obsidian-border bg-obsidian-surface">
                             <span className="text-ivory-muted flex items-center gap-1.5">
-                              <Terminal className="w-3.5 h-3.5 text-acid" />
-                              Incident Ingestion Stream
+                              <Calendar className="w-3.5 h-3.5 text-acid" />
+                              Customer Interface &amp; Schedule
                             </span>
-                            <span className="text-acid text-[10px]">Realtime</span>
+                            <span className="text-acid text-[10px]">React 18 / Vite</span>
                           </div>
                           <div className="flex justify-center text-ivory-dim text-[10px]">
-                            ↓ [Embedding Match + Zero-Shot]
+                            ↓ [Express API &amp; Availability Check]
+                          </div>
+                          <div className="flex items-center justify-between p-2 border border-acid/40 bg-obsidian-surface">
+                            <span className="text-ivory flex items-center gap-1.5 font-medium">
+                              <Database className="w-3.5 h-3.5 text-acid" />
+                              Prisma ORM &amp; MySQL Dispatch
+                            </span>
+                            <span className="text-acid text-[10px]">Hostinger Live</span>
+                          </div>
+                        </>
+                      )}
+
+                      {project.slug === "star-computer-center" && (
+                        <>
+                          <div className="flex items-center justify-between p-2 border border-obsidian-border bg-obsidian-surface">
+                            <span className="text-ivory-muted flex items-center gap-1.5">
+                              <BookOpen className="w-3.5 h-3.5 text-acid" />
+                              Student Interface &amp; Catalog
+                            </span>
+                            <span className="text-acid text-[10px]">React / Tailwind</span>
+                          </div>
+                          <div className="flex justify-center text-ivory-dim text-[10px]">
+                            ↓ [Syllabus Content &amp; Validation]
                           </div>
                           <div className="flex items-center justify-between p-2 border border-acid/40 bg-obsidian-surface">
                             <span className="text-ivory flex items-center gap-1.5 font-medium">
                               <Cpu className="w-3.5 h-3.5 text-acid" />
-                              Deterministic On-Call Route
+                              Inquiry Submission &amp; Backend API
                             </span>
-                            <span className="text-acid text-[10px]">Audit Logged</span>
+                            <span className="text-acid text-[10px]">Node / Express</span>
                           </div>
                         </>
                       )}
@@ -242,18 +255,34 @@ export default function WorkIndex() {
 
                   {/* Footer */}
                   <div className="flex justify-between items-center font-mono text-[10px] text-ivory-dim border-t border-obsidian-border pt-2 z-10">
-                    <span>ARCHITECTURE: PRODUCTION_TESTED</span>
-                    <span className="text-acid">STATUS: VERIFIED</span>
+                    <span>SYSTEM SPECIFICATION</span>
+                    <span className="text-acid">VERIFIED</span>
                   </div>
                 </div>
 
-                {/* Case Study Link */}
-                <div className="mt-4 flex justify-end">
+                {/* Case Study & Live Site Action Bar */}
+                <div className="mt-4 flex items-center justify-between gap-4">
+                  {project.demoUrl ? (
+                    <a
+                      href={project.demoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-mono text-xs text-acid hover:text-ivory flex items-center gap-1.5 transition-colors uppercase tracking-wider font-semibold"
+                    >
+                      <span>Visit Live Site</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  ) : (
+                    <span className="font-mono text-[11px] text-ivory-dim uppercase tracking-wider">
+                      Internal System
+                    </span>
+                  )}
+
                   <Link
                     href={`/work/${project.slug}`}
                     className="font-mono text-xs text-ivory hover:text-acid flex items-center gap-1.5 transition-colors uppercase tracking-wider font-semibold group/btn"
                   >
-                    <span>Read Architectural Case Study</span>
+                    <span>Read Case Study</span>
                     <ArrowUpRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
                   </Link>
                 </div>
@@ -268,11 +297,11 @@ export default function WorkIndex() {
         <div className="flex items-center gap-2">
           <ShieldCheck className="w-4 h-4 text-acid shrink-0" />
           <span>
-            PROVENANCE NOTICE: All portfolio projects represent authentic, verified codebases and architectural designs. No fabricated metrics or fictional clients.
+            PROVENANCE NOTICE: All portfolio projects represent authentic, verified commercial systems and engineering architecture.
           </span>
         </div>
         <Button href="/contact" variant="acid" size="sm" withArrow>
-          DISCUSS CUSTOM SYSTEM
+          COMMISSION ENGAGEMENT
         </Button>
       </div>
     </div>
