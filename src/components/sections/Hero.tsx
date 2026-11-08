@@ -7,9 +7,9 @@ import Button from "@/components/ui/Button";
 import CanvasFallback from "@/components/three/CanvasFallback";
 import { motion, useReducedMotion, type Variants } from "motion/react";
 
-// Dynamically load the WebGL SignatureCanvas to keep initial load fast and isolate SSR
-const SignatureCanvas = dynamic(
-  () => import("@/components/three/SignatureCanvas"),
+// Dynamically load the HeroLottie visual to isolate SSR and keep client hydration snappy
+const HeroLottie = dynamic(
+  () => import("@/components/ui/HeroLottie"),
   {
     ssr: false,
     loading: () => <CanvasFallback />,
@@ -116,16 +116,15 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Right Column: Free-Floating Signature 3D Digital Sculpture */}
+          {/* Right Column: Hero Visual (Lottie Animation) */}
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.85, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-5 relative w-full h-[380px] sm:h-[460px] lg:h-[540px] flex items-center justify-center"
           >
-            {/* Interactive 3D Canvas */}
             <div className="w-full h-full relative">
-              <SignatureCanvas />
+              <HeroLottie />
             </div>
           </motion.div>
         </div>
