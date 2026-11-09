@@ -216,6 +216,20 @@ export default function SelectedWork() {
       {/* Main Horizontal Exhibition Track */}
       <div
         ref={trackRef}
+        onScroll={(e) => {
+          if (typeof window !== "undefined" && window.innerWidth < 1024) {
+            const target = e.currentTarget;
+            const scrollLeft = target.scrollLeft;
+            const width = target.clientWidth;
+            if (width > 0) {
+              const currentIdx = Math.min(
+                Math.round(scrollLeft / width),
+                EXHIBITION_STAGES.length - 1
+              );
+              setActiveStageIndex((prev) => (prev !== currentIdx ? currentIdx : prev));
+            }
+          }
+        }}
         className="flex flex-nowrap h-full items-stretch snap-x snap-mandatory lg:snap-none overflow-x-auto lg:overflow-visible no-scrollbar"
       >
         {EXHIBITION_STAGES.map((stage, idx) => {
@@ -249,15 +263,8 @@ export default function SelectedWork() {
                   </div>
 
                   <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-2 font-mono text-xs">
-                      <span className="text-acid font-bold">
-                        {String(stage.stageNumber).padStart(2, "0")}
-                      </span>
-                      <span className="text-ivory-dim">/</span>
-                      <span className="text-ivory-dim">
-                        {String(EXHIBITION_STAGES.length).padStart(2, "0")}
-                      </span>
-                      <span className="hidden md:inline-block text-ivory font-medium tracking-wide uppercase border-l border-obsidian-border pl-3">
+                    <div className="flex items-center font-mono text-xs">
+                      <span className="text-ivory font-medium tracking-wide uppercase">
                         {project.title}
                       </span>
                     </div>
@@ -268,14 +275,14 @@ export default function SelectedWork() {
                   </div>
                 </div>
 
-                {/* Centered Project Composition Visual Stage */}
+                {/* Centered Project Composition Visual Stage with Dynamic Focus Blur */}
                 <div className="flex-1 w-full max-w-5xl xl:max-w-6xl mx-auto px-4 sm:px-8 lg:px-12 py-6 flex items-center justify-center">
                   <div
                     className={cn(
-                      "w-full border bg-obsidian-surface p-6 sm:p-10 lg:p-12 transition-all duration-300 relative flex flex-col justify-between shadow-2xl",
+                      "w-full border bg-obsidian-surface p-6 sm:p-10 lg:p-12 relative flex flex-col justify-between shadow-2xl transition-all duration-700 ease-out will-change-[filter,opacity,transform] motion-reduce:transition-none motion-reduce:filter-none motion-reduce:opacity-100 motion-reduce:scale-100",
                       isActive
-                        ? "border-ivory/40 ring-1 ring-ivory/20"
-                        : "border-obsidian-border"
+                        ? "border-ivory/40 ring-1 ring-ivory/20 filter-none opacity-100 scale-100 pointer-events-auto"
+                        : "border-obsidian-border filter blur-[4px] opacity-40 scale-[0.985] pointer-events-none"
                     )}
                   >
                     {/* Upper Ribbon */}
@@ -413,26 +420,14 @@ export default function SelectedWork() {
                       >
                         VIEW ARCHITECTURE CASE STUDY
                       </Button>
-
-                      <span className="font-mono text-xs text-ivory-dim">
-                        STAGE {String(stage.stageNumber).padStart(2, "0")} /{" "}
-                        {String(EXHIBITION_STAGES.length).padStart(2, "0")}
-                      </span>
                     </div>
                   </div>
                 </div>
 
                 {/* Bottom Stage Progress Ribbon */}
-                <div className="w-full border-t border-obsidian-border px-4 sm:px-8 lg:px-12 h-14 flex items-center justify-between font-mono text-xs text-ivory-dim shrink-0">
-                  <div className="flex items-center gap-3">
-                    <span className="text-acid uppercase font-semibold">SCROLL TO ADVANCE</span>
-                    <span className="hidden sm:inline-block text-ivory-dim">
-                      Horizontal stages pinned to scroll progress
-                    </span>
-                  </div>
-
+                <div className="w-full border-t border-obsidian-border px-4 sm:px-8 lg:px-12 h-14 flex items-center justify-center font-mono text-xs shrink-0">
                   {/* Indicator Dots */}
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5" aria-hidden="true">
                     {EXHIBITION_STAGES.map((s, dotIdx) => (
                       <span
                         key={dotIdx}
@@ -444,10 +439,6 @@ export default function SelectedWork() {
                         )}
                       />
                     ))}
-                  </div>
-
-                  <div>
-                    <span className="text-ivory font-medium">STAGE {stage.stageNumber} OF 10</span>
                   </div>
                 </div>
               </div>
@@ -479,15 +470,8 @@ export default function SelectedWork() {
                   </div>
 
                   <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-2 font-mono text-xs">
-                      <span className="text-obsidian font-bold">
-                        {String(stage.stageNumber).padStart(2, "0")}
-                      </span>
-                      <span className="text-obsidian/40">/</span>
-                      <span className="text-obsidian/40">
-                        {String(EXHIBITION_STAGES.length).padStart(2, "0")}
-                      </span>
-                      <span className="hidden md:inline-block text-obsidian font-medium tracking-wide uppercase border-l border-obsidian/15 pl-3">
+                    <div className="flex items-center font-mono text-xs">
+                      <span className="text-obsidian font-medium tracking-wide uppercase">
                         {stage.title}
                       </span>
                     </div>
@@ -504,8 +488,15 @@ export default function SelectedWork() {
                   </div>
                 </div>
 
-                {/* Centered Editorial Surface with Generous Whitespace */}
-                <div className="flex-1 w-full max-w-4xl xl:max-w-5xl mx-auto px-4 sm:px-8 lg:px-12 py-8 flex flex-col justify-center space-y-8">
+                {/* Centered Editorial Surface with Generous Whitespace & Focus Blur */}
+                <div
+                  className={cn(
+                    "flex-1 w-full max-w-4xl xl:max-w-5xl mx-auto px-4 sm:px-8 lg:px-12 py-8 flex flex-col justify-center space-y-8 transition-all duration-700 ease-out will-change-[filter,opacity,transform] motion-reduce:transition-none motion-reduce:filter-none motion-reduce:opacity-100 motion-reduce:scale-100",
+                    isActive
+                      ? "filter-none opacity-100 scale-100 pointer-events-auto"
+                      : "filter blur-[4px] opacity-40 scale-[0.985] pointer-events-none"
+                  )}
+                >
                   <div className="space-y-4">
                     <p className="font-mono text-xs sm:text-sm text-obsidian/60 uppercase tracking-widest font-medium">
                       {stage.subtitle}
@@ -537,16 +528,9 @@ export default function SelectedWork() {
                 </div>
 
                 {/* Bottom Stage Progress Ribbon */}
-                <div className="w-full border-t border-obsidian/15 px-4 sm:px-8 lg:px-12 h-14 flex items-center justify-between font-mono text-xs text-obsidian/60 shrink-0">
-                  <div className="flex items-center gap-3">
-                    <span className="text-obsidian font-semibold uppercase">EDITORIAL TRANSITION</span>
-                    <span className="hidden sm:inline-block text-obsidian/50">
-                      Philosophy &amp; architectural standards
-                    </span>
-                  </div>
-
+                <div className="w-full border-t border-obsidian/15 px-4 sm:px-8 lg:px-12 h-14 flex items-center justify-center font-mono text-xs shrink-0">
                   {/* Indicator Dots */}
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5" aria-hidden="true">
                     {EXHIBITION_STAGES.map((s, dotIdx) => (
                       <span
                         key={dotIdx}
@@ -558,10 +542,6 @@ export default function SelectedWork() {
                         )}
                       />
                     ))}
-                  </div>
-
-                  <div>
-                    <span className="text-obsidian font-medium">STAGE {stage.stageNumber} OF 10</span>
                   </div>
                 </div>
               </div>
@@ -592,19 +572,23 @@ export default function SelectedWork() {
                 </div>
 
                 <div className="flex items-center gap-6">
-                  <div className="flex items-center gap-2 font-mono text-xs">
-                    <span className="text-obsidian font-bold">10</span>
-                    <span className="text-obsidian/40">/</span>
-                    <span className="text-obsidian/40">10</span>
-                    <span className="hidden md:inline-block text-obsidian font-medium tracking-wide uppercase border-l border-obsidian/15 pl-3">
+                  <div className="flex items-center font-mono text-xs">
+                    <span className="text-obsidian font-medium tracking-wide uppercase">
                       Architectural Index
                     </span>
                   </div>
                 </div>
               </div>
 
-              {/* Centered Call to Action Surface */}
-              <div className="flex-1 w-full max-w-4xl xl:max-w-5xl mx-auto px-4 sm:px-8 lg:px-12 py-8 flex flex-col justify-center space-y-8">
+              {/* Centered Call to Action Surface with Focus Blur */}
+              <div
+                className={cn(
+                  "flex-1 w-full max-w-4xl xl:max-w-5xl mx-auto px-4 sm:px-8 lg:px-12 py-8 flex flex-col justify-center space-y-8 transition-all duration-700 ease-out will-change-[filter,opacity,transform] motion-reduce:transition-none motion-reduce:filter-none motion-reduce:opacity-100 motion-reduce:scale-100",
+                  isActive
+                    ? "filter-none opacity-100 scale-100 pointer-events-auto"
+                    : "filter blur-[4px] opacity-40 scale-[0.985] pointer-events-none"
+                )}
+              >
                 <div className="space-y-4">
                   <p className="font-mono text-xs sm:text-sm text-obsidian/60 uppercase tracking-widest font-medium">
                     Verified Codebases &amp; Implementation Matrices
@@ -643,16 +627,9 @@ export default function SelectedWork() {
               </div>
 
               {/* Bottom Stage Progress Ribbon */}
-              <div className="w-full border-t border-obsidian/15 px-4 sm:px-8 lg:px-12 h-14 flex items-center justify-between font-mono text-xs text-obsidian/60 shrink-0">
-                <div className="flex items-center gap-3">
-                  <span className="text-obsidian font-semibold uppercase">EXHIBITION ARCHIVE</span>
-                  <span className="hidden sm:inline-block text-obsidian/50">
-                    Scroll down to explore Technical Practices
-                  </span>
-                </div>
-
+              <div className="w-full border-t border-obsidian/15 px-4 sm:px-8 lg:px-12 h-14 flex items-center justify-center font-mono text-xs shrink-0">
                 {/* Indicator Dots */}
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1.5" aria-hidden="true">
                   {EXHIBITION_STAGES.map((s, dotIdx) => (
                     <span
                       key={dotIdx}
@@ -664,10 +641,6 @@ export default function SelectedWork() {
                       )}
                     />
                   ))}
-                </div>
-
-                <div>
-                  <span className="text-obsidian font-medium">STAGE 10 OF 10</span>
                 </div>
               </div>
             </div>
