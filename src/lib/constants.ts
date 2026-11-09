@@ -22,6 +22,7 @@ export const NAV_LINKS = [
   { label: "Services", href: "/services" },
   { label: "Studio", href: "/about" },
   { label: "Packages", href: "/packages" },
+  { label: "Contact", href: "/contact" },
 ] as const;
 
 export const FOOTER_LINKS = [
