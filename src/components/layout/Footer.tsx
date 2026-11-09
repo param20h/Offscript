@@ -1,11 +1,81 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { SITE_CONFIG, FOOTER_LINKS } from "@/lib/constants";
 import { trackEvent } from "@/lib/analytics";
 import { ArrowUpRight } from "lucide-react";
+
+/**
+ * Interactive architectural watermark banner.
+ * Tracks local cursor coordinates and reveals an Acid Lime spotlight glow
+ * exclusively under the cursor position without illuminating the entire wordmark.
+ */
+function SpotlightWordmark() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const updateCoordinates = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    containerRef.current.style.setProperty("--cursor-x", `${x}px`);
+    containerRef.current.style.setProperty("--cursor-y", `${y}px`);
+    containerRef.current.style.setProperty("--glow-opacity", "1");
+  };
+
+  const handleMouseLeave = () => {
+    if (!containerRef.current) return;
+    containerRef.current.style.setProperty("--glow-opacity", "0");
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      onMouseMove={updateCoordinates}
+      onMouseEnter={updateCoordinates}
+      onMouseLeave={handleMouseLeave}
+      className="relative pt-12 pb-6 border-t border-obsidian-border/40 overflow-hidden select-none cursor-default group"
+      aria-label="OFFSCRIPT Architectural Watermark"
+    >
+      {/* 1. Ambient localized cursor aura (subtle halo directly under cursor) */}
+      <div
+        aria-hidden="true"
+        className="absolute pointer-events-none rounded-full blur-3xl transition-opacity duration-300"
+        style={{
+          width: "280px",
+          height: "280px",
+          left: "calc(var(--cursor-x, -9999px) - 140px)",
+          top: "calc(var(--cursor-y, -9999px) - 140px)",
+          background:
+            "radial-gradient(circle, rgba(214, 255, 53, 0.22) 0%, rgba(214, 255, 53, 0) 70%)",
+          opacity: "var(--glow-opacity, 0)",
+        }}
+      />
+
+      {/* 2. Base Muted Watermark Layer (Always visible, dark architectural bedrock) */}
+      <span className="block font-display text-[14vw] font-black tracking-tighter leading-none text-obsidian-border/30 text-center whitespace-nowrap">
+        OFFSCRIPT
+      </span>
+
+      {/* 3. Localized Spotlight Glow Layer (Clipped via radial-gradient mask to cursor coordinates) */}
+      <span
+        aria-hidden="true"
+        className="absolute inset-0 pt-12 pb-6 flex items-center justify-center font-display text-[14vw] font-black tracking-tighter leading-none text-acid text-center whitespace-nowrap pointer-events-none drop-shadow-[0_0_35px_rgba(214,255,53,0.55)] transition-opacity duration-200"
+        style={{
+          maskImage:
+            "radial-gradient(circle 200px at var(--cursor-x, -9999px) var(--cursor-y, -9999px), black 0%, transparent 75%)",
+          WebkitMaskImage:
+            "radial-gradient(circle 200px at var(--cursor-x, -9999px) var(--cursor-y, -9999px), black 0%, transparent 75%)",
+          opacity: "var(--glow-opacity, 0)",
+        }}
+      >
+        OFFSCRIPT
+      </span>
+    </div>
+  );
+}
 
 export default function Footer() {
   return (
@@ -109,12 +179,8 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Oversized Studio Wordmark with Hover Glow */}
-      <div className="pt-8 pb-4 border-t border-obsidian-border/40 overflow-hidden select-none">
-        <span className="block font-display text-[14vw] font-black tracking-tighter leading-none text-obsidian-border/30 hover:text-acid hover:drop-shadow-[0_0_50px_rgba(214,255,53,0.35)] transition-all duration-700 text-center whitespace-nowrap cursor-default">
-          OFFSCRIPT
-        </span>
-      </div>
+      {/* Oversized Studio Wordmark with Localized Cursor Spotlight Glow */}
+      <SpotlightWordmark />
 
       {/* Lower Footer: Colophon & Legal */}
       <div className="border-t border-obsidian-border">
