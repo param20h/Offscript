@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import {
   Layers,
@@ -81,10 +82,15 @@ export default async function ClientPortalPage({
         {/* Top Header */}
         <header className="border-b border-[#171717]/15 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="font-display font-extrabold text-xl tracking-tight text-[#171717]">
-                OFFSCRIPT
-              </span>
+            <div className="flex items-center gap-3 mb-3">
+              <Image
+                src="/logos/Compact — Symbol + Wordmark (Mono).svg"
+                alt="OFFSCRIPT Studio"
+                width={150}
+                height={23}
+                priority
+                className="h-6 w-auto object-contain"
+              />
               <span className="text-[10px] font-mono tracking-widest uppercase bg-[#171717] text-[#D6FF35] px-2 py-0.5 rounded-xs font-bold">
                 CLIENT PORTAL
               </span>

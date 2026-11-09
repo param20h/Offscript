@@ -1,4 +1,6 @@
 import { jsPDF } from "jspdf";
+import fs from "fs";
+import path from "path";
 import { formatCurrency } from "./pricing";
 import {
   InvoiceRecord,
@@ -13,6 +15,17 @@ export interface InvoicePDFData {
   items: InvoiceItemRecord[];
   payments?: PaymentRecord[];
   linkedProposalNumber?: string | null;
+}
+
+// Synchronously load pre-rasterized official monochrome studio logo if available
+let invoiceLogoPng: Buffer | null = null;
+try {
+  const logoPath = path.join(process.cwd(), "public", "Logo", "invoice-logo-mono.png");
+  if (fs.existsSync(logoPath)) {
+    invoiceLogoPng = fs.readFileSync(logoPath);
+  }
+} catch {
+  invoiceLogoPng = null;
 }
 
 /**
@@ -88,15 +101,21 @@ export function generateInvoicePDF({
   // ---------------------------------------------------------------------------
   // 1. HEADER SECTION
   // ---------------------------------------------------------------------------
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(22);
-  doc.setTextColor(23, 23, 23);
-  doc.text("OFFSCRIPT", margin, y + 8);
+  if (invoiceLogoPng) {
+    const logoW = 46;
+    const logoH = logoW / (462 / 124); // ~12.35 mm
+    doc.addImage(invoiceLogoPng, "PNG", margin, y + 1, logoW, logoH, undefined, "FAST");
+  } else {
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(22);
+    doc.setTextColor(23, 23, 23);
+    doc.text("OFFSCRIPT", margin, y + 8);
 
-  doc.setFontSize(8);
-  doc.setFont("helvetica", "normal");
-  doc.setTextColor(110, 110, 110);
-  doc.text("DIGITAL ENGINEERING STUDIO · TAX INVOICE", margin, y + 13);
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(110, 110, 110);
+    doc.text("DIGITAL ENGINEERING STUDIO · TAX INVOICE", margin, y + 13);
+  }
 
   // Invoice Number & Status
   doc.setFont("helvetica", "bold");
@@ -179,13 +198,19 @@ export function generateInvoicePDF({
   doc.setFillColor(23, 23, 23);
   doc.rect(margin, y, contentWidth, 7, "F");
 
+  // Calibrated column layout preventing overlap:
+  // DESCRIPTION: margin+4 (22)
+  // QTY:         margin+78 (96) [right aligned]
+  // UNIT:        margin+84 (102) [left aligned]
+  // RATE:        margin+128 (146) [right aligned]
+  // TOTAL:       pageWidth-margin-4 (188) [right aligned]
   doc.setFontSize(7.5);
   doc.setTextColor(240, 237, 229);
   doc.setFont("helvetica", "bold");
   doc.text("DESCRIPTION", margin + 4, y + 4.8);
-  doc.text("QTY", margin + 84, y + 4.8, { align: "right" });
-  doc.text("UNIT", margin + 90, y + 4.8, { align: "left" });
-  doc.text("RATE", margin + 134, y + 4.8, { align: "right" });
+  doc.text("QTY", margin + 78, y + 4.8, { align: "right" });
+  doc.text("UNIT", margin + 84, y + 4.8, { align: "left" });
+  doc.text("RATE", margin + 128, y + 4.8, { align: "right" });
   doc.text("TOTAL", pageWidth - margin - 4, y + 4.8, { align: "right" });
 
   y += 7;
@@ -202,13 +227,13 @@ export function generateInvoicePDF({
 
     doc.setFontSize(8.5);
     doc.setTextColor(30, 30, 30);
-    const desc = item.description.length > 40 ? `${item.description.slice(0, 37)}...` : item.description;
+    const desc = item.description.length > 36 ? `${item.description.slice(0, 33)}...` : item.description;
     doc.text(desc, margin + 4, y + 5.2);
 
-    doc.text(item.quantity.toString(), margin + 84, y + 5.2, { align: "right" });
-    const unitText = (item.unit || "units").slice(0, 10);
-    doc.text(unitText, margin + 90, y + 5.2, { align: "left" });
-    doc.text(formatPdfCurrency(item.unit_price, invoice.currency), margin + 134, y + 5.2, { align: "right" });
+    doc.text(item.quantity.toString(), margin + 78, y + 5.2, { align: "right" });
+    const unitText = (item.unit || "unit").slice(0, 8);
+    doc.text(unitText, margin + 84, y + 5.2, { align: "left" });
+    doc.text(formatPdfCurrency(item.unit_price, invoice.currency), margin + 128, y + 5.2, { align: "right" });
     doc.setFont("helvetica", "bold");
     doc.text(formatPdfCurrency(item.total_price, invoice.currency), pageWidth - margin - 4, y + 5.2, { align: "right" });
     doc.setFont("helvetica", "normal");
@@ -226,15 +251,16 @@ export function generateInvoicePDF({
   // ---------------------------------------------------------------------------
   checkPageBreak(45);
 
-  const summaryWidth = 85;
+  const summaryWidth = 96;
   const summaryX = pageWidth - margin - summaryWidth;
+  const rightAlignX = pageWidth - margin - 4;
 
   const printSummaryRow = (label: string, value: string, isBold = false) => {
     doc.setFontSize(8.5);
     doc.setFont("helvetica", isBold ? "bold" : "normal");
     doc.setTextColor(isBold ? 23 : 80, isBold ? 23 : 80, isBold ? 23 : 80);
-    doc.text(label, summaryX, y);
-    doc.text(value, pageWidth - margin - 4, y, { align: "right" });
+    doc.text(label, summaryX + 4, y);
+    doc.text(value, rightAlignX, y, { align: "right" });
     y += 5.5;
   };
 
@@ -260,13 +286,13 @@ export function generateInvoicePDF({
   // Balance Due Accent Block
   y += 2;
   doc.setFillColor(23, 23, 23); // Obsidian
-  doc.rect(summaryX, y, summaryWidth, 10, "F");
+  doc.rect(summaryX, y, summaryWidth, 11, "F");
 
   doc.setFontSize(9);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(214, 255, 53); // Acid Lime
-  doc.text("BALANCE DUE", summaryX + 4, y + 6.5);
-  doc.text(formatPdfCurrency(invoice.balance_due, invoice.currency), pageWidth - margin - 4, y + 6.5, { align: "right" });
+  doc.text("BALANCE DUE", summaryX + 4, y + 7.2);
+  doc.text(formatPdfCurrency(invoice.balance_due, invoice.currency), rightAlignX, y + 7.2, { align: "right" });
 
   y += 18;
 

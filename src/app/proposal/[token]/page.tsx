@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { Metadata } from "next";
 import { verifyAndRetrieveProposalByToken } from "@/lib/proposals/tokens";
 import { formatCurrency } from "@/lib/proposals/pricing";
@@ -59,9 +60,14 @@ export default async function ClientProposalViewerPage({
         {/* Header */}
         <header className="max-w-4xl w-full mx-auto flex items-center justify-between border-b border-ivory/10 pb-6">
           <div className="flex items-center gap-3">
-            <span className="font-display text-lg font-bold tracking-tight text-ivory">
-              OFFSCRIPT
-            </span>
+            <Image
+              src="/logos/Website — Horizontal (Dark).svg"
+              alt="OFFSCRIPT Studio"
+              width={130}
+              height={26}
+              priority
+              className="h-6 w-auto object-contain"
+            />
             <span className="text-[10px] font-mono uppercase tracking-widest text-acid px-2 py-0.5 rounded-xs bg-acid/10 border border-acid/20">
               Studio
             </span>
@@ -126,10 +132,15 @@ export default async function ClientProposalViewerPage({
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           {/* Studio Wordmark & Proposal Meta */}
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <span className="font-display text-lg font-bold tracking-tight text-ivory">
-                OFFSCRIPT
-              </span>
+            <div className="flex items-center gap-3">
+              <Image
+                src="/logos/Website — Horizontal (Dark).svg"
+                alt="OFFSCRIPT Studio"
+                width={130}
+                height={26}
+                priority
+                className="h-6 w-auto object-contain"
+              />
               <span className="text-[10px] font-mono uppercase tracking-widest text-acid px-2 py-0.5 rounded-xs bg-acid/10 border border-acid/20">
                 PROPOSAL
               </span>

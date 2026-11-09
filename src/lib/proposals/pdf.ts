@@ -1,4 +1,6 @@
 import { jsPDF } from "jspdf";
+import fs from "fs";
+import path from "path";
 import { formatCurrency } from "./pricing";
 import {
   ProposalRecord,
@@ -14,6 +16,17 @@ export interface ProposalPDFData {
   items: ProposalItemRecord[];
   deliverables: ProposalDeliverableRecord[];
   milestones: ProposalMilestoneRecord[];
+}
+
+// Synchronously load pre-rasterized official monochrome studio logo if available
+let invoiceLogoPng: Buffer | null = null;
+try {
+  const logoPath = path.join(process.cwd(), "public", "Logo", "invoice-logo-mono.png");
+  if (fs.existsSync(logoPath)) {
+    invoiceLogoPng = fs.readFileSync(logoPath);
+  }
+} catch {
+  invoiceLogoPng = null;
 }
 
 /**
@@ -89,15 +102,21 @@ export function generateProposalPDF({
   // ---------------------------------------------------------------------------
   // HEADER SECTION
   // ---------------------------------------------------------------------------
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(20);
-  doc.setTextColor(23, 23, 23);
-  doc.text("OFFSCRIPT", margin, y + 8);
+  if (invoiceLogoPng) {
+    const logoW = 44;
+    const logoH = logoW / (462 / 124); // ~11.8 mm
+    doc.addImage(invoiceLogoPng, "PNG", margin, y + 1, logoW, logoH, undefined, "FAST");
+  } else {
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(20);
+    doc.setTextColor(23, 23, 23);
+    doc.text("OFFSCRIPT", margin, y + 8);
 
-  doc.setFontSize(8);
-  doc.setFont("helvetica", "normal");
-  doc.setTextColor(110, 110, 110);
-  doc.text("STUDIO OPERATIONS · DIGITAL ENGINEERING", margin, y + 13);
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(110, 110, 110);
+    doc.text("STUDIO OPERATIONS · DIGITAL ENGINEERING", margin, y + 13);
+  }
 
   // Proposal Meta (Right aligned)
   doc.setFont("helvetica", "bold");
@@ -290,8 +309,8 @@ export function generateProposalPDF({
   doc.setFontSize(7.5);
   doc.setTextColor(255, 255, 255);
   doc.text("DESCRIPTION", margin + 3, y + 4.8);
-  doc.text("QTY", margin + 84, y + 4.8);
-  doc.text("RATE", margin + 134, y + 4.8, { align: "right" });
+  doc.text("QTY", margin + 78, y + 4.8);
+  doc.text("RATE", margin + 128, y + 4.8, { align: "right" });
   doc.text("AMOUNT", pageWidth - margin - 3, y + 4.8, { align: "right" });
   y += 7;
 
@@ -304,14 +323,14 @@ export function generateProposalPDF({
     doc.setFont("helvetica", "bold");
     doc.setFontSize(8);
     doc.setTextColor(30, 30, 30);
-    const titleText = item.title.length > 40 ? `${item.title.slice(0, 37)}...` : item.title;
+    const titleText = item.title.length > 38 ? `${item.title.slice(0, 35)}...` : item.title;
     doc.text(titleText, margin + 3, y + 5);
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
     doc.setTextColor(80, 80, 80);
-    doc.text(`${item.quantity} ${item.unit}`, margin + 84, y + 5);
-    doc.text(formatPdfCurrency(item.unit_price, proposal.currency), margin + 134, y + 5, { align: "right" });
+    doc.text(`${item.quantity} ${item.unit}`, margin + 78, y + 5);
+    doc.text(formatPdfCurrency(item.unit_price, proposal.currency), margin + 128, y + 5, { align: "right" });
     doc.setFont("helvetica", "bold");
     doc.setTextColor(23, 23, 23);
     doc.text(
@@ -327,8 +346,8 @@ export function generateProposalPDF({
   // Table Totals Card
   checkPageBreak(40);
   y += 3;
-  const totalsX = margin + 90;
-  const totalsW = contentWidth - 90;
+  const totalsW = 95;
+  const totalsX = pageWidth - margin - totalsW;
 
   doc.setFillColor(245, 243, 238);
   doc.roundedRect(totalsX, y, totalsW, 36, 1, 1, "F");

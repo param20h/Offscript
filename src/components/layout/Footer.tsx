@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { SITE_CONFIG, FOOTER_LINKS } from "@/lib/constants";
 import { trackEvent } from "@/lib/analytics";
 import { ArrowUpRight } from "lucide-react";
@@ -15,14 +16,19 @@ export default function Footer() {
           {/* Brand Column */}
           <div className="md:col-span-7 flex flex-col justify-between space-y-6">
             <div>
-              <div className="flex items-baseline gap-1.5 mb-3">
-                <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ivory">
-                  OFFSCRIPT
-                </span>
-                <span className="font-mono text-xs text-acid font-semibold">
-                  ®
-                </span>
-              </div>
+              <Link
+                href="/"
+                className="inline-block mb-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-acid"
+                aria-label="OFFSCRIPT Studio Homepage"
+              >
+                <Image
+                  src="/logos/Website — Horizontal (Dark).svg"
+                  alt="OFFSCRIPT Studio"
+                  width={178}
+                  height={36}
+                  className="h-8 sm:h-9 w-auto object-contain transition-opacity hover:opacity-90"
+                />
+              </Link>
               <p className="font-mono text-xs uppercase tracking-widest text-acid mb-3">
                 {SITE_CONFIG.positioning}
               </p>

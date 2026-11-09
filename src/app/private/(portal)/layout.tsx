@@ -1,6 +1,7 @@
 import React from "react";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { getPrivateSession } from "@/lib/auth/session";
 import SidebarNav from "@/components/private/SidebarNav";
 import SignOutButton from "@/components/private/SignOutButton";
@@ -31,11 +32,16 @@ export default async function PrivatePortalLayout({
       <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-ivory/10 bg-[#141414] flex flex-col shrink-0 md:min-h-screen">
         {/* Brand Header */}
         <div className="p-5 border-b border-ivory/10 flex items-center justify-between">
-          <Link href="/private" className="group">
-            <div className="font-display text-lg font-bold tracking-tight text-ivory group-hover:text-acid transition-colors">
-              OFFSCRIPT
-            </div>
-            <div className="text-[10px] font-mono uppercase tracking-widest text-ivory/40 flex items-center gap-1.5 mt-0.5">
+          <Link href="/private" className="group block focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-acid">
+            <Image
+              src="/logos/Website — Horizontal (Dark).svg"
+              alt="OFFSCRIPT Studio"
+              width={140}
+              height={28}
+              priority
+              className="h-6 w-auto object-contain transition-opacity group-hover:opacity-90"
+            />
+            <div className="text-[10px] font-mono uppercase tracking-widest text-ivory/40 flex items-center gap-1.5 mt-2">
               <span className="w-1.5 h-1.5 rounded-full bg-acid animate-pulse" />
               <span>Operations Portal</span>
             </div>

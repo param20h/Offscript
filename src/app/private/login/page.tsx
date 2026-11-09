@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Lock, ArrowRight, ShieldCheck, AlertCircle, Loader2 } from "lucide-react";
 
 export default function PrivateLoginPage() {
@@ -53,14 +54,21 @@ export default function PrivateLoginPage() {
       <div className="w-full max-w-md relative z-10">
         {/* Header Branding */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-ivory/10 bg-ivory/[0.02] text-xs font-mono uppercase tracking-widest text-acid mb-4">
+          <div className="flex justify-center mb-4">
+            <Image
+              src="/logos/Website — Horizontal (Dark).svg"
+              alt="OFFSCRIPT Studio"
+              width={160}
+              height={32}
+              priority
+              className="h-8 w-auto object-contain"
+            />
+          </div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-ivory/10 bg-ivory/[0.02] text-xs font-mono uppercase tracking-widest text-acid mb-3">
             <span className="w-1.5 h-1.5 rounded-full bg-acid animate-pulse" />
             Internal Portal
           </div>
-          <h1 className="font-display text-3xl font-bold tracking-tight text-ivory">
-            OFFSCRIPT <span className="text-ivory/40 font-normal">OPERATIONS</span>
-          </h1>
-          <p className="text-xs text-ivory/50 mt-2 font-mono">
+          <p className="text-xs text-ivory/50 mt-1 font-mono">
             Restricted access. Authorized studio personnel only.
           </p>
         </div>

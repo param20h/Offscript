@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { SITE_CONFIG, NAV_LINKS } from "@/lib/constants";
 import Button from "@/components/ui/Button";
@@ -50,21 +51,20 @@ export default function Navbar() {
         )}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          {/* Brand Wordmark (temporary typographic treatment) */}
+          {/* Brand Wordmark */}
           <Link
             href="/"
-            className="group flex items-baseline gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-acid"
+            className="group flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-acid"
             aria-label={`${SITE_CONFIG.name} Homepage`}
           >
-            <span className="font-display text-xl sm:text-2xl font-bold tracking-tighter text-ivory transition-colors group-hover:text-acid">
-              OFFSCRIPT
-            </span>
-            <span className="font-mono text-[10px] text-acid font-semibold">
-              ®
-            </span>
-            <span className="hidden sm:inline-block font-mono text-[10px] text-ivory-dim tracking-widest pl-2 border-l border-obsidian-border uppercase">
-              STUDIO
-            </span>
+            <Image
+              src="/logos/Website — Horizontal (Dark).svg"
+              alt="OFFSCRIPT Studio"
+              width={178}
+              height={36}
+              priority
+              className="h-8 md:h-9 w-auto object-contain transition-opacity duration-200 group-hover:opacity-90"
+            />
           </Link>
 
           {/* Center Navigation Links (Desktop) */}
