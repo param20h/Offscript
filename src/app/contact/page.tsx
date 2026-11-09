@@ -26,31 +26,21 @@ type SubmissionState =
       fallbackEmail: string;
     };
 
-const BUDGET_OPTIONS = {
-  USD: [
-    { value: "Under $10k", label: "Under $10,000 (Launch / Scoped Prototype)" },
-    { value: "$10k–$25k", label: "$10,000 – $25,000 (Production Application / MVP)" },
-    { value: "$25k–$50k", label: "$25,000 – $50,000 (Full-Scale Platform / Custom AI)" },
-    { value: "$50k+", label: "$50,000+ (Enterprise Architecture)" },
-    { value: "To Be Scoped", label: "To Be Scoped in Discovery" },
-  ],
-  INR: [
-    { value: "Under ₹8L", label: "Under ₹8,00,000 (Launch / Scoped Prototype)" },
-    { value: "₹8L–₹20L", label: "₹8,00,000 – ₹20,00,000 (Production Application / MVP)" },
-    { value: "₹20L–₹40L", label: "₹20,00,000 – ₹40,00,000 (Full-Scale Platform / Custom AI)" },
-    { value: "₹40L+", label: "₹40,00,000+ (Enterprise Architecture)" },
-    { value: "To Be Scoped", label: "To Be Scoped in Discovery" },
-  ],
-};
+const ENGAGEMENT_PACKAGES = [
+  { value: "Launch", label: "Launch — Digital Flagship & Architecture (2 to 4 Weeks)" },
+  { value: "Scale", label: "Scale — Custom Product App & Systems (4 to 8 Weeks)" },
+  { value: "Intelligence", label: "Intelligence — Autonomous AI Agents & Workflows (4 to 10 Weeks)" },
+  { value: "Custom Engineering", label: "Custom Engineering — Bespoke Platforms & Architecture" },
+  { value: "Custom / Discovery", label: "Custom Scope — To Be Defined in Technical Discovery" },
+] as const;
 
 export default function ContactPage() {
-  const [currency, setCurrency] = useState<"USD" | "INR">("USD");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     company: "",
     projectType: "Web Development",
-    budgetRange: "Under $10k",
+    packageModel: "Launch",
     timeline: "2 to 4 Weeks",
     description: "",
   });
@@ -72,23 +62,15 @@ export default function ContactPage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [submissionResult, setSubmissionResult] = useState<SubmissionState>({ status: "idle" });
 
-  const handleCurrencyChange = (newCurrency: "USD" | "INR") => {
-    setCurrency(newCurrency);
-    setFormData((prev) => ({
-      ...prev,
-      budgetRange: BUDGET_OPTIONS[newCurrency][0].value,
-    }));
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMessage(null);
 
-    // Track submission attempt (Zero PII: only category and currency)
+    // Track submission attempt (Zero PII: only category and package)
     trackEvent("contact_form_submitted", {
       projectType: formData.projectType,
-      currency,
+      packageModel: formData.packageModel,
     });
 
     const durationMs = Date.now() - mountTimeRef.current;
@@ -99,9 +81,11 @@ export default function ContactPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
-          currency,
-          company_website_hp: honeypot,
+          packageModel: formData.packageModel,
+          budgetRange: formData.packageModel,
+          currency: "USD",
           durationMs,
+          company_website_hp: honeypot,
         }),
       });
 
@@ -184,7 +168,7 @@ export default function ContactPage() {
       email: "",
       company: "",
       projectType: "Web Development",
-      budgetRange: BUDGET_OPTIONS[currency][0].value,
+      packageModel: "Launch",
       timeline: "2 to 4 Weeks",
       description: "",
     });
@@ -356,7 +340,7 @@ export default function ContactPage() {
                   <div><span className="text-ivory-dim">Name:</span> <span className="text-ivory">{formData.name}</span></div>
                   <div><span className="text-ivory-dim">Email:</span> <span className="text-ivory">{formData.email}</span></div>
                   <div><span className="text-ivory-dim">Discipline:</span> <span className="text-ivory">{formData.projectType}</span></div>
-                  <div><span className="text-ivory-dim">Budget:</span> <span className="text-acid">{currency} {formData.budgetRange}</span></div>
+                  <div><span className="text-ivory-dim">Package:</span> <span className="text-acid">{formData.packageModel}</span></div>
                   <div><span className="text-ivory-dim">Timeline:</span> <span className="text-ivory">{formData.timeline}</span></div>
                 </div>
 
@@ -482,72 +466,48 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                {/* Currency & Budget Selection */}
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
+                {/* Package & Timeline Selection */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
                     <label
-                      htmlFor="budgetRange"
-                      className="block font-mono text-xs text-ivory uppercase tracking-wider"
+                      htmlFor="packageModel"
+                      className="block font-mono text-xs text-ivory uppercase tracking-wider mb-2"
                     >
-                      Budget Framework
+                      Engagement Package *
                     </label>
-                    {/* Explicit Currency Toggle */}
-                    <div className="flex items-center gap-1 bg-obsidian border border-obsidian-border p-0.5">
-                      <button
-                        type="button"
-                        onClick={() => handleCurrencyChange("USD")}
-                        className={`px-2.5 py-1 font-mono text-xs transition-colors cursor-pointer ${
-                          currency === "USD"
-                            ? "bg-acid text-obsidian font-bold"
-                            : "text-ivory-dim hover:text-ivory"
-                        }`}
-                      >
-                        USD ($)
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleCurrencyChange("INR")}
-                        className={`px-2.5 py-1 font-mono text-xs transition-colors cursor-pointer ${
-                          currency === "INR"
-                            ? "bg-acid text-obsidian font-bold"
-                            : "text-ivory-dim hover:text-ivory"
-                        }`}
-                      >
-                        INR (₹)
-                      </button>
-                    </div>
+                    <select
+                      id="packageModel"
+                      value={formData.packageModel}
+                      onChange={(e) => setFormData({ ...formData, packageModel: e.target.value })}
+                      className="w-full px-4 py-3 bg-obsidian border border-obsidian-border text-ivory text-sm font-sans focus:outline-none focus:border-acid transition-colors cursor-pointer"
+                    >
+                      {ENGAGEMENT_PACKAGES.map((pkg) => (
+                        <option key={pkg.value} value={pkg.value}>
+                          {pkg.label}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div>
-                      <select
-                        id="budgetRange"
-                        value={formData.budgetRange}
-                        onChange={(e) => setFormData({ ...formData, budgetRange: e.target.value })}
-                        className="w-full px-4 py-3 bg-obsidian border border-obsidian-border text-ivory text-sm font-sans focus:outline-none focus:border-acid transition-colors"
-                      >
-                        {BUDGET_OPTIONS[currency].map((opt) => (
-                          <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div>
-                      <select
-                        id="timeline"
-                        value={formData.timeline}
-                        onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                        className="w-full px-4 py-3 bg-obsidian border border-obsidian-border text-ivory text-sm font-sans focus:outline-none focus:border-acid transition-colors"
-                        aria-label="Target Timeline"
-                      >
-                        <option value="2 to 4 Weeks">2 to 4 Weeks (Fast-track)</option>
-                        <option value="4 to 8 Weeks">4 to 8 Weeks (Standard)</option>
-                        <option value="8 to 12 Weeks">8 to 12 Weeks (Comprehensive)</option>
-                        <option value="Ongoing / Retainer">Ongoing Sprint Retainer</option>
-                      </select>
-                    </div>
+                  <div>
+                    <label
+                      htmlFor="timeline"
+                      className="block font-mono text-xs text-ivory uppercase tracking-wider mb-2"
+                    >
+                      Target Timeline *
+                    </label>
+                    <select
+                      id="timeline"
+                      value={formData.timeline}
+                      onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
+                      className="w-full px-4 py-3 bg-obsidian border border-obsidian-border text-ivory text-sm font-sans focus:outline-none focus:border-acid transition-colors cursor-pointer"
+                      aria-label="Target Timeline"
+                    >
+                      <option value="2 to 4 Weeks">2 to 4 Weeks (Fast-track)</option>
+                      <option value="4 to 8 Weeks">4 to 8 Weeks (Standard)</option>
+                      <option value="8 to 12 Weeks">8 to 12 Weeks (Comprehensive)</option>
+                      <option value="Ongoing / Retainer">Ongoing Sprint Retainer</option>
+                    </select>
                   </div>
                 </div>
 

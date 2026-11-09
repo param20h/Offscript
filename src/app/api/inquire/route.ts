@@ -170,6 +170,7 @@ export async function POST(request: Request) {
     const supabase = getSupabaseServerClient();
 
     try {
+      const packageSelection = inquiry.packageModel || inquiry.budgetRange || "Launch";
       const { data: inserted, error: insertError } = await supabase
         .from("inquiries")
         .insert({
@@ -177,8 +178,8 @@ export async function POST(request: Request) {
           email: inquiry.email,
           company: inquiry.company || "Independent",
           project_type: inquiry.projectType,
-          currency: inquiry.currency,
-          budget_range: inquiry.budgetRange,
+          currency: inquiry.currency || "USD",
+          budget_range: packageSelection,
           timeline: inquiry.timeline,
           description: inquiry.description,
           delivery_status: "pending",
@@ -187,6 +188,7 @@ export async function POST(request: Request) {
             ipHash,
             durationMs: inquiry.durationMs,
             userAgent,
+            packageModel: packageSelection,
           },
         })
         .select("id")

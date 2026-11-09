@@ -27,7 +27,7 @@ const PACKAGES = [
     id: "launch",
     name: "Launch",
     tagline: "High-impact digital flagship & foundational architecture.",
-    pricingPlaceholder: "Scope-Based Quotation",
+    scopeModel: "Scope-Based Quotation",
     timeline: "2 to 4 Weeks",
     targetCustomer:
       "Founders, creative studios, and early-stage ventures requiring an unignorable digital presence that differentiates them from day one.",
@@ -52,7 +52,7 @@ const PACKAGES = [
     id: "scale",
     name: "Scale",
     tagline: "Custom product web app & interactive customer systems.",
-    pricingPlaceholder: "Scope-Based Quotation",
+    scopeModel: "Scope-Based Quotation",
     timeline: "4 to 8 Weeks",
     targetCustomer:
       "Growing startups and businesses requiring customer dashboards, interactive SaaS interfaces, or complex authenticated portals.",
@@ -77,7 +77,7 @@ const PACKAGES = [
     id: "intelligence",
     name: "Intelligence",
     tagline: "Autonomous AI agents, verified RAG & deterministic workflows.",
-    pricingPlaceholder: "Scope-Based Quotation",
+    scopeModel: "Scope-Based Quotation",
     timeline: "4 to 10 Weeks",
     targetCustomer:
       "Companies seeking to eliminate operational friction with autonomous AI pipelines, verifiable document analysis, or automated triage.",
@@ -102,7 +102,7 @@ const PACKAGES = [
     id: "custom",
     name: "Custom Engineering",
     tagline: "Bespoke SaaS platforms, platform architecture & technical leadership.",
-    pricingPlaceholder: "Sprint-Based or Retainer Discussion",
+    scopeModel: "Sprint-Based or Retainer Discussion",
     timeline: "Sprint-Based / Ongoing",
     targetCustomer:
       "Established engineering teams and funded startups needing senior architecture leadership, performance refactoring, or bespoke platforms.",
@@ -131,7 +131,7 @@ export default function PackagesPage() {
         badge="TRANSPARENT SCOPING"
         title="ENGINEERING PACKAGES."
         subtitle="Predictable delivery models tailored to architectural complexity and commercial velocity."
-        description="All pricing is scoped directly to verified requirements. We do not invent arbitrary pricing tiers or cut corners on engineering standards. Every engagement is executed with senior technical rigor."
+        description="All engagements are scoped directly to verified requirements. We do not invent arbitrary pricing tiers or cut corners on engineering standards. Every engagement is executed with senior technical rigor."
       />
 
       {/* Packages Grid */}
@@ -161,13 +161,13 @@ export default function PackagesPage() {
                   {pkg.tagline}
                 </p>
 
-                {/* Investment Box */}
+                {/* Scope Model Box */}
                 <div className="p-4 bg-obsidian border border-obsidian-border mb-6">
                   <span className="font-mono text-[10px] text-ivory-dim uppercase tracking-wider block mb-1">
-                    Investment Structure
+                    Engagement Model
                   </span>
                   <p className="font-mono text-sm text-ivory font-semibold flex items-center justify-between">
-                    <span>{pkg.pricingPlaceholder}</span>
+                    <span>{pkg.scopeModel}</span>
                     <span className="text-[10px] text-acid font-normal">CONFIRMED POST-DISCOVERY</span>
                   </p>
                 </div>

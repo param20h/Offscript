@@ -14,8 +14,9 @@ export type AnalyticsEventMap = {
     entryPoint: "contact_page";
   };
   contact_form_submitted: {
-    currency: "USD" | "INR";
+    currency?: "USD" | "INR";
     projectType: string;
+    packageModel?: string;
   };
   contact_form_persisted: {
     notificationAccepted: boolean;

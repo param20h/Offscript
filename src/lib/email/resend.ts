@@ -64,6 +64,8 @@ export async function sendInquiryNotification(
 
   const subject = `[Project Inquiry] ${inquiry.name} — ${inquiry.projectType}`;
 
+  const packageSelection = inquiry.packageModel || inquiry.budgetRange || "Launch";
+
   const textBody = `
 NEW INQUIRY REGISTERED — OFFSCRIPT STUDIO
 Record ID: ${inquiryId}
@@ -72,7 +74,7 @@ Name: ${inquiry.name}
 Email: ${inquiry.email}
 Company: ${inquiry.company || "Independent"}
 Discipline: ${inquiry.projectType}
-Budget: ${inquiry.currency} ${inquiry.budgetRange}
+Package: ${packageSelection}
 Timeline: ${inquiry.timeline}
 
 Project Brief:
@@ -83,7 +85,7 @@ ${inquiry.description}
   const safeEmail = escapeHtml(inquiry.email);
   const safeCompany = escapeHtml(inquiry.company || "Independent");
   const safeDiscipline = escapeHtml(inquiry.projectType);
-  const safeBudget = escapeHtml(`${inquiry.currency} ${inquiry.budgetRange}`);
+  const safePackage = escapeHtml(packageSelection);
   const safeTimeline = escapeHtml(inquiry.timeline);
   const safeDescription = escapeHtml(inquiry.description).replace(/\n/g, "<br/>");
   const safeInquiryId = escapeHtml(inquiryId);
@@ -134,8 +136,8 @@ ${inquiry.description}
     </div>
 
     <div class="field-row">
-      <div class="label">Budget Framework</div>
-      <div class="value">${safeBudget}</div>
+      <div class="label">Engagement Package</div>
+      <div class="value">${safePackage}</div>
     </div>
 
     <div class="field-row">

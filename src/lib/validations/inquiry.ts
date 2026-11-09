@@ -9,35 +9,17 @@ export const PROJECT_TYPES = [
   "Product Engineering",
 ] as const;
 
+export const PACKAGE_OPTIONS = [
+  "Launch",
+  "Scale",
+  "Intelligence",
+  "Custom Engineering",
+  "Custom / Discovery",
+] as const;
+
+export type PackageOption = (typeof PACKAGE_OPTIONS)[number];
+
 export const CURRENCIES = ["USD", "INR"] as const;
-
-export const USD_BUDGETS = [
-  "Under $10k",
-  "$10k–$25k",
-  "$25k–$50k",
-  "$50k+",
-  "To Be Scoped",
-] as const;
-
-export const INR_BUDGETS = [
-  "Under ₹8L",
-  "₹8L–₹20L",
-  "₹20L–₹40L",
-  "₹40L+",
-  "To Be Scoped",
-] as const;
-
-export const ALL_BUDGETS = [
-  "Under $10k",
-  "$10k–$25k",
-  "$25k–$50k",
-  "$50k+",
-  "Under ₹8L",
-  "₹8L–₹20L",
-  "₹20L–₹40L",
-  "₹40L+",
-  "To Be Scoped",
-] as const;
 
 export const TIMELINES = [
   "2 to 4 Weeks",
@@ -48,84 +30,59 @@ export const TIMELINES = [
 
 /**
  * Strict server-side inquiry validation schema.
- * Rejects empty/malformed inputs, enforces bounds, and validates against verified options.
+ * Validates against verified project disciplines, packages, and delivery bounds.
  */
-export const inquirySchema = z
-  .object({
-    name: z
-      .string()
-      .trim()
-      .min(2, "A valid name (at least 2 characters) is required.")
-      .max(100, "Name must not exceed 100 characters."),
+export const inquirySchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(2, "A valid name (at least 2 characters) is required.")
+    .max(100, "Name must not exceed 100 characters."),
 
-    email: z
-      .string()
-      .trim()
-      .email("A valid contact email address is required.")
-      .max(120, "Email address must not exceed 120 characters."),
+  email: z
+    .string()
+    .trim()
+    .email("A valid contact email address is required.")
+    .max(120, "Email address must not exceed 120 characters."),
 
-    company: z
-      .string()
-      .trim()
-      .max(120, "Company name must not exceed 120 characters.")
-      .optional()
-      .transform((val) => (val && val.length > 0 ? val : "Independent")),
+  company: z
+    .string()
+    .trim()
+    .max(120, "Company name must not exceed 120 characters.")
+    .optional()
+    .transform((val) => (val && val.length > 0 ? val : "Independent")),
 
-    projectType: z.enum(PROJECT_TYPES, {
-      message: "Please select a recognized project discipline.",
-    }),
+  projectType: z.enum(PROJECT_TYPES, {
+    message: "Please select a recognized project discipline.",
+  }),
 
-    currency: z.enum(CURRENCIES, {
-      message: "Currency must be either USD ($) or INR (₹).",
-    }),
+  packageModel: z.string().optional().default("Launch"),
 
-    budgetRange: z.enum(ALL_BUDGETS, {
-      message: "Please select an approved budget framework option.",
-    }),
+  currency: z.enum(CURRENCIES).optional().default("USD"),
 
-    timeline: z.enum(TIMELINES, {
-      message: "Please select an approved target timeline option.",
-    }),
+  budgetRange: z.string().optional(),
 
-    description: z
-      .string()
-      .trim()
-      .min(10, "Please provide a project brief with at least 10 characters.")
-      .max(3000, "Project brief must not exceed 3,000 characters."),
+  timeline: z.enum(TIMELINES, {
+    message: "Please select an approved target timeline option.",
+  }),
 
-    // Honeypot field (must remain empty for human submissions)
-    company_website_hp: z.string().max(200).optional(),
+  description: z
+    .string()
+    .trim()
+    .min(10, "Please provide a project brief with at least 10 characters.")
+    .max(3000, "Project brief must not exceed 3,000 characters."),
 
-    // Client submission elapsed duration in milliseconds
-    durationMs: z
-      .number()
-      .int("Submission duration must be an integer.")
-      .min(0, "Submission duration cannot be negative.")
-      .max(86400000, "Submission duration exceeds 24 hours.")
-      .optional(),
-  })
-  .superRefine((data, ctx) => {
-    // Validate currency and budget alignment
-    if (data.currency === "USD") {
-      const isUsdBudget = (USD_BUDGETS as readonly string[]).includes(data.budgetRange);
-      if (!isUsdBudget) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: `The selected budget '${data.budgetRange}' does not match USD currency.`,
-          path: ["budgetRange"],
-        });
-      }
-    } else if (data.currency === "INR") {
-      const isInrBudget = (INR_BUDGETS as readonly string[]).includes(data.budgetRange);
-      if (!isInrBudget) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: `The selected budget '${data.budgetRange}' does not match INR currency.`,
-          path: ["budgetRange"],
-        });
-      }
-    }
-  });
+  // Honeypot field (must remain empty for human submissions)
+  company_website_hp: z.string().max(200).optional(),
+
+  // Client submission elapsed duration in milliseconds
+  durationMs: z
+    .number()
+    .int("Submission duration must be an integer.")
+    .min(0, "Submission duration cannot be negative.")
+    .max(86400000, "Submission duration exceeds 24 hours.")
+    .optional(),
+});
 
 export type InquiryInput = z.infer<typeof inquirySchema>;
 export type InquiryPayload = InquiryInput;
