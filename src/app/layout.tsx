@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE_CONFIG } from "@/lib/constants";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import PublicLayoutWrapper from "@/components/layout/PublicLayoutWrapper";
+import { Analytics } from "@vercel/analytics/react";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -61,12 +61,21 @@ export const metadata: Metadata = {
     title: `${SITE_CONFIG.name} — ${SITE_CONFIG.tagline}`,
     description:
       "OFFSCRIPT is an independent digital engineering studio building digital products, AI systems, web experiences and custom software.",
+    images: [
+      {
+        url: `${SITE_CONFIG.url}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: `${SITE_CONFIG.name} — ${SITE_CONFIG.tagline}`,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${SITE_CONFIG.name} — ${SITE_CONFIG.tagline}`,
     description:
       "OFFSCRIPT is an independent digital engineering studio building digital products, AI systems, web experiences and custom software.",
+    images: [`${SITE_CONFIG.url}/opengraph-image`],
   },
   robots: {
     index: true,
@@ -81,6 +90,28 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: SITE_CONFIG.name,
+  legalName: SITE_CONFIG.legalName,
+  url: SITE_CONFIG.url,
+  logo: `${SITE_CONFIG.url}/icon.svg`,
+  image: `${SITE_CONFIG.url}/opengraph-image`,
+  email: SITE_CONFIG.email,
+  description:
+    "Independent digital engineering studio building high-performance web platforms, autonomous AI systems, and custom software architectures.",
+  serviceType: [
+    "Web Development",
+    "AI & Intelligent Systems",
+    "Backend & Cloud Engineering",
+    "Creative Development",
+    "Automation & Integrations",
+    "Product Engineering",
+  ],
+  sameAs: ["https://github.com/param20h/Offscript"],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -91,10 +122,15 @@ export default function RootLayout({
       lang="en"
       className={`${spaceGrotesk.variable} ${geistSans.variable} ${geistMono.variable}`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="bg-obsidian text-ivory antialiased selection:bg-acid selection:text-obsidian min-h-screen flex flex-col font-sans">
-        <Navbar />
-        <main className="flex-1 w-full">{children}</main>
-        <Footer />
+        <PublicLayoutWrapper>{children}</PublicLayoutWrapper>
+        <Analytics />
       </body>
     </html>
   );

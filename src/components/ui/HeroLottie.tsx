@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Lottie } from "lottie-react";
+import heroAnimationData from "../../../public/animations/hero-lottie.json";
 
 export default function HeroLottie() {
   return (
@@ -14,7 +15,7 @@ export default function HeroLottie() {
 
       <div className="w-full max-w-[440px] sm:max-w-[500px] lg:max-w-[540px] xl:max-w-[580px] flex items-center justify-center relative z-10">
         <Lottie
-          src="/animations/hero-lottie.json"
+          src={heroAnimationData}
           autoplay
           loop
           className="w-full h-auto drop-shadow-[0_20px_50px_rgba(0,0,0,0.6)]"

@@ -29,6 +29,9 @@ yarn-error.log*
 
 # local data / logs
 .data/
+scratch/
+supabase/
+PHASE_*.md
 
 # vercel
 .vercel

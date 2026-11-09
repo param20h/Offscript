@@ -1,6 +1,9 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { SITE_CONFIG, FOOTER_LINKS } from "@/lib/constants";
+import { trackEvent } from "@/lib/analytics";
 import { ArrowUpRight } from "lucide-react";
 
 export default function Footer() {
@@ -34,6 +37,7 @@ export default function Footer() {
               </span>
               <a
                 href={`mailto:${SITE_CONFIG.email}`}
+                onClick={() => trackEvent("email_contact_clicked", { location: "footer" })}
                 className="font-mono text-sm sm:text-base text-ivory hover:text-acid transition-colors inline-flex items-center gap-1 group"
               >
                 <span>{SITE_CONFIG.email}</span>
@@ -70,8 +74,21 @@ export default function Footer() {
             <span>&copy; {new Date().getFullYear()} OFFSCRIPT Studio. All rights reserved.</span>
           </div>
 
-          <div className="flex items-center gap-6">
-            <span>Built different. Engineered properly.</span>
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+            <Link
+              href="/privacy"
+              className="hover:text-acid transition-colors underline-offset-4 hover:underline"
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              href="/terms"
+              className="hover:text-acid transition-colors underline-offset-4 hover:underline"
+            >
+              Terms of Engagement
+            </Link>
+            <span className="hidden sm:inline text-obsidian-border">|</span>
+            <span className="hidden sm:inline">Built different. Engineered properly.</span>
           </div>
         </div>
       </div>

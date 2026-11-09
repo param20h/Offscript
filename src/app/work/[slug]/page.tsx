@@ -6,6 +6,7 @@ import { SITE_CONFIG } from "@/lib/constants";
 import { PROJECTS, Project } from "@/content/projects";
 import Tag from "@/components/ui/Tag";
 import Button from "@/components/ui/Button";
+import ProjectViewTracker from "@/components/analytics/ProjectViewTracker";
 import {
   ArrowLeft,
   Terminal,
@@ -74,6 +75,9 @@ export default async function ProjectDetailPage({ params }: Props) {
 
   return (
     <article className="w-full py-16 sm:py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Privacy-Preserving Project View Analytics (No PII) */}
+      <ProjectViewTracker slug={project.slug} category={project.category} />
+
       {/* Back to Work Archive Link */}
       <div className="mb-10">
         <Link

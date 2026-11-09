@@ -1,11 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { forwardRef } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string;
   variant?: "primary" | "secondary" | "outline" | "ghost" | "acid";
   size?: "sm" | "md" | "lg";
@@ -15,16 +15,19 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
 }
 
-export default function Button({
-  href,
-  variant = "primary",
-  size = "md",
-  withArrow = false,
-  external = false,
-  children,
-  className,
-  ...props
-}: ButtonProps) {
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  {
+    href,
+    variant = "primary",
+    size = "md",
+    withArrow = false,
+    external = false,
+    children,
+    className,
+    ...props
+  },
+  ref
+) {
   const baseStyles =
     "inline-flex items-center justify-center font-mono text-xs uppercase tracking-wider font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-acid disabled:opacity-50 disabled:pointer-events-none group relative overflow-hidden select-none cursor-pointer";
 
@@ -92,10 +95,13 @@ export default function Button({
 
   return (
     <button
+      ref={ref}
       className={cn(baseStyles, sizeStyles[size], variantStyles[variant], className)}
       {...props}
     >
       {content}
     </button>
   );
-}
+});
+
+export default Button;

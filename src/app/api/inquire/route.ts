@@ -1,147 +1,308 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { SITE_CONFIG } from "@/lib/constants";
+import {
+  inquirySchema,
+  isHoneypotTriggered,
+  isSubmissionTooFast,
+  InquiryPayload,
+} from "@/lib/validations/inquiry";
+import { isSupabaseConfigured, getSupabaseServerClient } from "@/lib/db/supabase";
+import { checkRateLimit, getClientIpHash } from "@/lib/rate-limit";
+import { sendInquiryNotification } from "@/lib/email/resend";
 
-export interface InquiryPayload {
-  name: string;
-  email: string;
-  company?: string;
-  projectType: string;
-  currency: "USD" | "INR";
-  budgetRange: string;
-  timeline: string;
-  description: string;
+export { type InquiryPayload };
+
+const MAX_PAYLOAD_BYTES = 64 * 1024; // 64 KB maximum request size
+
+function createMailtoUrl(name: string, email: string, projectType: string, description: string): string {
+  const subject = encodeURIComponent(`Project Inquiry: ${name || "Client"} — ${projectType || "General"}`);
+  const body = encodeURIComponent(
+    `Hi OFFSCRIPT Team,\n\nName: ${name}\nEmail: ${email}\nDiscipline: ${projectType}\n\nProject Brief:\n${description}\n`
+  );
+  return `mailto:${SITE_CONFIG.email}?subject=${subject}&body=${body}`;
 }
 
 export async function POST(request: Request) {
   try {
-    const body: InquiryPayload = await request.json();
-
-    // 1. Strict Server-Side Validation
-    if (!body.name || typeof body.name !== "string" || body.name.trim().length < 2) {
+    // 1. Payload Size Guard
+    const contentLength = request.headers.get("content-length");
+    if (contentLength && parseInt(contentLength, 10) > MAX_PAYLOAD_BYTES) {
       return NextResponse.json(
-        { error: "A valid name (at least 2 characters) is required." },
+        {
+          success: false,
+          persisted: false,
+          error: "Payload exceeds maximum allowed size (64 KB).",
+        },
+        { status: 413 }
+      );
+    }
+
+    // 2. Distributed Rate Limiting Check
+    const rateLimit = await checkRateLimit(request);
+
+    if (rateLimit.serviceUnavailable) {
+      const mailtoUrl = createMailtoUrl("", "", "", "");
+      return NextResponse.json(
+        {
+          success: false,
+          persisted: false,
+          error: "Rate limiting infrastructure is unconfigured in production. Please contact us directly via email.",
+          fallbackEmail: SITE_CONFIG.email,
+          mailtoUrl,
+        },
+        {
+          status: 503,
+          headers: {
+            "Retry-After": "60",
+          },
+        }
+      );
+    }
+
+    if (!rateLimit.success) {
+      const retryAfterSeconds = rateLimit.retryAfterSeconds || 900;
+      return NextResponse.json(
+        {
+          success: false,
+          persisted: false,
+          error: `Too many inquiries received from this network. Please wait ${Math.ceil(
+            retryAfterSeconds / 60
+          )} minutes before submitting another brief.`,
+          retryAfter: retryAfterSeconds,
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(retryAfterSeconds),
+          },
+        }
+      );
+    }
+
+    // 3. Safe JSON Parsing
+    let rawBody: unknown;
+    try {
+      rawBody = await request.json();
+    } catch {
+      return NextResponse.json(
+        {
+          success: false,
+          persisted: false,
+          error: "Malformed JSON payload.",
+        },
         { status: 400 }
       );
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!body.email || !emailRegex.test(body.email)) {
+    if (!rawBody || typeof rawBody !== "object") {
       return NextResponse.json(
-        { error: "A valid contact email address is required." },
+        {
+          success: false,
+          persisted: false,
+          error: "Request body must be a valid JSON object.",
+        },
         { status: 400 }
       );
     }
 
-    if (!body.description || typeof body.description !== "string" || body.description.trim().length < 10) {
+    const payloadObj = rawBody as Record<string, unknown>;
+
+    // 4. Honeypot Anti-Spam Check
+    if (isHoneypotTriggered({ company_website_hp: String(payloadObj.company_website_hp || "") })) {
+      // Reject bot traffic immediately without persisting or emailing
       return NextResponse.json(
-        { error: "Please provide a project brief with at least 10 characters." },
+        {
+          success: false,
+          persisted: false,
+          error: "Automated submission rejected.",
+        },
         { status: 400 }
       );
     }
 
-    const currency = body.currency === "INR" ? "INR" : "USD";
+    // 5. Submission Timing Protection (< 3 seconds)
+    if (typeof payloadObj.durationMs === "number" && isSubmissionTooFast(payloadObj.durationMs)) {
+      return NextResponse.json(
+        {
+          success: false,
+          persisted: false,
+          error: "Form submission too fast. Please review your brief before submitting.",
+        },
+        { status: 400 }
+      );
+    }
 
-    // 2. Persist Inquiry to Server Storage (Do Not Silently Discard)
-    const timestamp = new Date().toISOString();
-    const storedRecord = {
-      timestamp,
-      name: body.name.trim(),
-      email: body.email.trim(),
-      company: body.company ? body.company.trim() : "Independent",
-      projectType: body.projectType || "General Engineering",
-      currency,
-      budgetRange: body.budgetRange,
-      timeline: body.timeline,
-      description: body.description.trim(),
-    };
+    // 6. Strict Server-Side Validation via Zod Schema
+    const validationResult = inquirySchema.safeParse(rawBody);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          persisted: false,
+          error: "Validation failed. Please correct the highlighted fields.",
+          errors: validationResult.error.flatten().fieldErrors,
+        },
+        { status: 400 }
+      );
+    }
+
+    const inquiry = validationResult.data;
+    const { ipHash } = getClientIpHash(request);
+    const userAgent = request.headers.get("user-agent") || "unknown";
+
+    // 7. Durable Database Persistence (Must precede email dispatch)
+    if (!isSupabaseConfigured()) {
+      // Truth in engineering: do not claim persistence when database credentials are not provisioned
+      const mailtoUrl = createMailtoUrl(inquiry.name, inquiry.email, inquiry.projectType, inquiry.description);
+      return NextResponse.json(
+        {
+          success: false,
+          persisted: false,
+          error: "Inquiry database is unconfigured. Your brief has not been stored. Please use direct studio email.",
+          fallbackEmail: SITE_CONFIG.email,
+          mailtoUrl,
+        },
+        { status: 503 }
+      );
+    }
+
+    let inquiryId: string;
+    const supabase = getSupabaseServerClient();
 
     try {
-      const logsDir = path.join(process.cwd(), ".data");
-      if (!fs.existsSync(logsDir)) {
-        fs.mkdirSync(logsDir, { recursive: true });
-      }
-      const logFile = path.join(logsDir, "inquiries.jsonl");
-      fs.appendFileSync(logFile, JSON.stringify(storedRecord) + "\n", "utf8");
-    } catch (fsErr) {
-      console.warn("[INQUIRY_FS_WARNING] Could not append to file system:", fsErr);
-    }
-
-    // 3. Resend Integration Architecture
-    const resendApiKey = process.env.RESEND_API_KEY;
-
-    // Check if production delivery is actively configured
-    if (resendApiKey) {
-      try {
-        // Dynamic dispatch via Resend REST API
-        const resendResponse = await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${resendApiKey}`,
-            "Content-Type": "application/json",
+      const { data: inserted, error: insertError } = await supabase
+        .from("inquiries")
+        .insert({
+          name: inquiry.name,
+          email: inquiry.email,
+          company: inquiry.company || "Independent",
+          project_type: inquiry.projectType,
+          currency: inquiry.currency,
+          budget_range: inquiry.budgetRange,
+          timeline: inquiry.timeline,
+          description: inquiry.description,
+          delivery_status: "pending",
+          delivery_attempts: 0,
+          metadata: {
+            ipHash,
+            durationMs: inquiry.durationMs,
+            userAgent,
           },
-          body: JSON.stringify({
-            from: "OFFSCRIPT Studio <inquiries@param20h.me>",
-            to: ["offscript@param20h.me"],
-            reply_to: storedRecord.email,
-            subject: `[Project Inquiry] ${storedRecord.name} — ${storedRecord.projectType}`,
-            text: `
-Name: ${storedRecord.name}
-Email: ${storedRecord.email}
-Company: ${storedRecord.company}
-Discipline: ${storedRecord.projectType}
-Budget: ${storedRecord.currency} ${storedRecord.budgetRange}
-Timeline: ${storedRecord.timeline}
-Date: ${storedRecord.timestamp}
+        })
+        .select("id")
+        .single();
 
-Brief:
-${storedRecord.description}
-            `.trim(),
-          }),
-        });
-
-        if (resendResponse.ok) {
-          return NextResponse.json(
-            {
-              success: true,
-              delivered: true,
-              message: "Your inquiry has been successfully delivered to the studio.",
-            },
-            { status: 200 }
-          );
-        } else {
-          const errData = await resendResponse.json().catch(() => ({}));
-          console.error("[RESEND_DISPATCH_FAILED]", errData);
-        }
-      } catch (dispatchErr) {
-        console.error("[RESEND_NETWORK_ERROR]", dispatchErr);
+      if (insertError || !inserted?.id) {
+        console.error("[INQUIRY_DB_INSERT_FAILED]", insertError);
+        const mailtoUrl = createMailtoUrl(inquiry.name, inquiry.email, inquiry.projectType, inquiry.description);
+        return NextResponse.json(
+          {
+            success: false,
+            persisted: false,
+            error: "Failed to persist project brief to database. Please use direct studio email.",
+            fallbackEmail: SITE_CONFIG.email,
+            mailtoUrl,
+          },
+          { status: 500 }
+        );
       }
+
+      inquiryId = inserted.id;
+    } catch (dbErr) {
+      console.error("[INQUIRY_DB_EXCEPTION]", dbErr);
+      const mailtoUrl = createMailtoUrl(inquiry.name, inquiry.email, inquiry.projectType, inquiry.description);
+      return NextResponse.json(
+        {
+          success: false,
+          persisted: false,
+          error: "A database error occurred while recording your brief. Please use direct studio email.",
+          fallbackEmail: SITE_CONFIG.email,
+          mailtoUrl,
+        },
+        { status: 500 }
+      );
     }
 
-    // 4. Honest Failure / Delivery Unavailable State (Truth in Engineering)
-    // If delivery is unconfigured or failed, DO NOT claim delivery succeeded.
-    // Return explicit error so the client displays a clear notification with direct mailto fallback.
-    const mailtoSubject = encodeURIComponent(`Project Inquiry: ${storedRecord.name} — ${storedRecord.projectType}`);
-    const mailtoBody = encodeURIComponent(
-      `Hi OFFSCRIPT Team,\n\nName: ${storedRecord.name}\nEmail: ${storedRecord.email}\nCompany: ${storedRecord.company}\nDiscipline: ${storedRecord.projectType}\nBudget: ${storedRecord.currency} ${storedRecord.budgetRange}\nTimeline: ${storedRecord.timeline}\n\nProject Brief:\n${storedRecord.description}\n`
-    );
-    const mailtoUrl = `mailto:offscript@param20h.me?subject=${mailtoSubject}&body=${mailtoBody}`;
+    // 8. Resend Email Notification Dispatch
+    const resendResult = await sendInquiryNotification(inquiry, inquiryId);
+
+    // 9. Update Database Record with Delivery Outcome
+    if (resendResult.accepted) {
+      await supabase
+        .from("inquiries")
+        .update({
+          delivery_status: "delivered",
+          delivery_attempts: 1,
+        })
+        .eq("id", inquiryId);
+
+      return NextResponse.json(
+        {
+          success: true,
+          persisted: true,
+          notificationAccepted: true,
+          inquiryId,
+          message: "Your project brief has been securely recorded and dispatched to the studio inbox.",
+        },
+        { status: 200 }
+      );
+    }
+
+    if (resendResult.unconfigured) {
+      await supabase
+        .from("inquiries")
+        .update({
+          delivery_status: "unconfigured",
+          delivery_attempts: 0,
+          last_delivery_error: "Resend unconfigured or awaiting domain DNS verification",
+        })
+        .eq("id", inquiryId);
+
+      return NextResponse.json(
+        {
+          success: true,
+          persisted: true,
+          notificationAccepted: false,
+          inquiryId,
+          message:
+            "Your project brief has been securely stored in our studio intake database. Automated notification dispatch is currently awaiting domain verification.",
+        },
+        { status: 202 }
+      );
+    }
+
+    // Resend returned an error
+    await supabase
+      .from("inquiries")
+      .update({
+        delivery_status: "failed",
+        delivery_attempts: 1,
+        last_delivery_error: resendResult.error || "Email provider dispatch rejected",
+      })
+      .eq("id", inquiryId);
 
     return NextResponse.json(
       {
-        success: false,
-        delivered: false,
-        error:
-          "Automated transactional dispatch is currently unconfigured awaiting domain verification. Your brief has been preserved in server logs, but please also send directly to offscript@param20h.me.",
-        fallbackEmail: "offscript@param20h.me",
-        mailtoUrl,
+        success: true,
+        persisted: true,
+        notificationAccepted: false,
+        inquiryId,
+        message:
+          "Your project brief has been securely stored in our intake database. Notification dispatch encountered a temporary network delay and will be reviewed manually.",
       },
-      { status: 503 }
+      { status: 202 }
     );
   } catch (error) {
-    console.error("[INQUIRY_POST_ERROR]", error);
+    console.error("[INQUIRY_POST_UNHANDLED_EXCEPTION]", error);
+    const mailtoUrl = createMailtoUrl("", "", "", "");
     return NextResponse.json(
-      { error: "An unexpected server error occurred while processing the inquiry." },
+      {
+        success: false,
+        persisted: false,
+        error: "An unexpected server error occurred while processing the inquiry.",
+        fallbackEmail: SITE_CONFIG.email,
+        mailtoUrl,
+      },
       { status: 500 }
     );
   }
