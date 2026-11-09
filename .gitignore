@@ -31,7 +31,9 @@ yarn-error.log*
 .data/
 scratch/
 supabase/
-PHASE_*.md
+*.md
+!AGENTS.md
+!README.md
 
 # vercel
 .vercel
