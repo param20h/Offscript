@@ -1,10 +1,38 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import MotionWrapper from "@/components/motion/MotionWrapper";
 import { SITE_CONFIG } from "@/lib/constants";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "motion/react";
 
 export default function StudioStatement() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+
+  // Scroll-linked focus blur when transitioning into this section from Hero (or scrolling up to it)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "start 35%"],
+  });
+
+  const statementOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.45, 1],
+    [0.35, 0.8, 1]
+  );
+  const statementBlur = useTransform(
+    scrollYProgress,
+    [0, 0.5, 1],
+    ["blur(12px)", "blur(3px)", "blur(0px)"]
+  );
+  const statementScale = useTransform(scrollYProgress, [0, 1], [0.97, 1]);
+  const statementY = useTransform(scrollYProgress, [0, 1], [40, 0]);
+
   const tenets = [
     {
       title: "Substance Over Noise",
@@ -26,6 +54,7 @@ export default function StudioStatement() {
   return (
     <section
       id="statement"
+      ref={sectionRef}
       className="relative w-full py-24 sm:py-32 lg:py-36 bg-ivory text-obsidian border-b border-obsidian/15 overflow-hidden"
     >
       {/* Background Architectural Watermark */}
@@ -33,7 +62,19 @@ export default function StudioStatement() {
         STUDIO
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <motion.div
+        style={
+          shouldReduceMotion
+            ? undefined
+            : {
+                opacity: statementOpacity,
+                filter: statementBlur,
+                scale: statementScale,
+                y: statementY,
+              }
+        }
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
+      >
         {/* Section Header */}
         <MotionWrapper className="mb-10 sm:mb-14">
           <div className="flex items-center gap-3">
@@ -105,7 +146,7 @@ export default function StudioStatement() {
             <span>↓</span>
           </a>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

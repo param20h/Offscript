@@ -1,11 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import dynamic from "next/dynamic";
 import { SITE_CONFIG } from "@/lib/constants";
 import Button from "@/components/ui/Button";
 import CanvasFallback from "@/components/three/CanvasFallback";
-import { motion, useReducedMotion, type Variants } from "motion/react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+  type Variants,
+} from "motion/react";
 
 // Dynamically load the HeroLottie visual to isolate SSR and keep client hydration snappy
 const HeroLottie = dynamic(
@@ -17,7 +23,22 @@ const HeroLottie = dynamic(
 );
 
 export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
   const shouldReduceMotion = useReducedMotion();
+
+  // Scroll-linked exit blur and depth when advancing to the next section
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.65, 1], [1, 0.85, 0.25]);
+  const heroBlur = useTransform(
+    scrollYProgress,
+    [0, 0.45, 1],
+    ["blur(0px)", "blur(2px)", "blur(10px)"]
+  );
+  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.96]);
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -43,12 +64,27 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative w-full min-h-[calc(100vh-5rem)] flex flex-col justify-between pt-4 pb-12 lg:pt-6 lg:pb-16 overflow-hidden border-b border-obsidian-border bg-obsidian">
+    <section
+      ref={sectionRef}
+      className="relative w-full min-h-[calc(100vh-5rem)] flex flex-col justify-between pt-4 pb-12 lg:pt-6 lg:pb-16 overflow-hidden border-b border-obsidian-border bg-obsidian"
+    >
       {/* Background Subtle Architectural Grid */}
       <div className="absolute inset-0 bg-grid-pattern opacity-25 pointer-events-none" />
 
-      {/* Top Editorial Ribbon: Studio Positioning */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-6 lg:mb-10">
+      <motion.div
+        style={
+          shouldReduceMotion
+            ? undefined
+            : {
+                opacity: heroOpacity,
+                filter: heroBlur,
+                scale: heroScale,
+              }
+        }
+        className="w-full flex-1 flex flex-col justify-between"
+      >
+        {/* Top Editorial Ribbon: Studio Positioning */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-6 lg:mb-10">
         <div className="flex flex-wrap items-center justify-between gap-3 py-3 border-b border-obsidian-border font-mono text-xs text-ivory-dim tracking-wider">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 bg-acid inline-block" />
@@ -149,6 +185,7 @@ export default function Hero() {
           </div>
         </div>
       </div>
+      </motion.div>
     </section>
   );
 }
